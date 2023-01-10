@@ -5,13 +5,10 @@
 
 void hal_drm_init(lv_coord_t hor_res, lv_coord_t ver_res)
 {
-  drm_init();
 
   /*Create a display*/
-  static lv_disp_drv_t disp_drv;
-  drm_disp_drv_init(&disp_drv);
+  drm_disp_drv_init(0);
 
-  lv_disp_t * disp = lv_disp_drv_register(&disp_drv);
 }
 #endif
 
