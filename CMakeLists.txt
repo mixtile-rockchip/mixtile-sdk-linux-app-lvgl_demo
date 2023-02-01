@@ -43,7 +43,7 @@ aux_source_directory(./sys SRCS)
 add_executable(${PROJECT_NAME} ${SRCS})
 
 target_link_libraries(${PROJECT_NAME}
-	lvgl pthread m lv_drivers
+	lvgl pthread m lv_drivers freetype
 )
 
 if (LV_DRV_USE_SDL_GPU)
