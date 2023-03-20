@@ -1,4 +1,4 @@
-#include "main.h"
+#include <stdio.h>
 #include "lv_port_file.h"
 
 #if 1//LV_USE_FILESYSTEM

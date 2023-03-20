@@ -14,11 +14,12 @@
  *  limitations under the License.
  */
 
+#include <lvgl/lvgl.h>
+#include <lvgl/lv_conf.h>
+
 #include "main.h"
-#include "lvgl/lvgl.h"
-#include "lvgl/lv_conf.h"
-#include "hal/hal_sdl.h"
-#include "hal/hal_drm.h"
+#include "hal_sdl.h"
+#include "hal_drm.h"
 
 static int g_indev_rotation = 90;
 static int g_disp_rotation = LV_DISP_ROT_90;

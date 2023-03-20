@@ -25,9 +25,9 @@
 
 #include <lvgl/lvgl.h>
 
-#include "lvgl/lv_port_file.h"
-#include "lvgl/lv_port_indev.h"
-#include "sys/timestamp.h"
+#include "lv_port_file.h"
+#include "lv_port_indev.h"
+#include "timestamp.h"
 
 #define ALIGN(x, a)     (((x) + (a - 1)) & ~(a - 1))
 #define FAKE_FD         1234

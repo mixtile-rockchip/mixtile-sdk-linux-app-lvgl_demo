@@ -9,8 +9,8 @@
 #include "lvgl.h"
 #include "lv_port_indev.h"
 
-#include "hal/evdev.h"
-#include "hal/key.h"
+#include "evdev.h"
+#include "key.h"
 
 typedef struct _GROUP_NODE {
     struct _GROUP_NODE *next;
