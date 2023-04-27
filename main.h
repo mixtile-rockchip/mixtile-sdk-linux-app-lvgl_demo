@@ -54,5 +54,7 @@ typedef struct
     int rot;
 } rk_lv_img_dsc_t;
 
+int app_disp_rotation(void);
+
 #endif
 

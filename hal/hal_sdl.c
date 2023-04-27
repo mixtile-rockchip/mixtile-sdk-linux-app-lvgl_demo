@@ -5,7 +5,7 @@
 #include "lvgl/lv_conf.h"
 #include "lv_drivers/sdl/sdl_gpu.h"
 
-void hal_sdl_init(lv_coord_t hor_res, lv_coord_t ver_res)
+void hal_sdl_init(lv_coord_t hor_res, lv_coord_t ver_res, int rotated)
 {
   /* Use the 'monitor' driver which creates window on PC's monitor to simulate a display*/
   monitor_init();
@@ -16,6 +16,7 @@ void hal_sdl_init(lv_coord_t hor_res, lv_coord_t ver_res)
 
   /*Create a display*/
   static lv_disp_drv_t disp_drv;
+  disp_drv.rotated = rotated;
   sdl_disp_drv_init(&disp_drv, hor_res, ver_res);
 
   lv_disp_t * disp = lv_disp_drv_register(&disp_drv);

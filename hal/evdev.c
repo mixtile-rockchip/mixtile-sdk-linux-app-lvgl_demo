@@ -19,6 +19,7 @@
 #endif
 #include <dirent.h>
 
+#include "main.h"
 /*********************
  *      DEFINES
  *********************/
@@ -181,6 +182,7 @@ bool evdev_set_file(char* dev_name)
 void evdev_read(lv_indev_drv_t * drv, lv_indev_data_t * data)
 {
     struct input_event in;
+    int tmp;
 
     while(read(evdev_fd, &in, sizeof(struct input_event)) > 0) {
         if(in.type == EV_REL) {
@@ -275,8 +277,18 @@ void evdev_read(lv_indev_drv_t * drv, lv_indev_data_t * data)
     /*Store the collected data*/
 
 #if EVDEV_CALIBRATE
-    data->point.x = map(evdev_root_x, EVDEV_HOR_MIN, EVDEV_HOR_MAX, 0, drv->disp->driver->hor_res);
-    data->point.y = map(evdev_root_y, EVDEV_VER_MIN, EVDEV_VER_MAX, 0, drv->disp->driver->ver_res);
+    if (app_disp_rotation() == LV_DISP_ROT_90 ||
+        app_disp_rotation() == LV_DISP_ROT_270) {
+        data->point.x = map(evdev_root_x, EVDEV_HOR_MIN, EVDEV_HOR_MAX,
+                            0, drv->disp->driver->ver_res);
+        data->point.y = map(evdev_root_y, EVDEV_VER_MIN, EVDEV_VER_MAX,
+                            0, drv->disp->driver->hor_res);
+    } else {
+        data->point.x = map(evdev_root_x, EVDEV_HOR_MIN, EVDEV_HOR_MAX,
+                            0, drv->disp->driver->hor_res);
+        data->point.y = map(evdev_root_y, EVDEV_VER_MIN, EVDEV_VER_MAX,
+                            0, drv->disp->driver->ver_res);
+    }
 #else
     data->point.x = evdev_root_x;
     data->point.y = evdev_root_y;
@@ -284,25 +296,36 @@ void evdev_read(lv_indev_drv_t * drv, lv_indev_data_t * data)
 
     data->state = evdev_button;
 
-    if(data->point.x < 0)
-      data->point.x = 0;
-    if(data->point.y < 0)
-      data->point.y = 0;
-    if (evdev_rot == 90 || evdev_rot == 270) {
-        int tmp;
-        if(data->point.x >= drv->disp->driver->ver_res)
-          data->point.x = drv->disp->driver->ver_res - 1;
-        if(data->point.y >= drv->disp->driver->hor_res)
-          data->point.y = drv->disp->driver->hor_res - 1;
+    switch (evdev_rot)
+    {
+    case 0:
+    default:
+        break;
+    case 90:
         tmp = data->point.x;
         data->point.x = data->point.y;
-        data->point.y = drv->disp->driver->ver_res - 1 - tmp;
-    } else {
-        if(data->point.x >= drv->disp->driver->hor_res)
-          data->point.x = drv->disp->driver->hor_res - 1;
-        if(data->point.y >= drv->disp->driver->ver_res)
-          data->point.y = drv->disp->driver->ver_res - 1;
+        data->point.y = drv->disp->driver->ver_res - tmp;
+        break;
+    case 180:
+        tmp = data->point.x;
+        data->point.x = drv->disp->driver->hor_res - data->point.y;
+        data->point.y = drv->disp->driver->ver_res - tmp;
+        break;
+    case 270:
+        tmp = data->point.x;
+        data->point.x = drv->disp->driver->hor_res - data->point.y;
+        data->point.y = tmp;
+        break;
     }
+
+    if (data->point.x < 0)
+      data->point.x = 0;
+    if (data->point.y < 0)
+      data->point.y = 0;
+    if (data->point.x >= drv->disp->driver->hor_res)
+        data->point.x = drv->disp->driver->hor_res - 1;
+    if (data->point.y >= drv->disp->driver->ver_res)
+        data->point.y = drv->disp->driver->ver_res - 1;
 
     return ;
 }
