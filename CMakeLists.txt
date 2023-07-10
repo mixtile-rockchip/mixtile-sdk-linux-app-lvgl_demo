@@ -26,3 +26,4 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/lvgl SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/sys SRCS)
 
 add_subdirectory(lv_demo)
+add_subdirectory(rk_demo)
