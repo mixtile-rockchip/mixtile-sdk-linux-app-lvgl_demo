@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 project(lv_demo)
 
 include_directories(
-	${PROJECT_SOURCE_DIR}/lv_demo/
+	${PROJECT_SOURCE_DIR}/./
 	)
 
 if (LV_USE_DEMO_WIDGETS)
