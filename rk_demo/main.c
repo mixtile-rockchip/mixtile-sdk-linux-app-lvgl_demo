@@ -23,9 +23,9 @@
 
 #include "ui_resource.h"
 
-static lv_ft_info_t ttf_main_s;
-static lv_ft_info_t ttf_main_m;
-static lv_ft_info_t ttf_main_l;
+lv_ft_info_t ttf_main_s;
+lv_ft_info_t ttf_main_m;
+lv_ft_info_t ttf_main_l;
 
 lv_style_t style_txt_s;
 lv_style_t style_txt_m;

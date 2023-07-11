@@ -10,6 +10,7 @@
 
 #include "furniture_control_ui.h"
 #include "home_ui.h"
+#include "setting_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
 uint32_t LV_EVENT_GET_COMP_CHILD;
@@ -36,6 +37,13 @@ static lv_timer_t * timer_date;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void page_switch(lv_event_t * e)
+{
+    void (*func)(void) = lv_event_get_user_data(e);
+
+    if (func)
+        func();
+}
 
 void home_page_jump_furniture_control_callback(lv_event_t* event) {
     printf("page_jump_furniture_control_callback is into \n");
@@ -183,6 +191,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_color(ui_setting, lv_color_hex(0xDED6D6), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_setting, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_setting, IMG_SETTING, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_add_event_cb(ui_setting, page_switch, LV_EVENT_CLICKED, setting_ui_init);
 
     ui_Label6 = lv_label_create(ui_setting_box);
     lv_obj_set_width(ui_Label6, LV_SIZE_CONTENT);   /// 1
@@ -222,6 +231,8 @@ void home_ui_init(void)
     if (!ui_Screen1)
         ui_Screen1_screen_init();
     lv_disp_load_scr(ui_Screen1);
+    //lv_scr_load_anim(ui_Screen1, LV_SCR_LOAD_ANIM_NONE,
+    //                 0, 0, true);
 }
 
 void rk_demo_init(void)

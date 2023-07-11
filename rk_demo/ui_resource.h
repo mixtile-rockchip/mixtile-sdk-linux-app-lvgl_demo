@@ -22,5 +22,14 @@
 #define IMG_RICE  "A:"PATH_PREFIX"/rice.png"
 
 
+#define WIFI_ON_PIC     "A:"PATH_PREFIX"/wifi.png"
+#define WIFI_OFF_PIC    "A:"PATH_PREFIX"/wifi-off.png"
+#define WIFI_SCANNING   "A:"PATH_PREFIX"/scanning.png"
+
+#define WALLPAPER_0     "A:"PATH_PREFIX"/wallpaper_0.png"
+#define WALLPAPER_1     "A:"PATH_PREFIX"/wallpaper_1.png"
+#define WALLPAPER_2     "A:"PATH_PREFIX"/wallpaper_2.png"
+#define WALLPAPER_3     "A:"PATH_PREFIX"/wallpaper_3.png"
+
 #endif
 

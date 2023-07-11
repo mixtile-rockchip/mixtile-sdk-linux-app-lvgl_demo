@@ -16,6 +16,10 @@
 #include "lv_port_file.h"
 #include "lv_port_indev.h"
 
+extern lv_ft_info_t ttf_main_s;
+extern lv_ft_info_t ttf_main_m;
+extern lv_ft_info_t ttf_main_l;
+
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
 extern lv_style_t style_txt_l;

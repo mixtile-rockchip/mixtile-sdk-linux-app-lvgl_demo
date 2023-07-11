@@ -6,6 +6,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/
 	${PROJECT_SOURCE_DIR}/home
 	${PROJECT_SOURCE_DIR}/furniture_control
+	${PROJECT_SOURCE_DIR}/setting
+	${PROJECT_SOURCE_DIR}/include
 	)
 
 if (LV_DRV_USE_SDL_GPU)
@@ -18,11 +20,12 @@ endif()
 aux_source_directory(. SRCS)
 aux_source_directory(./home SRCS)
 aux_source_directory(./furniture_control SRCS)
+aux_source_directory(./setting SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
 target_link_libraries(${PROJECT_NAME}
-	lvgl pthread m lv_drivers freetype
+	lvgl pthread m lv_drivers freetype rkwifibt
 )
 
 if (LV_DRV_USE_SDL_GPU)

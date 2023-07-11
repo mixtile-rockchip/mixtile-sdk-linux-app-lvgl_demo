@@ -8,6 +8,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/hal/
 	${PROJECT_SOURCE_DIR}/lvgl/
 	${PROJECT_SOURCE_DIR}/sys/
+	${PROJECT_SOURCE_DIR}/cJSON/
 	${CMAKE_SYSROOT}/usr/include/libdrm/
 	${CMAKE_SYSROOT}/usr/include/lvgl/
 	${CMAKE_SYSROOT}/usr/include/lvgl/lv_drivers/
@@ -24,6 +25,7 @@ endif()
 aux_source_directory(${PROJECT_SOURCE_DIR}/hal SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/lvgl SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/sys SRCS)
+aux_source_directory(${PROJECT_SOURCE_DIR}/cJSON SRCS)
 
 add_subdirectory(lv_demo)
 add_subdirectory(rk_demo)
