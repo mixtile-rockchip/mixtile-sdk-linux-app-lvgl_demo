@@ -1,4 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #include <lvgl/lvgl.h>
 
 #include "furniture_control_ui.h"
@@ -19,6 +26,7 @@ static lv_obj_t * ui_Label4;
 static lv_obj_t * ui_Label3;
 static lv_obj_t * ui_Label6;
 static lv_obj_t * ui_logo;
+static lv_timer_t * timer_date;
 
 ///////////////////// ANIMATIONS ////////////////////
 
@@ -27,8 +35,43 @@ static lv_obj_t * ui_logo;
 void home_page_jump_furniture_control_callback(lv_event_t* event) {
     printf("page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
+    lv_timer_del(timer_date);
     lv_obj_del(ui_Screen1);
     ui_Screen1 = NULL;
+}
+
+// static int go_ping(char *svrip) {  //103.235.46.40
+//     int time=0;
+//     pid_t pid;
+//     if ((pid = vfork()) < 0) {
+//         printf("\nvfork error\n");
+//         return 0;
+//     }else if (pid == 0) {       
+//         if ( execlp("ping", "ping","-c","1",svrip, (char*)0) < 0) {
+//             printf("\nexeclp error\n");
+//             return 0;
+//         }
+//     }
+//     int stat;
+//     waitpid(pid, &stat, 0);
+//     if (stat == 0) {
+//         printf("ping ok\n");
+//         return 0;
+//     }else {
+//         printf("ping error\n");
+//         return -1;  
+//     }
+// }
+
+static void date_update(lv_timer_t * timer)
+{
+    time_t time_ptr;
+    struct tm * tim;
+
+    time(&time_ptr);
+    tim = localtime(&time_ptr);
+    //printf("update time %04d-%02d-%02d %02d:%02d \n", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
+    lv_label_set_text_fmt(ui_Label_time, "%04d-%02d-%02d %02d:%02d", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
 }
 
 ///////////////////// SCREENS ////////////////////
@@ -39,7 +82,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_img_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_wifi = lv_img_create(ui_Screen1);
-    lv_img_set_src(ui_wifi, IMG_WIFI_ON);
+    lv_img_set_src(ui_wifi, IMG_WIFI_OFF);
     lv_obj_set_width(ui_wifi, LV_SIZE_CONTENT);   /// 64
     lv_obj_set_height(ui_wifi, LV_SIZE_CONTENT);    /// 64
     lv_obj_set_x(ui_wifi, 367);
@@ -106,7 +149,9 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_Label_time, 230);
     lv_obj_set_y(ui_Label_time, -210);
     lv_obj_set_align(ui_Label_time, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label_time, "2023-06-20  16:33");
+    date_update(NULL);
+    timer_date = lv_timer_create(date_update, 1000, NULL);
+    lv_timer_enable(timer_date);
 
     ui_Label1 = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
