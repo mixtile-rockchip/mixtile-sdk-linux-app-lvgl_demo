@@ -3,6 +3,7 @@
 
 #include "furniture_control_ui.h"
 #include "home_ui.h"
+#include "icebox_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
 extern uint32_t LV_EVENT_GET_COMP_CHILD;
@@ -30,6 +31,13 @@ static lv_obj_t * furniture_control_ui_Label3;
 void furniture_control_page_jump_home_callback(lv_event_t* event) {
     printf("page_jump_return_home_callback is into \n");
     home_ui_init();
+    lv_obj_del(furniture_control_ui_Screen1);
+    furniture_control_ui_Screen1 = NULL;
+}
+
+void furniture_control_page_jump_icebox_callback(lv_event_t* event) {
+    printf("furniture_control_page_jump_icebox_callback is into \n");
+    icebox_ui_init();
     lv_obj_del(furniture_control_ui_Screen1);
     furniture_control_ui_Screen1 = NULL;
 }
@@ -74,10 +82,10 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_CLICKABLE);
-    // if (furniture_control_ui_Image1 != NULL) {
-    //     printf("icebox callback\n");
-    //     lv_obj_add_event_cb(furniture_control_ui_Image1, page_jump_return_home_callback, LV_EVENT_CLICKED, NULL);
-    // }
+    if (furniture_control_ui_icebox != NULL) {
+        printf("icebox callback\n");
+        lv_obj_add_event_cb(furniture_control_ui_icebox, furniture_control_page_jump_icebox_callback, LV_EVENT_CLICKED, NULL);
+    }
 
     furniture_control_ui_player = lv_img_create(furniture_control_ui_Screen1);
     lv_img_set_src(furniture_control_ui_player, &ui_img_player_png);
