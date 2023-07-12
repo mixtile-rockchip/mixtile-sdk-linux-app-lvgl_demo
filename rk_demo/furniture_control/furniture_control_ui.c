@@ -18,12 +18,6 @@ static lv_obj_t * furniture_control_ui_Label1;
 static lv_obj_t * furniture_control_ui_Label4;
 static lv_obj_t * furniture_control_ui_Label3;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
-#if LV_COLOR_DEPTH != 32
-    #error "LV_COLOR_DEPTH should be 32bit to match SquareLine Studio's settings"
-#endif
-#if LV_COLOR_16_SWAP !=0
-    #error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
-#endif
 
 ///////////////////// ANIMATIONS ////////////////////
 
@@ -50,7 +44,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_clear_flag(furniture_control_ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     furniture_control_ui_return = lv_img_create(furniture_control_ui_Screen1);
-    lv_img_set_src(furniture_control_ui_return, &ui_img_return_png);
+    lv_img_set_src(furniture_control_ui_return, IMG_RETURN_BTN);
+    //lv_img_set_src(furniture_control_ui_return, &ui_img_return_png);
     lv_obj_set_width(furniture_control_ui_return, LV_SIZE_CONTENT);   /// 32
     lv_obj_set_height(furniture_control_ui_return, LV_SIZE_CONTENT);    /// 32
     lv_obj_set_x(furniture_control_ui_return, -352);
@@ -73,7 +68,7 @@ void ui_furniture_control_screen_init(void)
 
 
     furniture_control_ui_icebox = lv_img_create(furniture_control_ui_Screen1);
-    lv_img_set_src(furniture_control_ui_icebox, &ui_img_icebox_png);
+    lv_img_set_src(furniture_control_ui_icebox, IMG_ICEBOX);
     lv_obj_set_width(furniture_control_ui_icebox, LV_SIZE_CONTENT);   /// 64
     lv_obj_set_height(furniture_control_ui_icebox, LV_SIZE_CONTENT);    /// 64
     lv_obj_set_x(furniture_control_ui_icebox, -241);
@@ -88,7 +83,7 @@ void ui_furniture_control_screen_init(void)
     }
 
     furniture_control_ui_player = lv_img_create(furniture_control_ui_Screen1);
-    lv_img_set_src(furniture_control_ui_player, &ui_img_player_png);
+    lv_img_set_src(furniture_control_ui_player, IMG_PLAYER);
     lv_obj_set_width(furniture_control_ui_player, LV_SIZE_CONTENT);   /// 64
     lv_obj_set_height(furniture_control_ui_player, LV_SIZE_CONTENT);    /// 64
     lv_obj_set_x(furniture_control_ui_player, -1);
@@ -100,7 +95,7 @@ void ui_furniture_control_screen_init(void)
 
 
     furniture_control_ui_coffee_machine = lv_img_create(furniture_control_ui_Screen1);
-    lv_img_set_src(furniture_control_ui_coffee_machine, &ui_img_coffee_machine_png);
+    lv_img_set_src(furniture_control_ui_coffee_machine, IMG_COFFEE);
     lv_obj_set_width(furniture_control_ui_coffee_machine, LV_SIZE_CONTENT);   /// 64
     lv_obj_set_height(furniture_control_ui_coffee_machine, LV_SIZE_CONTENT);    /// 64
     lv_obj_set_x(furniture_control_ui_coffee_machine, 248);

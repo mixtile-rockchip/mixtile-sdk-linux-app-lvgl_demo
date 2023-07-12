@@ -11,12 +11,7 @@ extern "C" {
 #endif
 
 #include "lvgl/lvgl.h"
-
-
-LV_IMG_DECLARE(ui_img_icebox_tem_png);    // assets\icebox_tem.png
-LV_IMG_DECLARE(ui_img_rice_png);    // assets\rice.png
-LV_IMG_DECLARE(ui_img_return_png);    // assets\return.png
-
+#include "ui_resource.h"
 
 void icebox_ui_init(void);
 
