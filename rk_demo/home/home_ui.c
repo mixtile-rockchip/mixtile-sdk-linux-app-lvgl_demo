@@ -11,6 +11,7 @@
 #include "furniture_control_ui.h"
 #include "home_ui.h"
 #include "setting_ui.h"
+#include "Rk_wifi.h"
 
 ///////////////////// VARIABLES ////////////////////
 uint32_t LV_EVENT_GET_COMP_CHILD;
@@ -37,6 +38,8 @@ static lv_timer_t * timer_date;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+extern int wifi_connected(void);
+
 void page_switch(lv_event_t * e)
 {
     void (*func)(void) = lv_event_get_user_data(e);
@@ -53,29 +56,6 @@ void home_page_jump_furniture_control_callback(lv_event_t* event) {
     ui_Screen1 = NULL;
 }
 
-// static int go_ping(char *svrip) {  //103.235.46.40
-//     int time=0;
-//     pid_t pid;
-//     if ((pid = vfork()) < 0) {
-//         printf("\nvfork error\n");
-//         return 0;
-//     }else if (pid == 0) {       
-//         if ( execlp("ping", "ping","-c","1",svrip, (char*)0) < 0) {
-//             printf("\nexeclp error\n");
-//             return 0;
-//         }
-//     }
-//     int stat;
-//     waitpid(pid, &stat, 0);
-//     if (stat == 0) {
-//         printf("ping ok\n");
-//         return 0;
-//     }else {
-//         printf("ping error\n");
-//         return -1;  
-//     }
-// }
-
 static void date_update(lv_timer_t * timer)
 {
     time_t time_ptr;
@@ -85,6 +65,11 @@ static void date_update(lv_timer_t * timer)
     tim = localtime(&time_ptr);
     //printf("update time %04d-%02d-%02d %02d:%02d \n", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
     lv_label_set_text_fmt(ui_Label_time, "%04d-%02d-%02d %02d:%02d", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
+    if (wifi_connected() == RK_WIFI_State_CONNECTED) {
+        lv_img_set_src(ui_wifi, IMG_WIFI_ON);
+    }else {
+        lv_img_set_src(ui_wifi, IMG_WIFI_OFF);
+    }
 }
 
 ///////////////////// SCREENS ////////////////////
@@ -200,6 +185,12 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_align(ui_Label6, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label6, "Settings");
 
+    ui_wifi = lv_img_create(ui_Screen1);
+    lv_obj_align(ui_wifi, LV_ALIGN_TOP_RIGHT, -10, 10);
+    lv_obj_set_width(ui_wifi, LV_SIZE_CONTENT);   /// 64
+    lv_obj_set_height(ui_wifi, LV_SIZE_CONTENT);    /// 64
+    lv_img_set_zoom(ui_wifi, 120);
+    
     ui_Label_time = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_Label_time, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label_time, LV_SIZE_CONTENT);    /// 1
@@ -216,13 +207,6 @@ void ui_Screen1_screen_init(void)
     lv_obj_add_flag(ui_logo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_logo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_img_set_zoom(ui_logo, 150);
-
-    ui_wifi = lv_img_create(ui_Screen1);
-    lv_img_set_src(ui_wifi, IMG_WIFI_OFF);
-    lv_obj_align(ui_wifi, LV_ALIGN_TOP_RIGHT, -10, 10);
-    lv_obj_set_width(ui_wifi, LV_SIZE_CONTENT);   /// 64
-    lv_obj_set_height(ui_wifi, LV_SIZE_CONTENT);    /// 64
-    lv_img_set_zoom(ui_wifi, 120);
 
 }
 
