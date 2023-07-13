@@ -21,10 +21,21 @@
 #define IMG_COFFEE  		"A:"PATH_PREFIX"/coffee_machine.png"
 #define IMG_RICE  			"A:"PATH_PREFIX"/rice.png"
 
+#define IMG_PLAY            "A:"PATH_PREFIX"/play-fill.png"
+#define IMG_SKIP_BACK       "A:"PATH_PREFIX"/skip-back-fill.png"
+#define IMG_SKIP_FORWARD    "A:"PATH_PREFIX"/skip-forward-fill.png"
+#define IMG_VOL_DOWN        "A:"PATH_PREFIX"/volume-down-fill.png"
+#define IMG_VOL_UP          "A:"PATH_PREFIX"/volume-up-fill.png"
+#define IMG_VOL_MUTE        "A:"PATH_PREFIX"/volume-mute-fill.png"
 
 #define WIFI_ON_PIC     "A:"PATH_PREFIX"/wifi.png"
 #define WIFI_OFF_PIC    "A:"PATH_PREFIX"/wifi-off.png"
 #define WIFI_SCANNING   "A:"PATH_PREFIX"/scanning.png"
+
+#define BG_PIC_0        "A:"PATH_PREFIX"/bg_pic_0.png"
+#define BG_PIC_1        "A:"PATH_PREFIX"/bg_pic_1.png"
+#define BG_PIC_2        "A:"PATH_PREFIX"/bg_pic_2.png"
+#define BG_PIC_3        "A:"PATH_PREFIX"/bg_pic_3.png"
 
 #define WALLPAPER_0     "A:"PATH_PREFIX"/wallpaper_0.png"
 #define WALLPAPER_1     "A:"PATH_PREFIX"/wallpaper_1.png"

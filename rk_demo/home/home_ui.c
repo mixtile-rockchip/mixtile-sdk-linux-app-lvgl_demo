@@ -13,6 +13,8 @@
 #include "setting_ui.h"
 #include "Rk_wifi.h"
 #include "main.h"
+#include "smart_home_ui.h"
+
 ///////////////////// VARIABLES ////////////////////
 uint32_t LV_EVENT_GET_COMP_CHILD;
 
@@ -46,6 +48,10 @@ void page_switch(lv_event_t * e)
 
     if (func)
         func();
+
+    lv_timer_del(timer_date);
+    lv_obj_del(ui_Screen1);
+    ui_Screen1 = NULL;
 }
 
 void home_page_jump_furniture_control_callback(lv_event_t* event) {
@@ -102,6 +108,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_color(ui_smart_home, lv_color_hex(0xDED6D6), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_smart_home, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_smart_home, IMG_SMART_HOME, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_add_event_cb(ui_smart_home, page_switch, LV_EVENT_CLICKED, smart_home_ui_init);
 
     ui_Label1 = lv_label_create(ui_smart_home_box);
     lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
