@@ -12,7 +12,7 @@
 #include "home_ui.h"
 #include "setting_ui.h"
 #include "Rk_wifi.h"
-
+#include "main.h"
 ///////////////////// VARIABLES ////////////////////
 uint32_t LV_EVENT_GET_COMP_CHILD;
 
@@ -106,9 +106,10 @@ void ui_Screen1_screen_init(void)
     ui_Label1 = lv_label_create(ui_smart_home_box);
     lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(ui_Label1, LV_ALIGN_TOP_LEFT, 8, 135);
+    lv_obj_align(ui_Label1, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label1, "Smart home");
+    lv_obj_add_style(ui_Label1, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(ui_Label1, "智能家居");
 
     //furniture_control
     ui_furniture_control_box = lv_obj_create(ui_box_main);
@@ -132,9 +133,10 @@ void ui_Screen1_screen_init(void)
     ui_Label4 = lv_label_create(ui_furniture_control_box);
     lv_obj_set_width(ui_Label4, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label4, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(ui_Label4, LV_ALIGN_TOP_LEFT, 8, 135);
+    lv_obj_align(ui_Label4, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label4, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label4, "Furniture control");
+    lv_obj_add_style(ui_Label4, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(ui_Label4, "家电显控");
 
 
     //phone page
@@ -156,9 +158,10 @@ void ui_Screen1_screen_init(void)
     ui_Label3 = lv_label_create(ui_phone_box);
     lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label3, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(ui_Label3, LV_ALIGN_TOP_LEFT, 8, 135);
+    lv_obj_align(ui_Label3, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label3, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label3, "intercom");
+    lv_obj_add_style(ui_Label3, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(ui_Label3, "楼宇对讲");
 
     //setting page
 
@@ -181,9 +184,10 @@ void ui_Screen1_screen_init(void)
     ui_Label6 = lv_label_create(ui_setting_box);
     lv_obj_set_width(ui_Label6, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label6, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(ui_Label6, LV_ALIGN_TOP_LEFT, 8, 135);
+    lv_obj_align(ui_Label6, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label6, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label6, "Settings");
+    lv_obj_add_style(ui_Label6, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(ui_Label6, "设置");
 
     ui_wifi = lv_img_create(ui_Screen1);
     lv_obj_align(ui_wifi, LV_ALIGN_TOP_RIGHT, -10, 10);

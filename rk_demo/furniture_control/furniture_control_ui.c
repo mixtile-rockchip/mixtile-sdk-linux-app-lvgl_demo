@@ -4,6 +4,7 @@
 #include "furniture_control_ui.h"
 #include "home_ui.h"
 #include "icebox_ui.h"
+#include "main.h"
 
 ///////////////////// VARIABLES ////////////////////
 extern uint32_t LV_EVENT_GET_COMP_CHILD;
@@ -63,7 +64,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_set_width(furniture_control_ui_Label2, 249);
     lv_obj_set_height(furniture_control_ui_Label2, 26);
     lv_obj_align(furniture_control_ui_Label2, LV_ALIGN_TOP_LEFT, 100, 20);
-    lv_label_set_text(furniture_control_ui_Label2, "furniture control");
+    lv_obj_add_style(furniture_control_ui_Label2, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(furniture_control_ui_Label2, "家电显控");
 
     furniture_control_ui_box = lv_obj_create(furniture_control_ui_Screen1);
     lv_obj_remove_style_all(furniture_control_ui_box);
@@ -87,7 +89,6 @@ void ui_furniture_control_screen_init(void)
     lv_obj_clear_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_CLICKABLE);
     if (furniture_control_ui_icebox != NULL) {
-        printf("icebox callback\n");
         lv_obj_add_event_cb(furniture_control_ui_icebox, furniture_control_page_jump_icebox_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -95,7 +96,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_set_width(furniture_control_ui_Label1, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(furniture_control_ui_Label1, LV_SIZE_CONTENT);    /// 1
     lv_obj_align(furniture_control_ui_Label1, LV_ALIGN_CENTER, 0, 80);
-    lv_label_set_text(furniture_control_ui_Label1, "Icebox");
+    lv_obj_add_style(furniture_control_ui_Label1, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(furniture_control_ui_Label1, "每日菜谱");
 
 
     furniture_control_ui_player_box = lv_obj_create(furniture_control_ui_box);
@@ -117,7 +119,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_set_width(furniture_control_ui_Label4, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(furniture_control_ui_Label4, LV_SIZE_CONTENT);    /// 1
     lv_obj_align(furniture_control_ui_Label4, LV_ALIGN_CENTER, 0, 80);
-    lv_label_set_text(furniture_control_ui_Label4, "Promotional video");
+    lv_obj_add_style(furniture_control_ui_Label4, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(furniture_control_ui_Label4, "宣传视频");
 
     furniture_control_ui_coffee_box = lv_img_create(furniture_control_ui_box);
     lv_obj_remove_style_all(furniture_control_ui_coffee_box);
@@ -138,7 +141,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_set_width(furniture_control_ui_Label3, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(furniture_control_ui_Label3, LV_SIZE_CONTENT);    /// 1
     lv_obj_align(furniture_control_ui_Label3, LV_ALIGN_CENTER, 0, 80);
-    lv_label_set_text(furniture_control_ui_Label3, "Coffee machine");
+    lv_obj_add_style(furniture_control_ui_Label3, &style_txt_m, LV_PART_MAIN);
+    lv_label_set_text(furniture_control_ui_Label3, "咖啡机");
 }
 
 void furniture_control_ui_init(void)
