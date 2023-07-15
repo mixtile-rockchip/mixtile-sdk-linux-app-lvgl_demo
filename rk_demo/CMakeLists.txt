@@ -9,6 +9,9 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/setting
 	${PROJECT_SOURCE_DIR}/smart_home
 	${PROJECT_SOURCE_DIR}/include
+	${PROJECT_SOURCE_DIR}/video_monitor
+	${PROJECT_SOURCE_DIR}/intercom_call
+	${PROJECT_SOURCE_DIR}/intercom_homepage
 	)
 
 if (LV_DRV_USE_SDL_GPU)
@@ -23,6 +26,9 @@ aux_source_directory(./home SRCS)
 aux_source_directory(./furniture_control SRCS)
 aux_source_directory(./setting SRCS)
 aux_source_directory(./smart_home SRCS)
+aux_source_directory(./video_monitor SRCS)
+aux_source_directory(./intercom_call SRCS)
+aux_source_directory(./intercom_homepage SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 

@@ -8,6 +8,7 @@
 
 #include <lvgl/lvgl.h>
 
+#include "ui_intercom_homepage.h"
 #include "furniture_control_ui.h"
 #include "home_ui.h"
 #include "setting_ui.h"
@@ -77,6 +78,15 @@ static void date_update(lv_timer_t * timer)
     }else {
         lv_img_set_src(ui_wifi, IMG_WIFI_OFF);
     }
+}
+
+
+void home_page_jump_intercom_call_callback(lv_event_t* event) {
+    printf("home_page_jump_intercom_call_callback is into \n");
+    intercom_homepage_ui_init();
+    lv_timer_del(timer_date);
+    lv_obj_del(ui_Screen1);
+    ui_Screen1 = NULL;
 }
 
 ///////////////////// SCREENS ////////////////////
@@ -168,6 +178,9 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_color(ui_phone, lv_color_hex(0xDED6D6), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_phone, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_phone, IMG_PHONE, LV_PART_MAIN | LV_STATE_DEFAULT);
+    if (ui_phone != NULL) {
+        lv_obj_add_event_cb(ui_phone, home_page_jump_intercom_call_callback, LV_EVENT_CLICKED, NULL);
+    }
 
     ui_Label3 = lv_label_create(ui_phone_box);
     lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
