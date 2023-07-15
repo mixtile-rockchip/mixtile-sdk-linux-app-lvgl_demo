@@ -31,5 +31,13 @@
 #define WALLPAPER_2     "A:"PATH_PREFIX"/wallpaper_2.png"
 #define WALLPAPER_3     "A:"PATH_PREFIX"/wallpaper_3.png"
 
+//coffee machine
+#define COFFEE_1     "A:"PATH_PREFIX"/coffee1.png"
+#define COFFEE_2     "A:"PATH_PREFIX"/coffee2.png"
+#define COFFEE_3     "A:"PATH_PREFIX"/coffee3.png"
+#define COFFEE_4     "A:"PATH_PREFIX"/coffee4.png"
+#define COFFEE_5     "A:"PATH_PREFIX"/coffee5.png"
+
+
 #endif
 
