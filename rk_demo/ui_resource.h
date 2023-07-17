@@ -36,6 +36,7 @@
 #define BG_PIC_1        "A:"PATH_PREFIX"/bg_pic_1.png"
 #define BG_PIC_2        "A:"PATH_PREFIX"/bg_pic_2.png"
 #define BG_PIC_3        "A:"PATH_PREFIX"/bg_pic_3.png"
+#define BG_PIC_4        "A:"PATH_PREFIX"/bg_pic_4.png"
 
 #define WALLPAPER_0     "A:"PATH_PREFIX"/wallpaper_0.png"
 #define WALLPAPER_1     "A:"PATH_PREFIX"/wallpaper_1.png"

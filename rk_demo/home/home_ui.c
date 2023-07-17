@@ -35,6 +35,7 @@ static lv_obj_t * ui_Label4;
 static lv_obj_t * ui_Label3;
 static lv_obj_t * ui_Label6;
 static lv_obj_t * ui_logo;
+static lv_obj_t * bg_pic;
 static lv_timer_t * timer_date;
 
 ///////////////////// ANIMATIONS ////////////////////
@@ -85,6 +86,10 @@ void ui_Screen1_screen_init(void)
     lv_obj_clear_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_img_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    bg_pic = lv_img_create(ui_Screen1);
+    lv_obj_set_pos(bg_pic, 0, 0);
+    lv_img_set_src(bg_pic, BG_PIC_0);
+
     ui_box_main = lv_obj_create(ui_Screen1);
     lv_obj_remove_style_all(ui_box_main);
     lv_obj_set_width(ui_box_main, lv_pct(100));
@@ -116,6 +121,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_align(ui_Label1, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
     lv_obj_add_style(ui_Label1, &style_txt_m, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui_Label1, lv_color_white(), LV_PART_MAIN);
     lv_label_set_text(ui_Label1, "智能家居");
 
     //furniture_control
@@ -143,6 +149,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_align(ui_Label4, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label4, LV_ALIGN_CENTER);
     lv_obj_add_style(ui_Label4, &style_txt_m, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui_Label4, lv_color_white(), LV_PART_MAIN);
     lv_label_set_text(ui_Label4, "家电显控");
 
 
@@ -168,6 +175,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_align(ui_Label3, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label3, LV_ALIGN_CENTER);
     lv_obj_add_style(ui_Label3, &style_txt_m, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui_Label3, lv_color_white(), LV_PART_MAIN);
     lv_label_set_text(ui_Label3, "楼宇对讲");
 
     //setting page
@@ -194,6 +202,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_align(ui_Label6, LV_ALIGN_TOP_LEFT, 4, 135);
     lv_obj_set_align(ui_Label6, LV_ALIGN_CENTER);
     lv_obj_add_style(ui_Label6, &style_txt_m, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui_Label6, lv_color_white(), LV_PART_MAIN);
     lv_label_set_text(ui_Label6, "设置");
 
     ui_wifi = lv_img_create(ui_Screen1);

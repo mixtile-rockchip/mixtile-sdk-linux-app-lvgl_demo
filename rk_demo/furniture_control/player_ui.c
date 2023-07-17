@@ -20,14 +20,44 @@ static lv_obj_t * player_list_button = NULL;
 static lv_obj_t * video_label = NULL;
 static lv_obj_t * video_list_box = NULL;
 static lv_obj_t * video_list = NULL;
+static lv_obj_t * bg_pic = NULL;
+
 
 static lv_style_t style_txt;
 static lv_style_t style_list;
+//static lv_img_dsc_t * bg_snapshot;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+// static void bg_pic_snapshot_blur(void)
+// {
+//     lv_draw_rect_dsc_t dsc;
+
+//     bg_snapshot = lv_snapshot_take(bg_pic, LV_IMG_CF_TRUE_COLOR);
+
+//     lv_obj_t * canvas = lv_canvas_create(NULL);
+//     lv_area_t area;
+//     lv_canvas_set_buffer(canvas, bg_snapshot->data,
+//                          bg_snapshot->header.w,
+//                          bg_snapshot->header.h,
+//                          bg_snapshot->header.cf);
+//     area.x1 = 0;
+//     area.y1 = 0;
+//     area.x2 = bg_snapshot->header.w - 1;
+//     area.y2 = bg_snapshot->header.h - 1;
+//     lv_canvas_blur_ver(canvas, &area, 100);
+//     lv_canvas_blur_hor(canvas, &area, 100);
+//     lv_draw_rect_dsc_init(&dsc);
+//     dsc.bg_opa = 70;
+//     dsc.bg_color = lv_color_black();
+//     lv_canvas_draw_rect(canvas, 0, 0,
+//                         bg_snapshot->header.w,
+//                         bg_snapshot->header.h, &dsc);
+//     lv_obj_del(canvas);
+// }
+
 static void style_init(void)
 {
     lv_style_init(&style_txt);
@@ -43,6 +73,7 @@ void player_page_jump_furniture_control_callback(lv_event_t* event) {
     printf("player_page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_obj_del(ui_player_screen);
+    //free(bg_snapshot);
     ui_player_screen = NULL;
     video_list_box = NULL;
 }
@@ -102,6 +133,11 @@ void ui_player_screen_init(void)
 
     ui_player_screen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_player_screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    bg_pic = lv_img_create(ui_player_screen);
+    lv_obj_set_pos(bg_pic, 0, 0);
+    lv_img_set_src(bg_pic, BG_PIC_1);
+    //bg_pic_snapshot_blur();
 
     ui_return = lv_img_create(ui_player_screen);
     lv_img_set_src(ui_return, IMG_RETURN_BTN);
@@ -167,7 +203,7 @@ void ui_player_screen_init(void)
     video_label = lv_label_create(player_box_button);
     lv_obj_set_width(video_label, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(video_label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(video_label, LV_ALIGN_CENTER, 0, 150);
+    lv_obj_align(video_label, LV_ALIGN_CENTER, 0, 100);
     lv_obj_add_style(video_label, &style_txt_m, LV_PART_MAIN);
     lv_label_set_text(video_label, "");
 
