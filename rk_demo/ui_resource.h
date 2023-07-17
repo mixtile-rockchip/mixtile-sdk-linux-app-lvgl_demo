@@ -16,10 +16,10 @@
 #define IMG_FURNITURE  	"A:"PATH_PREFIX"/furniture_control.png"
 
 // furniture control page
-#define IMG_ICEBOX  "A:"PATH_PREFIX"/icebox.png"
-#define IMG_PLAYER  "A:"PATH_PREFIX"/player.png"
-#define IMG_COFFEE  "A:"PATH_PREFIX"/coffee_machine.png"
-#define IMG_RICE  "A:"PATH_PREFIX"/rice.png"
+#define IMG_ICEBOX  		"A:"PATH_PREFIX"/icebox.png"
+#define IMG_PLAYER  		"A:"PATH_PREFIX"/player.png"
+#define IMG_COFFEE  		"A:"PATH_PREFIX"/coffee_machine.png"
+#define IMG_RICE  			"A:"PATH_PREFIX"/rice.png"
 
 
 #define WIFI_ON_PIC     "A:"PATH_PREFIX"/wifi.png"
@@ -38,6 +38,10 @@
 #define COFFEE_4     "A:"PATH_PREFIX"/coffee4.png"
 #define COFFEE_5     "A:"PATH_PREFIX"/coffee5.png"
 
+//player
+#define IMG_PLAYER_STOP  	"A:"PATH_PREFIX"/player-stop.png"
+#define IMG_PLAYER_START 	"A:"PATH_PREFIX"/player-start.png"
+#define IMG_PLAYER_LIST  	"A:"PATH_PREFIX"/list.png"
 
 #endif
 

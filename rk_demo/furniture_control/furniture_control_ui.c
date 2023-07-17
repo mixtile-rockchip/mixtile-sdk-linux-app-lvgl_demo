@@ -48,6 +48,14 @@ void furniture_control_page_jump_coffee_machine_callback(lv_event_t* event) {
     furniture_control_ui_Screen1 = NULL;
 }
 
+void furniture_control_page_jump_player_callback(lv_event_t* event) {
+    printf("furniture_control_page_jump_player_callback is into \n");
+    player_ui_init();
+    lv_obj_del(furniture_control_ui_Screen1);
+    furniture_control_ui_Screen1 = NULL;
+}
+
+
 ///////////////////// SCREENS ////////////////////
 
 void ui_furniture_control_screen_init(void)
@@ -121,6 +129,9 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_player, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_player, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_player, LV_OBJ_FLAG_CLICKABLE);
+    if (furniture_control_ui_player != NULL) {
+        lv_obj_add_event_cb(furniture_control_ui_player, furniture_control_page_jump_player_callback, LV_EVENT_CLICKED, NULL);
+    }
 
     furniture_control_ui_Label4 = lv_label_create(furniture_control_ui_player_box);
     lv_obj_set_width(furniture_control_ui_Label4, LV_SIZE_CONTENT);   /// 1
