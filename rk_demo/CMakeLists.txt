@@ -12,6 +12,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/video_monitor
 	${PROJECT_SOURCE_DIR}/intercom_call
 	${PROJECT_SOURCE_DIR}/intercom_homepage
+	${PROJECT_SOURCE_DIR}/rockit
 	)
 
 if (LV_DRV_USE_SDL_GPU)
@@ -29,11 +30,12 @@ aux_source_directory(./smart_home SRCS)
 aux_source_directory(./video_monitor SRCS)
 aux_source_directory(./intercom_call SRCS)
 aux_source_directory(./intercom_homepage SRCS)
+aux_source_directory(./rockit SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
 target_link_libraries(${PROJECT_NAME}
-	lvgl pthread m lv_drivers freetype rkwifibt
+	lvgl pthread m lv_drivers freetype rkwifibt rockit
 )
 
 if (LV_DRV_USE_SDL_GPU)
@@ -44,4 +46,3 @@ if (LV_DRV_USE_DRM)
 endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-

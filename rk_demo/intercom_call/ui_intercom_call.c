@@ -1,7 +1,10 @@
-#include "home_ui.h"
-#include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "home_ui.h"
 #include "ui_intercom_homepage.h"
+#include "audio_server.h"
+#include "local_ip.h"
 
 
 lv_obj_t * ui_Screen_test;
@@ -13,6 +16,10 @@ static lv_obj_t * ui_rectangle;
 static lv_obj_t * ui_circle[15];
 static lv_obj_t * ui_intercom_call_Label_0;
 static lv_obj_t * ui_intercom_call_Label_1;
+static lv_obj_t * ui_call_break;
+static lv_obj_t * ui_ip_label;
+
+static lv_timer_t * timer;
 
 extern lv_img_dsc_t ui_img_circular;
 extern lv_img_dsc_t ui_img_rectangle;
@@ -80,6 +87,12 @@ static void icon_cb(lv_event_t * e)
                 }
             }
         }
+        if (type == 12) {
+            if (audio_client_state() != STATE_RUNNING)
+                run_audio_client(lv_label_get_text(ui_intercom_call_Label_1));
+            else
+                exit_audio_client();
+        }
     }
 }
 
@@ -90,6 +103,9 @@ static void back_icon_cb(lv_event_t * e){
         intercom_homepage_ui_init();
         lv_obj_del(ui_Screen_intercom_call);
         ui_Screen_intercom_call = NULL;
+        lv_timer_del(timer);
+        exit_audio_client();
+        exit_audio_server();
     }
 }
 
@@ -116,10 +132,34 @@ void intercom_call_button(lv_obj_t * parent, lv_obj_t * referent)
     }
 }
 
+static void state_update(lv_timer_t * timer)
+{
+    static int state = STATE_IDLE;
 
+    if (audio_client_state() != state)
+    {
+        state = audio_client_state();
+        if (state == STATE_RUNNING)
+        {
+            lv_label_set_text(button[12].ui_circle_label, "挂断");
+            lv_obj_set_style_text_color(button[12].ui_circle_label,
+                                        lv_color_make(0xff, 0x0, 0x0),
+                                        LV_PART_MAIN);
+        }
+        else
+        {
+            lv_label_set_text(button[12].ui_circle_label, button[12].txt);
+            lv_obj_set_style_text_color(button[12].ui_circle_label,
+                                        lv_color_black(),
+                                        LV_PART_MAIN);
+        }
+    }
+}
 
 void ui_intercom_call_screen_init()
 {
+    char *ip;
+
     ui_Screen_intercom_call = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Screen_intercom_call, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_img_opa(ui_Screen_intercom_call, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -160,12 +200,28 @@ void ui_intercom_call_screen_init()
     ui_intercom_call_Label_1 = lv_label_create(ui_rectangle);
     lv_obj_set_size(ui_intercom_call_Label_1, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_intercom_call_Label_1, ui_rectangle, LV_ALIGN_LEFT_MID, 20, 0);
-    strcpy(digits, " ");
+    memset(digits, 0, sizeof(digits));
     lv_label_set_text(ui_intercom_call_Label_1, digits);
+    lv_obj_refr_size(ui_intercom_call_Label_1);
+    lv_obj_refr_pos(ui_intercom_call_Label_1);
 
+    ui_ip_label = lv_label_create(ui_Screen_intercom_call);
+    lv_obj_set_size(ui_ip_label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    ip = get_local_ip();
+    //lv_obj_set_style_bg_opa(ui_ip_label, LV_OPA_TRANSP, LV_PART_MAIN);
+    lv_label_set_text(ui_ip_label, ip ? ip : "未联网");
+    if (ip)
+        free(ip);
+    lv_obj_refr_size(ui_rectangle);
+    lv_obj_refr_pos(ui_rectangle);
+    lv_obj_refr_size(ui_ip_label);
+    lv_obj_refr_pos(ui_ip_label);
+    lv_obj_align_to(ui_ip_label, ui_rectangle, LV_ALIGN_OUT_TOP_LEFT, 0, -10);
 
     intercom_call_button(ui_Screen_intercom_call, ui_rectangle);
 
+    timer = lv_timer_create(state_update, 100, NULL);
+    lv_timer_enable(timer);
 }
 
 void intercom_call_ui_init()
@@ -173,4 +229,5 @@ void intercom_call_ui_init()
     if (!ui_Screen_intercom_call)
         ui_intercom_call_screen_init();
     lv_disp_load_scr(ui_Screen_intercom_call);
+    run_audio_server();
 }

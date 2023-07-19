@@ -23,6 +23,9 @@
 
 #include "ui_resource.h"
 
+#include "rk_defines.h"
+#include "rk_mpi_sys.h"
+
 lv_ft_info_t ttf_main_s;
 lv_ft_info_t ttf_main_m;
 lv_ft_info_t ttf_main_l;
@@ -113,6 +116,8 @@ int main(int argc, char **argv)
     uint32_t st0 = 0, et0;
 #endif
     signal(SIGINT, sigterm_handler);
+    RK_MPI_SYS_Init();
+
     lvgl_init();
 
     app_init();
@@ -147,6 +152,8 @@ int main(int argc, char **argv)
 #endif
         usleep(100);
     }
+
+    RK_MPI_SYS_Exit();
 
     return 0;
 }
