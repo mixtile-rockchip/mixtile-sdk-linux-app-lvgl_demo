@@ -98,7 +98,7 @@ static void style_init(void)
 
 static void menu_switch_cb(lv_event_t * e)
 {
-    int idx = (int)lv_event_get_user_data(e);
+    intptr_t idx = (intptr_t)lv_event_get_user_data(e);
 
     if (idx < SUBMENU_MIN || idx >= SUBMENU_MAX)
         return;
@@ -186,7 +186,7 @@ void setting_ui_init(void)
     lv_obj_set_pos(area_content, lv_pct(40), lv_pct(5));
     lv_obj_set_flex_flow(area_content, LV_FLEX_FLOW_COLUMN);
 
-    for (int i = SUBMENU_MIN; i < SUBMENU_MAX; i++)
+    for (intptr_t i = SUBMENU_MIN; i < SUBMENU_MAX; i++)
     {
         sub_menu[i] = lv_list_add_btn(area_menu, NULL, submenu_desc[i].name);
         lv_obj_add_event_cb(sub_menu[i], menu_switch_cb, LV_EVENT_CLICKED, (void *)i);

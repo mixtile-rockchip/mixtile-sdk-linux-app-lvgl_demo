@@ -5,6 +5,8 @@
 #include "home_ui.h"
 #include "icebox_ui.h"
 #include "main.h"
+#include "coffee_machine.h"
+#include "player_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
 extern uint32_t LV_EVENT_GET_COMP_CHILD;
@@ -38,7 +40,7 @@ static void bg_pic_snapshot_blur(void)
 
     lv_obj_t * canvas = lv_canvas_create(NULL);
     lv_area_t area;
-    lv_canvas_set_buffer(canvas, bg_snapshot->data,
+    lv_canvas_set_buffer(canvas, (void *)bg_snapshot->data,
                          bg_snapshot->header.w,
                          bg_snapshot->header.h,
                          bg_snapshot->header.cf);

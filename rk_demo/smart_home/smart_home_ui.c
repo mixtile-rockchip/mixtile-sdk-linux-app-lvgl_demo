@@ -67,7 +67,7 @@ static void bg_pic_snapshot_blur(void)
 
     lv_obj_t * canvas = lv_canvas_create(NULL);
     lv_area_t area;
-    lv_canvas_set_buffer(canvas, bg_snapshot->data,
+    lv_canvas_set_buffer(canvas, (void *)bg_snapshot->data,
                          bg_snapshot->header.w,
                          bg_snapshot->header.h,
                          bg_snapshot->header.cf);
