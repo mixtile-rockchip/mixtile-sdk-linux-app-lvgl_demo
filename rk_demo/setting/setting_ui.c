@@ -22,7 +22,7 @@ enum
     SUBMENU_LANGUAGE_DATE,
     SUBMENU_ABOUT,
     SUBMENU_MAX,
-    SUBMENU_DEFAULT = SUBMENU_BT,
+    SUBMENU_DEFAULT = SUBMENU_WIFI,
 };
 
 struct submenu_s {
@@ -193,8 +193,8 @@ void setting_ui_init(void)
         submenu_desc[i].menu = NULL;
     }
 
-load:
     submenu_desc[SUBMENU_DEFAULT].init();
+load:
     lv_disp_load_scr(ui_screen);
 }
 

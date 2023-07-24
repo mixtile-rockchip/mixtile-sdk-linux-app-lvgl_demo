@@ -298,8 +298,6 @@ static void wifi_update(lv_timer_t * timer)
 
 lv_obj_t * menu_wifi_init(lv_obj_t * parent)
 {
-    if (RK_wifi_enable(1) < 0)
-        printf("RK_wifi_enable 1 fail!\n");
     RK_wifi_register_callback(rk_wifi_state_callback);
 
     style_init();
