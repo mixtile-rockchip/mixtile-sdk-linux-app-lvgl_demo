@@ -27,5 +27,9 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/lvgl SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/sys SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/cJSON SRCS)
 
-add_subdirectory(lv_demo)
-add_subdirectory(rk_demo)
+if (LV_USE_RK_DEMO)
+	add_subdirectory(rk_demo)
+else()
+	add_subdirectory(lv_demo)
+endif()
+
