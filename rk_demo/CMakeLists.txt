@@ -49,3 +49,4 @@ endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(DIRECTORY resource DESTINATION share)
+install(PROGRAMS S99-rk_demo DESTINATION /etc/init.d)

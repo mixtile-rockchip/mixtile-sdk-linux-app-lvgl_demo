@@ -1,0 +1,19 @@
+#! /bin/sh
+
+start() {
+	amixer -c 0 cset numid=33 0
+	amixer -c 0 cset numid=34 0
+	rk_demo &
+	udhcpc &
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  *)
+	echo "Usage: $0 {start}"
+	exit 1
+esac
+
+exit $?
