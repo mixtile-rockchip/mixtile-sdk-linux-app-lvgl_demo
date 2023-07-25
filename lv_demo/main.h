@@ -7,7 +7,6 @@
 #include <limits.h>
 #include <malloc.h>
 #include <math.h>
-#include <png.h>
 #include <poll.h>
 #include <pthread.h>
 #include <signal.h>
