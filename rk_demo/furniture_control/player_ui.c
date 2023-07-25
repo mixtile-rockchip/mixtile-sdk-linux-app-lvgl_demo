@@ -1,5 +1,5 @@
 #define MAX_FILE_COUNT 10
-#define PATH_VIDEO "/oem/" 
+#define PATH_VIDEO "/oem/"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -8,19 +8,19 @@
 #include "furniture_control_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
-static lv_obj_t * ui_player_screen = NULL;
-static lv_obj_t * player_label;
-static lv_obj_t * ui_return;
-static lv_obj_t * player_box = NULL;
-static lv_obj_t * player_box_canvas = NULL;
-static lv_obj_t * player_box_button = NULL;
-static lv_obj_t * player_start_button = NULL;
-static lv_obj_t * player_stop_button = NULL;
-static lv_obj_t * player_list_button = NULL;
-static lv_obj_t * video_label = NULL;
-static lv_obj_t * video_list_box = NULL;
-static lv_obj_t * video_list = NULL;
-static lv_obj_t * bg_pic = NULL;
+static lv_obj_t *ui_player_screen = NULL;
+static lv_obj_t *player_label;
+static lv_obj_t *ui_return;
+static lv_obj_t *player_box = NULL;
+static lv_obj_t *player_box_canvas = NULL;
+static lv_obj_t *player_box_button = NULL;
+static lv_obj_t *player_start_button = NULL;
+static lv_obj_t *player_stop_button = NULL;
+static lv_obj_t *player_list_button = NULL;
+static lv_obj_t *video_label = NULL;
+static lv_obj_t *video_list_box = NULL;
+static lv_obj_t *video_list = NULL;
+static lv_obj_t *bg_pic = NULL;
 
 
 static lv_style_t style_txt;
@@ -69,7 +69,8 @@ static void style_init(void)
     lv_style_set_text_color(&style_list, lv_color_black());
 }
 
-void player_page_jump_furniture_control_callback(lv_event_t* event) {
+void player_page_jump_furniture_control_callback(lv_event_t *event)
+{
     printf("player_page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_obj_del(ui_player_screen);
@@ -78,20 +79,23 @@ void player_page_jump_furniture_control_callback(lv_event_t* event) {
     video_list_box = NULL;
 }
 
-void video_name_callback(lv_event_t* event) {
-    char * file_name = lv_event_get_user_data(event);
+void video_name_callback(lv_event_t *event)
+{
+    char *file_name = lv_event_get_user_data(event);
     printf("video_name select file %s\n", file_name);
     lv_label_set_text(video_label, file_name);
     lv_obj_del(video_list_box);
     video_list_box = NULL;
 }
 
-void player_list_button_callback(lv_event_t* event) {
+void player_list_button_callback(lv_event_t *event)
+{
     printf("player_list_button_callback is into \n");
     DIR *dir;
     struct dirent *entry;
     int file_count = 0;
-    if (video_list_box == NULL) {
+    if (video_list_box == NULL)
+    {
         video_list_box = lv_obj_create(player_box);
         //lv_obj_remove_style_all(video_list_box);
         lv_obj_set_width(video_list_box, lv_pct(50));
@@ -105,23 +109,29 @@ void player_list_button_callback(lv_event_t* event) {
         lv_obj_set_style_pad_column(video_list, 10, LV_PART_MAIN);
 
         dir = opendir(PATH_VIDEO);
-        if (dir == NULL) {
+        if (dir == NULL)
+        {
             printf("Error opening directory /oem\n");
             return;
         }
-        while ((entry = readdir(dir)) != NULL) {
-            if (entry->d_type == DT_REG) {
+        while ((entry = readdir(dir)) != NULL)
+        {
+            if (entry->d_type == DT_REG)
+            {
                 //add_file_to_list(entry->d_name);
                 lv_obj_t *obj_text = lv_list_add_btn(video_list, NULL, entry->d_name);
                 lv_obj_add_flag(obj_text, LV_OBJ_FLAG_CLICKABLE);
                 lv_obj_add_event_cb(obj_text, video_name_callback, LV_EVENT_CLICKED, entry->d_name);
                 file_count++;
-                if (file_count >= MAX_FILE_COUNT) {
+                if (file_count >= MAX_FILE_COUNT)
+                {
                     break;
                 }
             }
         }
-    } else {
+    }
+    else
+    {
         lv_obj_del(video_list_box);
         video_list_box = NULL;
     }
@@ -146,7 +156,8 @@ void ui_player_screen_init(void)
     lv_obj_align(ui_return, LV_ALIGN_TOP_LEFT, 10, 10);
     lv_obj_add_flag(ui_return, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_return, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    if (ui_return != NULL) {
+    if (ui_return != NULL)
+    {
         lv_obj_add_event_cb(ui_return, player_page_jump_furniture_control_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -196,7 +207,8 @@ void ui_player_screen_init(void)
     lv_obj_add_flag(player_list_button, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(player_list_button, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(player_list_button, LV_OBJ_FLAG_CLICKABLE);
-    if (player_list_button != NULL) {
+    if (player_list_button != NULL)
+    {
         lv_obj_add_event_cb(player_list_button, player_list_button_callback, LV_EVENT_CLICKED, NULL);
     }
 

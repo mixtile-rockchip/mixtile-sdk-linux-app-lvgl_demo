@@ -11,22 +11,22 @@
 ///////////////////// VARIABLES ////////////////////
 extern uint32_t LV_EVENT_GET_COMP_CHILD;
 
-static lv_obj_t * furniture_control_ui_Screen1 = NULL;
-static lv_obj_t * furniture_control_ui_box = NULL;
-static lv_obj_t * furniture_control_ui_icebox_box = NULL;
-static lv_obj_t * furniture_control_ui_player_box = NULL;
-static lv_obj_t * furniture_control_ui_coffee_box = NULL;
-static lv_obj_t * furniture_control_ui_return;
-static lv_obj_t * furniture_control_ui_Label2;
-static lv_obj_t * furniture_control_ui_icebox;
-static lv_obj_t * furniture_control_ui_player;
-static lv_obj_t * furniture_control_ui_coffee_machine;
-static lv_obj_t * furniture_control_ui_Label1;
-static lv_obj_t * furniture_control_ui_Label4;
-static lv_obj_t * furniture_control_ui_Label3;
-static lv_obj_t * bg_pic;
-static lv_obj_t * v_bg;
-static lv_img_dsc_t * bg_snapshot;
+static lv_obj_t *furniture_control_ui_Screen1 = NULL;
+static lv_obj_t *furniture_control_ui_box = NULL;
+static lv_obj_t *furniture_control_ui_icebox_box = NULL;
+static lv_obj_t *furniture_control_ui_player_box = NULL;
+static lv_obj_t *furniture_control_ui_coffee_box = NULL;
+static lv_obj_t *furniture_control_ui_return;
+static lv_obj_t *furniture_control_ui_Label2;
+static lv_obj_t *furniture_control_ui_icebox;
+static lv_obj_t *furniture_control_ui_player;
+static lv_obj_t *furniture_control_ui_coffee_machine;
+static lv_obj_t *furniture_control_ui_Label1;
+static lv_obj_t *furniture_control_ui_Label4;
+static lv_obj_t *furniture_control_ui_Label3;
+static lv_obj_t *bg_pic;
+static lv_obj_t *v_bg;
+static lv_img_dsc_t *bg_snapshot;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
 ///////////////////// ANIMATIONS ////////////////////
@@ -38,7 +38,7 @@ static void bg_pic_snapshot_blur(void)
 
     bg_snapshot = lv_snapshot_take(bg_pic, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t * canvas = lv_canvas_create(NULL);
+    lv_obj_t *canvas = lv_canvas_create(NULL);
     lv_area_t area;
     lv_canvas_set_buffer(canvas, (void *)bg_snapshot->data,
                          bg_snapshot->header.w,
@@ -59,7 +59,8 @@ static void bg_pic_snapshot_blur(void)
     lv_obj_del(canvas);
 }
 
-void furniture_control_page_jump_home_callback(lv_event_t* event) {
+void furniture_control_page_jump_home_callback(lv_event_t *event)
+{
     printf("page_jump_return_home_callback is into \n");
     home_ui_init();
     lv_obj_del(furniture_control_ui_Screen1);
@@ -68,7 +69,8 @@ void furniture_control_page_jump_home_callback(lv_event_t* event) {
     furniture_control_ui_Screen1 = NULL;
 }
 
-void furniture_control_page_jump_icebox_callback(lv_event_t* event) {
+void furniture_control_page_jump_icebox_callback(lv_event_t *event)
+{
     printf("furniture_control_page_jump_icebox_callback is into \n");
     icebox_ui_init();
     lv_obj_del(furniture_control_ui_Screen1);
@@ -77,7 +79,8 @@ void furniture_control_page_jump_icebox_callback(lv_event_t* event) {
     furniture_control_ui_Screen1 = NULL;
 }
 
-void furniture_control_page_jump_coffee_machine_callback(lv_event_t* event) {
+void furniture_control_page_jump_coffee_machine_callback(lv_event_t *event)
+{
     printf("furniture_control_page_jump_coffee_machine_callback is into \n");
     coffee_machine_ui_init();
     lv_obj_del(furniture_control_ui_Screen1);
@@ -86,7 +89,8 @@ void furniture_control_page_jump_coffee_machine_callback(lv_event_t* event) {
     furniture_control_ui_Screen1 = NULL;
 }
 
-void furniture_control_page_jump_player_callback(lv_event_t* event) {
+void furniture_control_page_jump_player_callback(lv_event_t *event)
+{
     printf("furniture_control_page_jump_player_callback is into \n");
     player_ui_init();
     lv_obj_del(furniture_control_ui_Screen1);
@@ -118,7 +122,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_return, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_return, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_return, LV_OBJ_FLAG_CLICKABLE);
-    if (furniture_control_ui_return != NULL) {
+    if (furniture_control_ui_return != NULL)
+    {
         lv_obj_add_event_cb(furniture_control_ui_return, furniture_control_page_jump_home_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -162,7 +167,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_icebox, LV_OBJ_FLAG_CLICKABLE);
-    if (furniture_control_ui_icebox != NULL) {
+    if (furniture_control_ui_icebox != NULL)
+    {
         lv_obj_add_event_cb(furniture_control_ui_icebox, furniture_control_page_jump_icebox_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -188,7 +194,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_player, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_player, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_player, LV_OBJ_FLAG_CLICKABLE);
-    if (furniture_control_ui_player != NULL) {
+    if (furniture_control_ui_player != NULL)
+    {
         lv_obj_add_event_cb(furniture_control_ui_player, furniture_control_page_jump_player_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -213,7 +220,8 @@ void ui_furniture_control_screen_init(void)
     lv_obj_add_flag(furniture_control_ui_coffee_machine, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(furniture_control_ui_coffee_machine, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_flag(furniture_control_ui_coffee_machine, LV_OBJ_FLAG_CLICKABLE);
-    if (furniture_control_ui_coffee_machine != NULL) {
+    if (furniture_control_ui_coffee_machine != NULL)
+    {
         lv_obj_add_event_cb(furniture_control_ui_coffee_machine, furniture_control_page_jump_coffee_machine_callback, LV_EVENT_CLICKED, NULL);
     }
 

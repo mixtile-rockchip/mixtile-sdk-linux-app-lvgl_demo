@@ -38,9 +38,12 @@ static AUDIO_SOUND_MODE_E sound_mode(int ch)
 {
     switch (ch)
     {
-    case 1:     return AUDIO_SOUND_MODE_MONO;
-    case 2:     return AUDIO_SOUND_MODE_STEREO;
-    default:    return AUDIO_SOUND_MODE_BUTT;
+    case 1:
+        return AUDIO_SOUND_MODE_MONO;
+    case 2:
+        return AUDIO_SOUND_MODE_STEREO;
+    default:
+        return AUDIO_SOUND_MODE_BUTT;
     }
 }
 
@@ -65,13 +68,15 @@ int ai_init(void)
     aiAttr.u32ChnCnt = 2;
 
     result = RK_MPI_AI_SetPubAttr(aiDevId, &aiAttr);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai set attr fail, reason = %d", result);
         return -1;
     }
 
     result = RK_MPI_AI_Enable(aiDevId);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai enable fail, reason = %d", result);
         return -1;
     }
@@ -80,7 +85,8 @@ int ai_init(void)
     pstParams.enLoopbackMode = AUDIO_LOOPBACK_NONE;
     pstParams.s32UsrFrmDepth = -1;
     result = RK_MPI_AI_SetChnParam(aiDevId, aiChn, &pstParams);
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("ai set channel params, aiChn = %d", aiChn);
         goto ai_chn_err;
     }
@@ -94,35 +100,40 @@ int ai_init(void)
     stAiVqeConfig.s32WorkSampleRate = AUDIO_RATE;
     stAiVqeConfig.s32FrameSample = AUDIO_PERIOD_SZ;
     result = RK_MPI_AI_SetVqeAttr(aiDevId, aiVqeChn, 0, 0, &stAiVqeConfig);
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("%s: SetVqeAttr(%d,%d) failed with %#x",
-            __func__, aiDevId, aiVqeChn, result);
+                __func__, aiDevId, aiVqeChn, result);
         goto vqe_err;
     }
 
     result = RK_MPI_AI_GetVqeAttr(aiDevId, aiVqeChn, &stAiVqeConfig2);
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("%s: SetVqeAttr(%d,%d) failed with %#x",
-            __func__, aiDevId, aiChn, result);
+                __func__, aiDevId, aiChn, result);
         goto vqe_err;
     }
 
     result = memcmp(&stAiVqeConfig, &stAiVqeConfig2, sizeof(AI_VQE_CONFIG_S));
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("%s: set/get vqe config is different: %d", __func__, result);
         goto vqe_err;
     }
 
     result = RK_MPI_AI_EnableVqe(aiDevId, aiVqeChn);
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("%s: EnableVqe(%d,%d) failed with %#x",
-            __func__, aiDevId, aiVqeChn, result);
+                __func__, aiDevId, aiVqeChn, result);
         goto vqe_err;
     }
 #endif
 
     result = RK_MPI_AI_EnableChn(aiDevId, aiChn);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai enable channel fail, aiChn = %d, reason = %x", aiChn, result);
         goto ai_chn_err;
     }
@@ -137,7 +148,8 @@ int ai_init(void)
     aeAttr.u32BufCount = 4;
 
     result = RK_MPI_AENC_CreateChn(aeChn, &aeAttr);
-    if (result) {
+    if (result)
+    {
         RK_LOGE("create aenc chn %d err:0x%x\n", aeChn, result);
         goto aenc_err;
     }
@@ -150,7 +162,8 @@ int ai_init(void)
     aencBindAttr.s32ChnId = aeChn;
 
     result = RK_MPI_SYS_Bind(&aiBindAttr, &aencBindAttr);
-    if (result) {
+    if (result)
+    {
         RK_LOGE("bind ai aenc failed:0x%x\n", result);
         goto bind_err;
     }
@@ -181,10 +194,12 @@ int ai_fetch(int (*hook)(void *, char *, int), void *arg)
     RK_S32 result;
 
     result = RK_MPI_AI_GetFrame(aiDevId, aiChn, &getFrame, RK_NULL, -1);
-    if (result == 0) {
-        void* data = RK_MPI_MB_Handle2VirAddr(getFrame.pMbBlk);
+    if (result == 0)
+    {
+        void *data = RK_MPI_MB_Handle2VirAddr(getFrame.pMbBlk);
         RK_LOGV("data = %p, len = %d", data, getFrame.u32Len);
-        if (getFrame.u32Len <= 0) {
+        if (getFrame.u32Len <= 0)
+        {
             RK_LOGD("get ai frame end");
             return 0;
         }
@@ -197,12 +212,14 @@ int ai_fetch(int (*hook)(void *, char *, int), void *arg)
     RK_S32 eos = 0;
 
     result = RK_MPI_AENC_GetStream(aeChn, &pstStream, -1);
-    if (result == RK_SUCCESS) {
+    if (result == RK_SUCCESS)
+    {
         MB_BLK bBlk = pstStream.pMbBlk;
         RK_VOID *pstFrame = RK_MPI_MB_Handle2VirAddr(bBlk);
         RK_S32 frameSize = pstStream.u32Len;
         eos = (frameSize <= 0) ? 1 : 0;
-        if (pstFrame) {
+        if (pstFrame)
+        {
             RK_LOGV("get frame data = %p, size = %d", pstFrame, frameSize);
             result = (hook(arg, pstFrame, frameSize) <= 0) ? RK_FAILURE : RK_SUCCESS;
             RK_MPI_AENC_ReleaseStream(aeChn, &pstStream);

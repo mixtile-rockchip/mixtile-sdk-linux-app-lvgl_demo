@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Size: 14 px
  * Bpp: 2
- * Opts: 
+ * Opts:
  ******************************************************************************/
 
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
@@ -19,7 +19,8 @@
 
 
 /*Store the image of the glyphs*/
-static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
+static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
+{
     /* U+63A7 "控" */
     0x9, 0x0, 0x40, 0x0, 0x80, 0x6, 0x0, 0x8,
     0x15, 0x66, 0x85, 0xea, 0x10, 0x24, 0x8, 0x17,
@@ -61,7 +62,8 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *  GLYPH DESCRIPTION
  *--------------------*/
 
-static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
+static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
+{
     {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
     {.bitmap_index = 0, .adv_w = 224, .box_w = 14, .box_h = 14, .ofs_x = 0, .ofs_y = -2},
     {.bitmap_index = 49, .adv_w = 224, .box_w = 14, .box_h = 13, .ofs_x = 0, .ofs_y = -1},
@@ -73,7 +75,8 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
  *  CHARACTER MAPPING
  *--------------------*/
 
-static const uint16_t unicode_list_0[] = {
+static const uint16_t unicode_list_0[] =
+{
     0x0, 0x132a, 0x261f, 0x34ea
 };
 
@@ -95,9 +98,11 @@ static const lv_font_fmt_txt_cmap_t cmaps[] =
 #if LV_VERSION_CHECK(8, 0, 0)
 /*Store all the custom data of the font*/
 static  lv_font_fmt_txt_glyph_cache_t cache;
-static const lv_font_fmt_txt_dsc_t font_dsc = {
+static const lv_font_fmt_txt_dsc_t font_dsc =
+{
 #else
-static lv_font_fmt_txt_dsc_t font_dsc = {
+static lv_font_fmt_txt_dsc_t font_dsc =
+{
 #endif
     .glyph_bitmap = glyph_bitmap,
     .glyph_dsc = glyph_dsc,
@@ -120,9 +125,11 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
 
 /*Initialize a public general font descriptor*/
 #if LV_VERSION_CHECK(8, 0, 0)
-const lv_font_t Video_monitor = {
+const lv_font_t Video_monitor =
+{
 #else
-lv_font_t Video_monitor = {
+lv_font_t Video_monitor =
+{
 #endif
     .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
     .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/

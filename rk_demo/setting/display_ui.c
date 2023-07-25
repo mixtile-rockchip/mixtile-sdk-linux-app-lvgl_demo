@@ -9,22 +9,22 @@
 #include "main.h"
 #include "ui_resource.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_obj_t * bright_label;
-static lv_obj_t * bright_value;
-static lv_obj_t * bright_slider;
+static lv_obj_t *bright_label;
+static lv_obj_t *bright_value;
+static lv_obj_t *bright_slider;
 
-static void slider_event_cb(lv_event_t * e)
+static void slider_event_cb(lv_event_t *e)
 {
-    lv_obj_t * slider = lv_event_get_target(e);
+    lv_obj_t *slider = lv_event_get_target(e);
     char buf[8];
     lv_snprintf(buf, sizeof(buf), "%d%%", (int)lv_slider_get_value(slider));
     lv_label_set_text(bright_value, buf);
     lv_obj_align_to(bright_value, slider, LV_ALIGN_OUT_TOP_RIGHT, 0, 0);
 }
 
-lv_obj_t * menu_display_init(lv_obj_t * parent)
+lv_obj_t *menu_display_init(lv_obj_t *parent)
 {
     bg = lv_obj_create(parent);
     lv_obj_set_size(bg, lv_pct(100), LV_SIZE_CONTENT);

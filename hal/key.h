@@ -42,7 +42,7 @@ void key_init(void);
  * @param data store the evdev data here
  * @return false: because the points are not buffered, so no more data to be read
  */
-void key_read(lv_indev_drv_t * drv, lv_indev_data_t * data);
+void key_read(lv_indev_drv_t *drv, lv_indev_data_t *data);
 
 
 /**********************

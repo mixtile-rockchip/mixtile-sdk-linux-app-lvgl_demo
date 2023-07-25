@@ -3,25 +3,25 @@
 
 #include <time.h>
 
-lv_obj_t * ui_Screen_monitor;
+lv_obj_t *ui_Screen_monitor;
 
-lv_obj_t * ui_monitor_Label_0;
-lv_obj_t * ui_monitor_Label_1;
+lv_obj_t *ui_monitor_Label_0;
+lv_obj_t *ui_monitor_Label_1;
 
-lv_obj_t * ui_circular_0;
-lv_obj_t * ui_circular_1;
-lv_obj_t * ui_circular_2;
-lv_obj_t * ui_circular_3;
-lv_obj_t * ui_circular_mid;
+lv_obj_t *ui_circular_0;
+lv_obj_t *ui_circular_1;
+lv_obj_t *ui_circular_2;
+lv_obj_t *ui_circular_3;
+lv_obj_t *ui_circular_mid;
 
 
-static lv_obj_t * ui_back;
-static lv_obj_t * ui_pause;
-static lv_obj_t * ui_webcam;
-static lv_obj_t * ui_forward;
-static lv_obj_t * ui_backward;
-static lv_obj_t * ui_video_background;
-static lv_obj_t * bg_pic;
+static lv_obj_t *ui_back;
+static lv_obj_t *ui_pause;
+static lv_obj_t *ui_webcam;
+static lv_obj_t *ui_forward;
+static lv_obj_t *ui_backward;
+static lv_obj_t *ui_video_background;
+static lv_obj_t *bg_pic;
 
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
@@ -34,10 +34,12 @@ extern lv_img_dsc_t ui_img_circular;
 extern lv_img_dsc_t ui_img_video_background;
 
 
-static void back_icon_cb(lv_event_t * e){
+static void back_icon_cb(lv_event_t *e)
+{
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_CLICKED){
+    if (code == LV_EVENT_CLICKED)
+    {
         intercom_homepage_ui_init();
         lv_obj_del(ui_Screen_monitor);
         ui_Screen_monitor = NULL;
@@ -76,7 +78,7 @@ void ui_monitor_screen_init()
     lv_obj_add_flag(ui_back, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_back, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_add_event_cb(ui_back, back_icon_cb, LV_EVENT_ALL, 0);
-    
+
     /*text:Video Monitor*/
     ui_monitor_Label_0 = lv_label_create(ui_Screen_monitor);
     lv_label_set_text(ui_monitor_Label_0, "视频监控");
@@ -127,7 +129,7 @@ void ui_monitor_screen_init()
     lv_img_set_src(ui_webcam, &ui_img_webcam);
     lv_obj_set_size(ui_webcam, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_webcam, ui_circular_2, LV_ALIGN_CENTER, 0, -3);
-    
+
 
     //pause
     ui_circular_3 = lv_img_create(ui_Screen_monitor);

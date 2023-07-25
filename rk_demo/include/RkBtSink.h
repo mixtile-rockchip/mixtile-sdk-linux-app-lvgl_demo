@@ -7,30 +7,32 @@
 extern "C" {
 #endif
 
-typedef struct btmg_track_info_t {
-	char title[256];
-	char artist[256];
-	char album[256];
-	char track_num[64];
-	char num_tracks[64];
-	char genre[256];
-	char playing_time[256];
+typedef struct btmg_track_info_t
+{
+    char title[256];
+    char artist[256];
+    char album[256];
+    char track_num[64];
+    char num_tracks[64];
+    char genre[256];
+    char playing_time[256];
 } BtTrackInfo;
 
-typedef enum {
-	RK_BT_SINK_STATE_IDLE = 0,
-	RK_BT_SINK_STATE_CONNECT,
-	RK_BT_SINK_STATE_DISCONNECT,
+typedef enum
+{
+    RK_BT_SINK_STATE_IDLE = 0,
+    RK_BT_SINK_STATE_CONNECT,
+    RK_BT_SINK_STATE_DISCONNECT,
 
-	//avrcp
-	RK_BT_SINK_STATE_PLAY,
-	RK_BT_SINK_STATE_PAUSE,
-	RK_BT_SINK_STATE_STOP,
+    //avrcp
+    RK_BT_SINK_STATE_PLAY,
+    RK_BT_SINK_STATE_PAUSE,
+    RK_BT_SINK_STATE_STOP,
 
-	//a2dp(avdtp)
-	RK_BT_A2DP_SINK_STARTED,
-	RK_BT_A2DP_SINK_SUSPENDED,
-	RK_BT_A2DP_SINK_STOPPED,
+    //a2dp(avdtp)
+    RK_BT_A2DP_SINK_STARTED,
+    RK_BT_A2DP_SINK_SUSPENDED,
+    RK_BT_A2DP_SINK_STOPPED,
 } RK_BT_SINK_STATE;
 
 typedef int (*RK_BT_SINK_CALLBACK)(RK_BT_SINK_STATE state);

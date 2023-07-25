@@ -4,20 +4,20 @@
 #include "furniture_control_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
-static lv_obj_t * ui_icebox_screen = NULL;
-static lv_obj_t * ui_icebox_box = NULL;
-static lv_obj_t * ui_icebox_text_box = NULL;
-static lv_obj_t * text_box1 = NULL;
-static lv_obj_t * text_box2 = NULL;
-static lv_obj_t * ui_icebox_png_box = NULL;
-static lv_obj_t * bg_pic = NULL;
-static lv_obj_t * text_bg;
-static lv_obj_t * ui_icebox_tem;
-static lv_obj_t * ui_Label1;
-static lv_obj_t * ui_Label3;
-static lv_obj_t * ui_rice;
-static lv_obj_t * ui_return;
-static lv_img_dsc_t * bg_snapshot;
+static lv_obj_t *ui_icebox_screen = NULL;
+static lv_obj_t *ui_icebox_box = NULL;
+static lv_obj_t *ui_icebox_text_box = NULL;
+static lv_obj_t *text_box1 = NULL;
+static lv_obj_t *text_box2 = NULL;
+static lv_obj_t *ui_icebox_png_box = NULL;
+static lv_obj_t *bg_pic = NULL;
+static lv_obj_t *text_bg;
+static lv_obj_t *ui_icebox_tem;
+static lv_obj_t *ui_Label1;
+static lv_obj_t *ui_Label3;
+static lv_obj_t *ui_rice;
+static lv_obj_t *ui_return;
+static lv_img_dsc_t *bg_snapshot;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
@@ -25,7 +25,8 @@ static lv_img_dsc_t * bg_snapshot;
 
 ///////////////////// FUNCTIONS ////////////////////
 
-void icebox_page_jump_furniture_control_callback(lv_event_t* event) {
+void icebox_page_jump_furniture_control_callback(lv_event_t *event)
+{
     printf("icebox_page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_obj_del(ui_icebox_screen);
@@ -39,7 +40,7 @@ static void bg_pic_snapshot_blur(void)
 
     bg_snapshot = lv_snapshot_take(bg_pic, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t * canvas = lv_canvas_create(NULL);
+    lv_obj_t *canvas = lv_canvas_create(NULL);
     lv_area_t area;
     lv_canvas_set_buffer(canvas, (void *)bg_snapshot->data,
                          bg_snapshot->header.w,
@@ -80,7 +81,7 @@ void ui_icebox_screen_init(void)
     lv_obj_align(ui_icebox_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(33));
     lv_obj_refr_pos(ui_icebox_box);
     //lv_obj_set_flex_flow(ui_icebox_box, LV_FLEX_FLOW_ROW);//行
-    
+
     text_bg = lv_img_create(ui_icebox_box);
     lv_obj_set_width(text_bg, lv_pct(100));
     lv_obj_set_height(text_bg, lv_pct(100));
@@ -143,7 +144,8 @@ void ui_icebox_screen_init(void)
     lv_obj_align(ui_return, LV_ALIGN_TOP_LEFT, 10, 10);
     lv_obj_add_flag(ui_return, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_return, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    if (ui_return != NULL) {
+    if (ui_return != NULL)
+    {
         lv_obj_add_event_cb(ui_return, icebox_page_jump_furniture_control_callback, LV_EVENT_CLICKED, NULL);
     }
 

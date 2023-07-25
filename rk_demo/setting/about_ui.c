@@ -9,16 +9,16 @@
 #include "main.h"
 #include "ui_resource.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_obj_t * area_tag;
-static lv_obj_t * area_info;
+static lv_obj_t *area_tag;
+static lv_obj_t *area_info;
 
-static lv_obj_t * cont_update;
-static lv_obj_t * btn_update_local;
-static lv_obj_t * btn_update_net;
+static lv_obj_t *cont_update;
+static lv_obj_t *btn_update_local;
+static lv_obj_t *btn_update_net;
 
-static void update_event_cb(lv_event_t * e)
+static void update_event_cb(lv_event_t *e)
 {
     if (lv_obj_has_flag(cont_update, LV_OBJ_FLAG_HIDDEN))
         lv_obj_clear_flag(cont_update, LV_OBJ_FLAG_HIDDEN);
@@ -27,9 +27,9 @@ static void update_event_cb(lv_event_t * e)
     lv_obj_align_to(cont_update, area_info, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
 }
 
-lv_obj_t * menu_about_init(lv_obj_t * parent)
+lv_obj_t *menu_about_init(lv_obj_t *parent)
 {
-    lv_obj_t * obj;
+    lv_obj_t *obj;
 
     bg = lv_obj_create(parent);
     lv_obj_set_size(bg, lv_pct(100), lv_pct(100));

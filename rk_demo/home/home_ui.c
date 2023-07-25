@@ -19,32 +19,32 @@
 ///////////////////// VARIABLES ////////////////////
 uint32_t LV_EVENT_GET_COMP_CHILD;
 
-static lv_obj_t * ui_Screen1 = NULL;
-static lv_obj_t * ui_box_main = NULL;
-static lv_obj_t * ui_smart_home_box = NULL;
-static lv_obj_t * ui_furniture_control_box = NULL;
-static lv_obj_t * ui_phone_box = NULL;
-static lv_obj_t * ui_setting_box = NULL;
-static lv_obj_t * ui_wifi;
-static lv_obj_t * ui_smart_home;
-static lv_obj_t * ui_furniture_control;
-static lv_obj_t * ui_phone;
-static lv_obj_t * ui_setting;
-static lv_obj_t * ui_Label_time;
-static lv_obj_t * ui_Label1;
-static lv_obj_t * ui_Label4;
-static lv_obj_t * ui_Label3;
-static lv_obj_t * ui_Label6;
-static lv_obj_t * ui_logo;
-static lv_obj_t * bg_pic;
-static lv_timer_t * timer_date;
+static lv_obj_t *ui_Screen1 = NULL;
+static lv_obj_t *ui_box_main = NULL;
+static lv_obj_t *ui_smart_home_box = NULL;
+static lv_obj_t *ui_furniture_control_box = NULL;
+static lv_obj_t *ui_phone_box = NULL;
+static lv_obj_t *ui_setting_box = NULL;
+static lv_obj_t *ui_wifi;
+static lv_obj_t *ui_smart_home;
+static lv_obj_t *ui_furniture_control;
+static lv_obj_t *ui_phone;
+static lv_obj_t *ui_setting;
+static lv_obj_t *ui_Label_time;
+static lv_obj_t *ui_Label1;
+static lv_obj_t *ui_Label4;
+static lv_obj_t *ui_Label3;
+static lv_obj_t *ui_Label6;
+static lv_obj_t *ui_logo;
+static lv_obj_t *bg_pic;
+static lv_timer_t *timer_date;
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
 extern int wifi_connected(void);
 
-void page_switch(lv_event_t * e)
+void page_switch(lv_event_t *e)
 {
     void (*func)(void) = lv_event_get_user_data(e);
 
@@ -56,7 +56,8 @@ void page_switch(lv_event_t * e)
     ui_Screen1 = NULL;
 }
 
-void home_page_jump_furniture_control_callback(lv_event_t* event) {
+void home_page_jump_furniture_control_callback(lv_event_t *event)
+{
     printf("page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_timer_del(timer_date);
@@ -64,24 +65,28 @@ void home_page_jump_furniture_control_callback(lv_event_t* event) {
     ui_Screen1 = NULL;
 }
 
-static void date_update(lv_timer_t * timer)
+static void date_update(lv_timer_t *timer)
 {
     time_t time_ptr;
-    struct tm * tim;
+    struct tm *tim;
 
     time(&time_ptr);
     tim = localtime(&time_ptr);
     //printf("update time %04d-%02d-%02d %02d:%02d \n", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
     lv_label_set_text_fmt(ui_Label_time, "%04d-%02d-%02d %02d:%02d", tim->tm_year + 1900, tim->tm_mon + 1, tim->tm_mday, tim->tm_hour, tim->tm_min);
-    if (wifi_connected() == RK_WIFI_State_CONNECTED) {
+    if (wifi_connected() == RK_WIFI_State_CONNECTED)
+    {
         lv_img_set_src(ui_wifi, IMG_WIFI_ON);
-    }else {
+    }
+    else
+    {
         lv_img_set_src(ui_wifi, IMG_WIFI_OFF);
     }
 }
 
 
-void home_page_jump_intercom_call_callback(lv_event_t* event) {
+void home_page_jump_intercom_call_callback(lv_event_t *event)
+{
     printf("home_page_jump_intercom_call_callback is into \n");
     intercom_homepage_ui_init();
     lv_timer_del(timer_date);
@@ -106,7 +111,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_height(ui_box_main, lv_pct(33));
     lv_obj_align(ui_box_main, LV_ALIGN_TOP_LEFT, 0, lv_pct(33));
     lv_obj_set_flex_flow(ui_box_main, LV_FLEX_FLOW_ROW);//行
-    
+
     //Smart home page
 
     ui_smart_home_box = lv_obj_create(ui_box_main);
@@ -149,7 +154,8 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_color(ui_furniture_control, lv_color_hex(0xDED6D6), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_furniture_control, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_furniture_control, IMG_FURNITURE, LV_PART_MAIN | LV_STATE_DEFAULT);
-    if (ui_furniture_control != NULL) {
+    if (ui_furniture_control != NULL)
+    {
         lv_obj_add_event_cb(ui_furniture_control, home_page_jump_furniture_control_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -169,7 +175,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_width(ui_phone_box, lv_pct(25));
     lv_obj_set_height(ui_phone_box, lv_pct(100));
     lv_obj_align(ui_phone_box, LV_ALIGN_TOP_LEFT, 0, 0);
-    
+
     ui_phone = lv_obj_create(ui_phone_box);
     lv_obj_set_width(ui_phone, 130);
     lv_obj_set_height(ui_phone, 130);
@@ -178,7 +184,8 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_color(ui_phone, lv_color_hex(0xDED6D6), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_phone, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_phone, IMG_PHONE, LV_PART_MAIN | LV_STATE_DEFAULT);
-    if (ui_phone != NULL) {
+    if (ui_phone != NULL)
+    {
         lv_obj_add_event_cb(ui_phone, home_page_jump_intercom_call_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -223,7 +230,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_width(ui_wifi, LV_SIZE_CONTENT);   /// 64
     lv_obj_set_height(ui_wifi, LV_SIZE_CONTENT);    /// 64
     lv_img_set_zoom(ui_wifi, 120);
-    
+
     ui_Label_time = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_Label_time, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label_time, LV_SIZE_CONTENT);    /// 1
@@ -256,9 +263,9 @@ void rk_demo_init(void)
 {
     LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
 
-    lv_disp_t * dispp = lv_disp_get_default();
-    lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
-                                               false, LV_FONT_DEFAULT);
+    lv_disp_t *dispp = lv_disp_get_default();
+    lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
+                        false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
 
     home_ui_init();

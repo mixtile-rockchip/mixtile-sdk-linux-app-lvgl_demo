@@ -31,7 +31,7 @@ static int audio_server_init(void)
 
     fd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if(fd < 0)
+    if (fd < 0)
         return fd;
 
     saddr.sin_family = AF_INET;
@@ -39,7 +39,7 @@ static int audio_server_init(void)
     saddr.sin_port = htons(9999);
     ret = bind(fd, (struct sockaddr *)&saddr, sizeof(saddr));
 
-    if(ret < 0)
+    if (ret < 0)
         return ret;
 
     return fd;
@@ -59,7 +59,8 @@ static void *audio_server(void *arg)
     {
         printf("start listening...\n");
         ret = listen(fd, 8);
-        if(ret == -1) {
+        if (ret == -1)
+        {
             printf("listen error\n");
             break;
         }
@@ -67,7 +68,8 @@ static void *audio_server(void *arg)
         len = sizeof(clientaddr);
         cfd = accept(fd, (struct sockaddr *)&clientaddr, &len);
 
-        if(cfd == -1) {
+        if (cfd == -1)
+        {
             printf("accept error\n");
             break;
         }

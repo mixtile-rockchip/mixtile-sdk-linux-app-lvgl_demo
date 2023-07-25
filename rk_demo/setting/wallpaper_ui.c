@@ -9,23 +9,24 @@
 #include "main.h"
 #include "ui_resource.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_obj_t * area_screen_timeout;
-static lv_obj_t * area_locked_screen;
-static lv_obj_t * area_wallpaper;
+static lv_obj_t *area_screen_timeout;
+static lv_obj_t *area_locked_screen;
+static lv_obj_t *area_wallpaper;
 
-static char *wallpapers[4] = {
+static char *wallpapers[4] =
+{
     WALLPAPER_0,
     WALLPAPER_1,
     WALLPAPER_2,
     WALLPAPER_3,
 };
 
-lv_obj_t * menu_wallpaper_init(lv_obj_t * parent)
+lv_obj_t *menu_wallpaper_init(lv_obj_t *parent)
 {
-    lv_obj_t * obj;
-    lv_obj_t * area_depart;
+    lv_obj_t *obj;
+    lv_obj_t *area_depart;
 
     bg = lv_obj_create(parent);
     lv_obj_remove_style_all(bg);

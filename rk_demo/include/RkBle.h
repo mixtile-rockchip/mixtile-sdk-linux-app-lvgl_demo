@@ -7,16 +7,18 @@
 extern "C" {
 #endif
 
-typedef enum {
-	RK_BLE_STATE_IDLE = 0,
-	RK_BLE_STATE_CONNECT,
-	RK_BLE_STATE_DISCONNECT
+typedef enum
+{
+    RK_BLE_STATE_IDLE = 0,
+    RK_BLE_STATE_CONNECT,
+    RK_BLE_STATE_DISCONNECT
 } RK_BLE_STATE;
 
-typedef struct {
-	char uuid[38];
-	char data[BT_ATT_MAX_VALUE_LEN];
-	int len;
+typedef struct
+{
+    char uuid[38];
+    char data[BT_ATT_MAX_VALUE_LEN];
+    int len;
 } RkBleConfig;
 
 typedef void (*RK_BLE_STATE_CALLBACK)(const char *bd_addr, const char *name, RK_BLE_STATE state);

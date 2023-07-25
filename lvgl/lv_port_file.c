@@ -93,7 +93,7 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t *drv, void *file_p, uint32_t pos, lv_fs_w
     return res;
 }
 
-static lv_fs_res_t fs_tell(struct _lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
+static lv_fs_res_t fs_tell(struct _lv_fs_drv_t *drv, void *file_p, uint32_t *pos_p)
 {
     lv_fs_res_t res = LV_FS_RES_OK;
 

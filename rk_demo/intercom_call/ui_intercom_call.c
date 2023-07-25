@@ -7,27 +7,27 @@
 #include "local_ip.h"
 
 
-lv_obj_t * ui_Screen_test;
-lv_obj_t * ui_Screen_intercom_call;
+lv_obj_t *ui_Screen_test;
+lv_obj_t *ui_Screen_intercom_call;
 
-static lv_obj_t * ui_back;
-static lv_obj_t * bg_pic;
-static lv_obj_t * ui_rectangle;
-static lv_obj_t * ui_circle[15];
-static lv_obj_t * ui_intercom_call_Label_0;
-static lv_obj_t * ui_intercom_call_Label_1;
-static lv_obj_t * ui_call_break;
-static lv_obj_t * ui_ip_label;
+static lv_obj_t *ui_back;
+static lv_obj_t *bg_pic;
+static lv_obj_t *ui_rectangle;
+static lv_obj_t *ui_circle[15];
+static lv_obj_t *ui_intercom_call_Label_0;
+static lv_obj_t *ui_intercom_call_Label_1;
+static lv_obj_t *ui_call_break;
+static lv_obj_t *ui_ip_label;
 
-static lv_timer_t * timer;
+static lv_timer_t *timer;
 
 extern lv_img_dsc_t ui_img_circular;
 extern lv_img_dsc_t ui_img_rectangle;
-extern lv_obj_t * ui_Screen_intercom_homepage;
+extern lv_obj_t *ui_Screen_intercom_homepage;
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
 
-static void icon_cb(lv_event_t * e);
+static void icon_cb(lv_event_t *e);
 
 /*Maximum number of digits*/
 #define MAX_DIGITS 15
@@ -57,37 +57,49 @@ static struct lv_button_parameter button[] =
 };
 
 
-static const char* type_messages[] = {
+static const char *type_messages[] =
+{
     "1", "2", "3", "Buil", "4", "5", "6", "Unit", "7", "8", "9", ".", "call", "0", "Delete", "Manage"
 };
 
-static void icon_cb(lv_event_t * e)
+static void icon_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
     intptr_t type = (intptr_t)lv_event_get_user_data(e);
 
-    if (code == LV_EVENT_CLICKED && type >= 0 && type < sizeof(type_messages) / sizeof(type_messages[0])) {
-        if (type != 3 && type != 7 && type != 12 && type != 15){
+    if (code == LV_EVENT_CLICKED && type >= 0 && type < sizeof(type_messages) / sizeof(type_messages[0]))
+    {
+        if (type != 3 && type != 7 && type != 12 && type != 15)
+        {
             /*Add and Remove Character Operations*/
-            if (type != 14){
-                if (digits[strlen(digits)-1] == '.' && type == 11){
+            if (type != 14)
+            {
+                if (digits[strlen(digits) - 1] == '.' && type == 11)
+                {
                     printf("illegal format\n");
-                } else {
-                    if (strlen(digits) < MAX_DIGITS) {
+                }
+                else
+                {
+                    if (strlen(digits) < MAX_DIGITS)
+                    {
                         strcat(digits, type_messages[type]);
                         lv_label_set_text(ui_intercom_call_Label_1, digits);
                     }
                 }
-            }else {
+            }
+            else
+            {
                 int length = strlen(digits);
-                if (length > 1) {
+                if (length > 1)
+                {
                     digits[length - 1] = '\0';
                     lv_label_set_text(ui_intercom_call_Label_1, digits);
                 }
             }
         }
-        if (type == 12) {
+        if (type == 12)
+        {
             if (audio_client_state() != STATE_RUNNING)
                 run_audio_client(lv_label_get_text(ui_intercom_call_Label_1));
             else
@@ -96,10 +108,12 @@ static void icon_cb(lv_event_t * e)
     }
 }
 
-static void back_icon_cb(lv_event_t * e){
+static void back_icon_cb(lv_event_t *e)
+{
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_CLICKED){
+    if (code == LV_EVENT_CLICKED)
+    {
         intercom_homepage_ui_init();
         lv_obj_del(ui_Screen_intercom_call);
         ui_Screen_intercom_call = NULL;
@@ -111,9 +125,10 @@ static void back_icon_cb(lv_event_t * e){
 
 
 
-void intercom_call_button(lv_obj_t * parent, lv_obj_t * referent)
+void intercom_call_button(lv_obj_t *parent, lv_obj_t *referent)
 {
-    for (intptr_t i = 0; i < 16; i ++){
+    for (intptr_t i = 0; i < 16; i ++)
+    {
         button[i].ui_circle = lv_img_create(parent);
         lv_img_set_src(button[i].ui_circle, (const void *)&ui_img_circular);
         lv_obj_set_width(button[i].ui_circle, LV_SIZE_CONTENT);
@@ -127,12 +142,12 @@ void intercom_call_button(lv_obj_t * parent, lv_obj_t * referent)
         lv_obj_align_to(button[i].ui_circle_label, button[i].ui_circle, LV_ALIGN_CENTER, button[i].x_po_verify, button[i].y_po_verify);
         lv_label_set_text(button[i].ui_circle_label, button[i].txt);
         lv_obj_add_flag(button[i].ui_circle, LV_OBJ_FLAG_CLICKABLE);
-        lv_obj_add_event_cb(button[i].ui_circle, icon_cb, LV_EVENT_ALL, (void*)i);
+        lv_obj_add_event_cb(button[i].ui_circle, icon_cb, LV_EVENT_ALL, (void *)i);
 
     }
 }
 
-static void state_update(lv_timer_t * timer)
+static void state_update(lv_timer_t *timer)
 {
     static int state = STATE_IDLE;
 
@@ -164,7 +179,7 @@ void ui_intercom_call_screen_init()
     lv_obj_clear_flag(ui_Screen_intercom_call, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_img_opa(ui_Screen_intercom_call, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_add_style(ui_Screen_intercom_call, &style_txt_s, LV_PART_MAIN);
-    
+
     bg_pic = lv_img_create(ui_Screen_intercom_call);
     lv_obj_set_pos(bg_pic, 0, 0);
     lv_img_set_src(bg_pic, BG_PIC_0);

@@ -10,22 +10,23 @@
 #include "ui_resource.h"
 #include "smart_home_ui.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_img_dsc_t * bg_snapshot;
+static lv_img_dsc_t *bg_snapshot;
 
-static lv_img_dsc_t * bg_img_aircond_0;
-static lv_img_dsc_t * bg_img_aircond_1;
-static lv_img_dsc_t * bg_img_light;
+static lv_img_dsc_t *bg_img_aircond_0;
+static lv_img_dsc_t *bg_img_aircond_1;
+static lv_img_dsc_t *bg_img_light;
 
-static lv_obj_t * area_aircond_0;
-static lv_obj_t * area_aircond_1;
-static lv_obj_t * area_light;
+static lv_obj_t *area_aircond_0;
+static lv_obj_t *area_aircond_1;
+static lv_obj_t *area_light;
 
-static lv_obj_t * light_menu(lv_obj_t * parent,
-                             lv_img_dsc_t * img)
+static lv_obj_t *light_menu(lv_obj_t *parent,
+                            lv_img_dsc_t *img)
 {
-    char *light_name[] = {
+    char *light_name[] =
+    {
         "卧室1",
         "卧室2",
         "客厅1",
@@ -34,7 +35,8 @@ static lv_obj_t * light_menu(lv_obj_t * parent,
         "客卧2",
         "餐厅",
     };
-    int light_state[] = {
+    int light_state[] =
+    {
         LV_STATE_CHECKED,
         LV_STATE_DEFAULT,
         LV_STATE_CHECKED,
@@ -43,10 +45,10 @@ static lv_obj_t * light_menu(lv_obj_t * parent,
         LV_STATE_DEFAULT,
         LV_STATE_DEFAULT
     };
-    lv_obj_t * obj;
-    lv_obj_t * cont;
-    lv_obj_t * depart;
-    lv_obj_t * light;
+    lv_obj_t *obj;
+    lv_obj_t *cont;
+    lv_obj_t *depart;
+    lv_obj_t *light;
     int x, y;
     int ofs;
 
@@ -97,22 +99,23 @@ static lv_obj_t * light_menu(lv_obj_t * parent,
     return light;
 }
 
-static lv_obj_t * aircond_menu(lv_obj_t * parent,
-                               char *name,
-                               lv_img_dsc_t * img)
+static lv_obj_t *aircond_menu(lv_obj_t *parent,
+                              char *name,
+                              lv_img_dsc_t *img)
 {
-    char *btn_name[] = {
+    char *btn_name[] =
+    {
         "开启/关闭",
         "制冷模式",
         "制热模式",
         "风力：3"
     };
-    lv_obj_t * area_aircond;
-    lv_obj_t * area_temp;
-    lv_obj_t * area_btn;
-    lv_obj_t * area_set;
-    lv_obj_t * obj;
-    lv_obj_t * temp;
+    lv_obj_t *area_aircond;
+    lv_obj_t *area_temp;
+    lv_obj_t *area_btn;
+    lv_obj_t *area_set;
+    lv_obj_t *obj;
+    lv_obj_t *temp;
     int x, y;
     int ofs;
 
@@ -198,7 +201,7 @@ static lv_obj_t * aircond_menu(lv_obj_t * parent,
     return area_aircond;
 }
 
-lv_obj_t * menu_control_init(lv_obj_t * parent)
+lv_obj_t *menu_control_init(lv_obj_t *parent)
 {
     bg = lv_obj_create(parent);
     lv_obj_remove_style_all(bg);

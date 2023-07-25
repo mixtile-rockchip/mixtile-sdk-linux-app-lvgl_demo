@@ -30,8 +30,9 @@ static int trace_init_once(void)
 {
     if (init_ok == 0)
     {
-         atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY | O_CLOEXEC);
-        if (atrace_marker_fd == -1) {
+        atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY | O_CLOEXEC);
+        if (atrace_marker_fd == -1)
+        {
             printf("Error opening trace file: %s (%d)", strerror(errno), errno);
             return -1;
         }
@@ -61,7 +62,7 @@ static int trace_init_once(void)
         printf("Warning: write failed\n"); \
 }
 
-void atrace_begin_body(const char* name)
+void atrace_begin_body(const char *name)
 {
     WRITE_MSG("B|%d|", "%s", name, "");
 }
@@ -71,29 +72,29 @@ void atrace_end_body()
     WRITE_MSG("E|%d", "%s", "", "");
 }
 
-void atrace_async_begin_body(const char* name, int32_t cookie)
+void atrace_async_begin_body(const char *name, int32_t cookie)
 {
     WRITE_MSG("S|%d|", "|%" PRId32, name, cookie);
 }
 
-void atrace_async_end_body(const char* name, int32_t cookie)
+void atrace_async_end_body(const char *name, int32_t cookie)
 {
     WRITE_MSG("F|%d|", "|%" PRId32, name, cookie);
 }
 
-void atrace_int_body(const char* name, int32_t value)
+void atrace_int_body(const char *name, int32_t value)
 {
     WRITE_MSG("C|%d|", "|%" PRId32, name, value);
 }
 
-void atrace_int64_body(const char* name, int64_t value)
+void atrace_int64_body(const char *name, int64_t value)
 {
     WRITE_MSG("C|%d|", "|%" PRId64, name, value);
 }
 
 #else
 
-void atrace_begin_body(__attribute__((unused)) const char* name)
+void atrace_begin_body(__attribute__((unused)) const char *name)
 {
 }
 
@@ -101,19 +102,19 @@ void atrace_end_body()
 {
 }
 
-void atrace_async_begin_body(__attribute__((unused)) const char* name, __attribute__((unused)) int32_t cookie)
+void atrace_async_begin_body(__attribute__((unused)) const char *name, __attribute__((unused)) int32_t cookie)
 {
 }
 
-void atrace_async_end_body(__attribute__((unused)) const char* name, __attribute__((unused)) int32_t cookie)
+void atrace_async_end_body(__attribute__((unused)) const char *name, __attribute__((unused)) int32_t cookie)
 {
 }
 
-void atrace_int_body(__attribute__((unused)) const char* name, __attribute__((unused)) int32_t value)
+void atrace_int_body(__attribute__((unused)) const char *name, __attribute__((unused)) int32_t value)
 {
 }
 
-void atrace_int64_body(__attribute__((unused)) const char* name, __attribute__((unused)) int64_t value)
+void atrace_int64_body(__attribute__((unused)) const char *name, __attribute__((unused)) int64_t value)
 {
 }
 

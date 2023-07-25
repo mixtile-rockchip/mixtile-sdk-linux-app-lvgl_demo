@@ -11,27 +11,28 @@
 #include "ui_resource.h"
 #include "smart_home_ui.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_img_dsc_t * bg_snapshot;
+static lv_img_dsc_t *bg_snapshot;
 
-static lv_img_dsc_t * bg_img;
+static lv_img_dsc_t *bg_img;
 
-static lv_obj_t * area_player;
-static lv_obj_t * area_label;
-static lv_obj_t * slider;
-static lv_obj_t * area_btn;
-static lv_obj_t * box_btn;
-static lv_obj_t * label_singer;
-static lv_obj_t * label_song;
-static lv_obj_t * label_pos;
-static lv_obj_t * label_time;
-static lv_obj_t * btn_play;
-static lv_obj_t * label_bt_state;
-static lv_timer_t * timer;
-static lv_timer_t * pos_timer;
+static lv_obj_t *area_player;
+static lv_obj_t *area_label;
+static lv_obj_t *slider;
+static lv_obj_t *area_btn;
+static lv_obj_t *box_btn;
+static lv_obj_t *label_singer;
+static lv_obj_t *label_song;
+static lv_obj_t *label_pos;
+static lv_obj_t *label_time;
+static lv_obj_t *btn_play;
+static lv_obj_t *label_bt_state;
+static lv_timer_t *timer;
+static lv_timer_t *pos_timer;
 
-static char * btn_img[] = {
+static char *btn_img[] =
+{
     LV_SYMBOL_PREV,
     LV_SYMBOL_PLAY,
     LV_SYMBOL_NEXT,
@@ -45,12 +46,12 @@ static int volume = 100;
 static int mute = 0;
 static int g_pos = 0;
 
-static void btn_cb(lv_event_t * e)
+static void btn_cb(lv_event_t *e)
 {
     intptr_t idx = (intptr_t)lv_event_get_user_data(e);
 
     if (bt_sink_state() == RK_BT_SINK_STATE_IDLE ||
-        bt_sink_state() == RK_BT_SINK_STATE_DISCONNECT)
+            bt_sink_state() == RK_BT_SINK_STATE_DISCONNECT)
         return;
 
     switch (idx)
@@ -126,7 +127,7 @@ static void bt_timer_cb(struct _lv_timer_t *tmr)
     int vol;
 
     if ((bt_sink_enabled == 0)
-        && bt_is_state_on())
+            && bt_is_state_on())
     {
         bt_sink_enabled = 1;
         bt_sink_enable();
@@ -137,7 +138,7 @@ static void bt_timer_cb(struct _lv_timer_t *tmr)
     if (bt_sink_enabled)
     {
         if (bt_sink_state() != RK_BT_SINK_STATE_IDLE &&
-            bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
+                bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
             lv_label_set_text(label_bt_state,
                               "蓝牙：已开启 A2DP：已连接");
     }
@@ -160,9 +161,9 @@ static void bt_timer_cb(struct _lv_timer_t *tmr)
     }
 }
 
-lv_obj_t * menu_music_init(lv_obj_t * parent)
+lv_obj_t *menu_music_init(lv_obj_t *parent)
 {
-    lv_obj_t * obj;
+    lv_obj_t *obj;
     int x, y;
     int ofs;
 
@@ -290,7 +291,7 @@ void menu_music_deinit(void)
     if (bt_sink_enabled)
     {
         if (bt_sink_state() != RK_BT_SINK_STATE_IDLE &&
-            bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
+                bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
         {
             bt_sink_pause();
             bt_sink_disconnect();

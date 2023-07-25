@@ -7,19 +7,19 @@
 
 // home page
 #define IMG_RETURN_BTN  "A:"PATH_PREFIX"/return.png"
-#define IMG_RK_LOGO  	"A:"PATH_PREFIX"/logo.png"
-#define IMG_PHONE	  	"A:"PATH_PREFIX"/phone.png"
-#define IMG_WIFI_ON  	"A:"PATH_PREFIX"/wifi.png"
-#define IMG_WIFI_OFF  	"A:"PATH_PREFIX"/wifi-off.png"
+#define IMG_RK_LOGO     "A:"PATH_PREFIX"/logo.png"
+#define IMG_PHONE       "A:"PATH_PREFIX"/phone.png"
+#define IMG_WIFI_ON     "A:"PATH_PREFIX"/wifi.png"
+#define IMG_WIFI_OFF    "A:"PATH_PREFIX"/wifi-off.png"
 #define IMG_SMART_HOME  "A:"PATH_PREFIX"/smart_home.png"
-#define IMG_SETTING  	"A:"PATH_PREFIX"/setting.png"
-#define IMG_FURNITURE  	"A:"PATH_PREFIX"/furniture_control.png"
+#define IMG_SETTING     "A:"PATH_PREFIX"/setting.png"
+#define IMG_FURNITURE   "A:"PATH_PREFIX"/furniture_control.png"
 
 // furniture control page
-#define IMG_ICEBOX  		"A:"PATH_PREFIX"/icebox.png"
-#define IMG_PLAYER  		"A:"PATH_PREFIX"/player.png"
-#define IMG_COFFEE  		"A:"PATH_PREFIX"/coffee_machine.png"
-#define IMG_RICE  			"A:"PATH_PREFIX"/rice.png"
+#define IMG_ICEBOX          "A:"PATH_PREFIX"/icebox.png"
+#define IMG_PLAYER          "A:"PATH_PREFIX"/player.png"
+#define IMG_COFFEE          "A:"PATH_PREFIX"/coffee_machine.png"
+#define IMG_RICE            "A:"PATH_PREFIX"/rice.png"
 
 #define IMG_PLAY            "A:"PATH_PREFIX"/play-fill.png"
 #define IMG_SKIP_BACK       "A:"PATH_PREFIX"/skip-back-fill.png"
@@ -51,9 +51,9 @@
 #define COFFEE_5     "A:"PATH_PREFIX"/coffee5.png"
 
 //player
-#define IMG_PLAYER_STOP  	"A:"PATH_PREFIX"/player-stop.png"
-#define IMG_PLAYER_START 	"A:"PATH_PREFIX"/player-start.png"
-#define IMG_PLAYER_LIST  	"A:"PATH_PREFIX"/list.png"
+#define IMG_PLAYER_STOP     "A:"PATH_PREFIX"/player-stop.png"
+#define IMG_PLAYER_START    "A:"PATH_PREFIX"/player-start.png"
+#define IMG_PLAYER_LIST     "A:"PATH_PREFIX"/list.png"
 
 #endif
 

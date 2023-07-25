@@ -32,14 +32,15 @@
 #define ALIGN(x, a)     (((x) + (a - 1)) & ~(a - 1))
 #define FAKE_FD         1234
 
-enum {
+enum
+{
     SCALE_MODE_FILL = 0x0,  // full screen stretch
     SCALE_MODE_CONTAIN,     // keep the scale, The side with the larger ratio
-                            // is aligned with the container, and the other
-                            // side is scaled equally
+    // is aligned with the container, and the other
+    // side is scaled equally
     SCALE_MODE_COVER,       // keep the scale, The side with the smaller ratio
-                            // is aligned with the container, and the other
-                            // side is scaled equally
+    // is aligned with the container, and the other
+    // side is scaled equally
     SCALE_MODE_NONE,
 };
 

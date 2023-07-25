@@ -24,90 +24,101 @@ extern "C" {
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 
-typedef struct {
+typedef struct
+{
 #define UUID_16     2
 #define UUID_32     4
 #define UUID_128    16
 
-	uint16_t len; //byte
-	const char *uuid;
+    uint16_t len; //byte
+    const char *uuid;
 } Ble_Uuid_Type_t;
 
-enum {
-	BLE_ADVDATA_TYPE_USER = 0,
-	BLE_ADVDATA_TYPE_SYSTEM
+enum
+{
+    BLE_ADVDATA_TYPE_USER = 0,
+    BLE_ADVDATA_TYPE_SYSTEM
 };
 
-typedef enum {
-	PLAYROLE_TYPE_UNKNOWN,
-	PLAYROLE_TYPE_SOURCE,
-	PLAYROLE_TYPE_SINK,
+typedef enum
+{
+    PLAYROLE_TYPE_UNKNOWN,
+    PLAYROLE_TYPE_SOURCE,
+    PLAYROLE_TYPE_SINK,
 } RK_BT_PLAYROLE_TYPE;
 
 /*BT state*/
-typedef enum {
-	RK_BT_STATE_OFF,
-	RK_BT_STATE_ON,
-	RK_BT_STATE_TURNING_ON,
-	RK_BT_STATE_TURNING_OFF,
+typedef enum
+{
+    RK_BT_STATE_OFF,
+    RK_BT_STATE_ON,
+    RK_BT_STATE_TURNING_ON,
+    RK_BT_STATE_TURNING_OFF,
 } RK_BT_STATE;
 
-typedef enum {
-	RK_BT_BOND_STATE_NONE,
-	RK_BT_BOND_STATE_BONDING,
-	RK_BT_BOND_STATE_BONDED,
+typedef enum
+{
+    RK_BT_BOND_STATE_NONE,
+    RK_BT_BOND_STATE_BONDING,
+    RK_BT_BOND_STATE_BONDED,
 } RK_BT_BOND_STATE;
 
-typedef enum {
-	SCAN_TYPE_AUTO, //LE, BR/EDR, or both
-	SCAN_TYPE_BREDR,
-	SCAN_TYPE_LE,
-	SCAN_TYPE_PAN,
-	SCAN_TYPE_SPP
+typedef enum
+{
+    SCAN_TYPE_AUTO, //LE, BR/EDR, or both
+    SCAN_TYPE_BREDR,
+    SCAN_TYPE_LE,
+    SCAN_TYPE_PAN,
+    SCAN_TYPE_SPP
 } RK_BT_SCAN_TYPE;
 
 /*BT discovery state*/
-typedef enum {
-	RK_BT_DISC_STARTED,
-	RK_BT_DISC_START_FAILED,
-	RK_BT_DISC_STOPPED_AUTO,
-	RK_BT_DISC_STOPPED_BY_USER,
+typedef enum
+{
+    RK_BT_DISC_STARTED,
+    RK_BT_DISC_START_FAILED,
+    RK_BT_DISC_STOPPED_AUTO,
+    RK_BT_DISC_STOPPED_BY_USER,
 } RK_BT_DISCOVERY_STATE;
 
-typedef enum {
-	RK_BT_DEV_PLATFORM_UNKNOWN = 0, /* unknown platform */
-	RK_BT_DEV_PLATFORM_IOS,         /* Apple iOS */
+typedef enum
+{
+    RK_BT_DEV_PLATFORM_UNKNOWN = 0, /* unknown platform */
+    RK_BT_DEV_PLATFORM_IOS,         /* Apple iOS */
 } RK_BT_DEV_PLATFORM_TYPE;
 
-typedef struct {
-	Ble_Uuid_Type_t server_uuid;
-	Ble_Uuid_Type_t chr_uuid[12];
-	uint8_t chr_cnt;
-	const char *ble_name;
-	uint8_t ble_addr[DEVICE_ADDR_LEN];
-	uint8_t advData[MXA_ADV_DATA_LEN];
-	uint8_t advDataLen;
-	uint8_t respData[MXA_ADV_DATA_LEN];
-	uint8_t respDataLen;
-	uint8_t advDataType;
-	/* recevice data */
-	void (*cb_ble_recv_fun)(const char *uuid, char *data, int len);
-	/* full data */
-	void (*cb_ble_request_data)(const char *uuid);
+typedef struct
+{
+    Ble_Uuid_Type_t server_uuid;
+    Ble_Uuid_Type_t chr_uuid[12];
+    uint8_t chr_cnt;
+    const char *ble_name;
+    uint8_t ble_addr[DEVICE_ADDR_LEN];
+    uint8_t advData[MXA_ADV_DATA_LEN];
+    uint8_t advDataLen;
+    uint8_t respData[MXA_ADV_DATA_LEN];
+    uint8_t respDataLen;
+    uint8_t advDataType;
+    /* recevice data */
+    void (*cb_ble_recv_fun)(const char *uuid, char *data, int len);
+    /* full data */
+    void (*cb_ble_request_data)(const char *uuid);
 } RkBleContent;
 
-typedef struct {
-	RkBleContent ble_content;
-	const char *bt_name;
-	const char *bt_addr;
+typedef struct
+{
+    RkBleContent ble_content;
+    const char *bt_name;
+    const char *bt_addr;
 } RkBtContent;
 
-typedef struct scaned_dev {
-	char *remote_address;
-	char *remote_name;
-	unsigned int cod; //class of device
-	bool is_connected;
-	struct scaned_dev *next;
+typedef struct scaned_dev
+{
+    char *remote_address;
+    char *remote_name;
+    unsigned int cod; //class of device
+    bool is_connected;
+    struct scaned_dev *next;
 } RkBtScanedDevice;
 
 typedef void (*RK_BT_STATE_CALLBACK)(RK_BT_STATE state);

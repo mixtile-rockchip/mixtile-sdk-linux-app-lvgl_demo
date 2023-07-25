@@ -29,9 +29,10 @@ char *get_local_ip(void)
                 if (!(ioctl(fd, SIOCGIFADDR, (char *)&buf[intrface])))
                 {
                     inet_ntop(AF_INET,
-                              &((struct sockaddr_in*)(&buf[intrface].ifr_addr))->sin_addr,
+                              &((struct sockaddr_in *)(&buf[intrface].ifr_addr))->sin_addr,
                               ip, INET_ADDRSTRLEN);
-                    if (strcmp(ip, "127.0.0.1") != 0) {
+                    if (strcmp(ip, "127.0.0.1") != 0)
+                    {
                         strcat(ip_out, ip);
                         if (intrface > 1)
                             strcat(ip_out, ",");

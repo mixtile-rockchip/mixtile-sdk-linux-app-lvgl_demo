@@ -43,7 +43,8 @@ static int quit = 0;
 
 extern void rk_demo_init(void);
 
-static void sigterm_handler(int sig) {
+static void sigterm_handler(int sig)
+{
     fprintf(stderr, "signal %d\n", sig);
     quit = 1;
 }
@@ -131,7 +132,8 @@ int main(int argc, char **argv)
 
     rk_demo_init();
 
-    while(!quit) {
+    while (!quit)
+    {
 #if FPS
         st = clock_ms();
 #endif
@@ -139,20 +141,24 @@ int main(int argc, char **argv)
 #if FPS
         et = clock_ms();
         fps = 1000 / (et - st);
-        if (fps != 0.0 && fps < minfps) {
+        if (fps != 0.0 && fps < minfps)
+        {
             minfps = fps;
             printf("Update minfps %f\n", minfps);
         }
-        if (fps < 60 && fps > maxfps) {
+        if (fps < 60 && fps > maxfps)
+        {
             maxfps = fps;
             printf("Update maxfps %f\n", maxfps);
         }
-        if (fps > 0.0 && fps < 60) {
+        if (fps > 0.0 && fps < 60)
+        {
             fps0 = (fps0 + fps) / 2;
             fps1 = (fps0 + fps1) / 2;
         }
         et0 = clock_ms();
-        if ((et0 - st0) > 1000) {
+        if ((et0 - st0) > 1000)
+        {
             printf("avg:%f\n", fps1);
             st0 = et0;
         }

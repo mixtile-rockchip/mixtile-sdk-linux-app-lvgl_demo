@@ -10,22 +10,22 @@
 #include "smart_home_ui.h"
 #include "ui_resource.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_img_dsc_t * bg_snapshot;
+static lv_img_dsc_t *bg_snapshot;
 
-static lv_obj_t * area_date;
-static lv_obj_t * area_weather;
-static lv_obj_t * area_scene;
+static lv_obj_t *area_date;
+static lv_obj_t *area_weather;
+static lv_obj_t *area_scene;
 
-static lv_img_dsc_t * bg_img_date;
-static lv_img_dsc_t * bg_img_weather;
-static lv_img_dsc_t * bg_img_scene;
+static lv_img_dsc_t *bg_img_date;
+static lv_img_dsc_t *bg_img_weather;
+static lv_img_dsc_t *bg_img_scene;
 
-lv_obj_t * menu_info_init(lv_obj_t * parent)
+lv_obj_t *menu_info_init(lv_obj_t *parent)
 {
-    lv_obj_t * obj;
-    lv_obj_t * label;
+    lv_obj_t *obj;
+    lv_obj_t *label;
     int x, y;
     int ofs;
 

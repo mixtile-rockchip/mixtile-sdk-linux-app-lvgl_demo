@@ -9,20 +9,20 @@
 #include "main.h"
 #include "ui_resource.h"
 
-static lv_obj_t * bg;
+static lv_obj_t *bg;
 
-static lv_obj_t * area_language;
-static lv_obj_t * area_date;
-static lv_obj_t * area_time;
+static lv_obj_t *area_language;
+static lv_obj_t *area_date;
+static lv_obj_t *area_time;
 
-static lv_obj_t * label_date;
-static lv_obj_t * label_time;
-static lv_obj_t * mask;
-static lv_obj_t * calendar;
-static lv_obj_t * time_roller[3];
-static lv_obj_t * btn_confirm;
+static lv_obj_t *label_date;
+static lv_obj_t *label_time;
+static lv_obj_t *mask;
+static lv_obj_t *calendar;
+static lv_obj_t *time_roller[3];
+static lv_obj_t *btn_confirm;
 
-static void confirm_cb(lv_event_t * e)
+static void confirm_cb(lv_event_t *e)
 {
     int hour, min, sec;
     char buf[10];
@@ -40,18 +40,19 @@ static void confirm_cb(lv_event_t * e)
     lv_obj_del(mask);
 }
 
-static void calendar_cb(lv_event_t * e)
+static void calendar_cb(lv_event_t *e)
 {
     lv_calendar_date_t date;
 
-    if(lv_calendar_get_pressed_date(calendar, &date)) {
+    if (lv_calendar_get_pressed_date(calendar, &date))
+    {
         lv_label_set_text_fmt(label_date, "%04d-%02d-%02d",
                               date.year, date.month, date.day);
         lv_obj_del(mask);
     }
 }
 
-static void show_calendar(lv_event_t * e)
+static void show_calendar(lv_event_t *e)
 {
     mask = lv_obj_create(lv_layer_top());
     lv_obj_remove_style_all(mask);
@@ -70,14 +71,15 @@ static void show_calendar(lv_event_t * e)
     lv_calendar_header_arrow_create(calendar);
 }
 
-static void roller_drawed(lv_event_t * e)
+static void roller_drawed(lv_event_t *e)
 {
     lv_obj_align_to(btn_confirm, time_roller[1], LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 }
 
-static void show_time_setting(lv_event_t * e)
+static void show_time_setting(lv_event_t *e)
 {
-    const char *opts[2] = {
+    const char *opts[2] =
+    {
         "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n"
         "10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n"
         "20\n21\n22\n23",
@@ -88,7 +90,7 @@ static void show_time_setting(lv_event_t * e)
         "40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n"
         "50\n51\n52\n53\n55\n55\n56\n57\n58\n59\n"
     };
-    lv_obj_t * obj;
+    lv_obj_t *obj;
 
     mask = lv_obj_create(lv_layer_top());
     lv_obj_remove_style_all(mask);
@@ -125,9 +127,9 @@ static void show_time_setting(lv_event_t * e)
     lv_obj_add_style(obj, &style_txt_s, LV_PART_MAIN);
 }
 
-lv_obj_t * menu_language_init(lv_obj_t * parent)
+lv_obj_t *menu_language_init(lv_obj_t *parent)
 {
-    lv_obj_t * obj;
+    lv_obj_t *obj;
 
     bg = lv_obj_create(parent);
     lv_obj_set_size(bg, lv_pct(100), LV_SIZE_CONTENT);

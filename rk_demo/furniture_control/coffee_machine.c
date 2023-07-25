@@ -4,25 +4,25 @@
 #include "furniture_control_ui.h"
 
 ///////////////////// VARIABLES ////////////////////
-static lv_obj_t * coffee_machine_screen = NULL;
-static lv_obj_t * coffee_machine_label1 = NULL;
-static lv_obj_t * coffee_machine_box = NULL;
-static lv_obj_t * coffee_machine_png_box = NULL;
-static lv_obj_t * coffee_machine_box_name = NULL;
-static lv_obj_t * coffee_machine_name = NULL;
-static lv_obj_t * coffee_machine_button_box = NULL;
-static lv_obj_t * coffee_machine_button = NULL;
-static lv_obj_t * coffee_machine_button_label = NULL;
-static lv_obj_t * bg_pic = NULL;
-static lv_obj_t * ui_return;
+static lv_obj_t *coffee_machine_screen = NULL;
+static lv_obj_t *coffee_machine_label1 = NULL;
+static lv_obj_t *coffee_machine_box = NULL;
+static lv_obj_t *coffee_machine_png_box = NULL;
+static lv_obj_t *coffee_machine_box_name = NULL;
+static lv_obj_t *coffee_machine_name = NULL;
+static lv_obj_t *coffee_machine_button_box = NULL;
+static lv_obj_t *coffee_machine_button = NULL;
+static lv_obj_t *coffee_machine_button_label = NULL;
+static lv_obj_t *bg_pic = NULL;
+static lv_obj_t *ui_return;
 
-static lv_obj_t * coffee_1;
-static lv_obj_t * coffee_2;
-static lv_obj_t * coffee_3;
-static lv_obj_t * coffee_4;
-static lv_obj_t * coffee_5;
-static lv_obj_t * coffee_6;
-static lv_obj_t * coffee_0;
+static lv_obj_t *coffee_1;
+static lv_obj_t *coffee_2;
+static lv_obj_t *coffee_3;
+static lv_obj_t *coffee_4;
+static lv_obj_t *coffee_5;
+static lv_obj_t *coffee_6;
+static lv_obj_t *coffee_0;
 static int scroll_value = 0;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
@@ -30,41 +30,48 @@ static int scroll_value = 0;
 
 ///////////////////// FUNCTIONS ////////////////////
 
-void coffee_machine_page_jump_furniture_control_callback(lv_event_t* event) {
+void coffee_machine_page_jump_furniture_control_callback(lv_event_t *event)
+{
     printf("coffee_machine_page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_obj_del(coffee_machine_screen);
     coffee_machine_screen = NULL;
 }
 
-void coffee_machine_png_box_scroll_callback(lv_event_t* event) {
-    lv_obj_t* screen = lv_event_get_target(event);
+void coffee_machine_png_box_scroll_callback(lv_event_t *event)
+{
+    lv_obj_t *screen = lv_event_get_target(event);
     scroll_value = lv_obj_get_scroll_left(screen);
     //printf("%d pixels are scrolled out on the left\n", scroll_value);
-    if (scroll_value > 0 && scroll_value < 250) {
+    if (scroll_value > 0 && scroll_value < 250)
+    {
         lv_img_set_zoom(coffee_1, 256);
         lv_img_set_zoom(coffee_2, 192);
         lv_label_set_text(coffee_machine_name, "美式咖啡");
     }
-    if (scroll_value > 250 && scroll_value < 650 ) {
+    if (scroll_value > 250 && scroll_value < 650)
+    {
         lv_img_set_zoom(coffee_1, 192);
         lv_img_set_zoom(coffee_2, 256);
         lv_img_set_zoom(coffee_3, 192);
         lv_label_set_text(coffee_machine_name, "意式咖啡");
     }
-    if (scroll_value > 650 && scroll_value < 1050) {
+    if (scroll_value > 650 && scroll_value < 1050)
+    {
         lv_img_set_zoom(coffee_2, 192);
         lv_img_set_zoom(coffee_3, 256);
         lv_img_set_zoom(coffee_4, 192);
         lv_label_set_text(coffee_machine_name, "美味拿铁");
     }
-    if (scroll_value > 1050 && scroll_value < 1450) {
+    if (scroll_value > 1050 && scroll_value < 1450)
+    {
         lv_img_set_zoom(coffee_3, 192);
         lv_img_set_zoom(coffee_4, 256);
         lv_img_set_zoom(coffee_5, 192);
         lv_label_set_text(coffee_machine_name, "卡布奇诺");
     }
-    if (scroll_value > 1450 && scroll_value < 1850) {
+    if (scroll_value > 1450 && scroll_value < 1850)
+    {
         lv_img_set_zoom(coffee_4, 192);
         lv_img_set_zoom(coffee_5, 256);
         lv_label_set_text(coffee_machine_name, "RK咖啡");
@@ -95,7 +102,8 @@ void ui_coffee_machine_screen_init(void)
     lv_obj_align(ui_return, LV_ALIGN_TOP_LEFT, 10, 10);
     lv_obj_add_flag(ui_return, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_return, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    if (ui_return != NULL) {
+    if (ui_return != NULL)
+    {
         lv_obj_add_event_cb(ui_return, coffee_machine_page_jump_furniture_control_callback, LV_EVENT_CLICKED, NULL);
     }
 
@@ -111,7 +119,8 @@ void ui_coffee_machine_screen_init(void)
     lv_obj_set_width(coffee_machine_png_box, lv_pct(100));
     lv_obj_set_height(coffee_machine_png_box, 400);
     lv_obj_align(coffee_machine_png_box, LV_ALIGN_TOP_LEFT, 0, 250);
-    if (coffee_machine_png_box != NULL) {
+    if (coffee_machine_png_box != NULL)
+    {
         lv_obj_add_event_cb(coffee_machine_png_box, coffee_machine_png_box_scroll_callback, LV_EVENT_SCROLL, NULL);
     }
     //lv_obj_set_style_radius(coffee_machine_png_box, LV_RADIUS_CIRCLE, 0);
@@ -153,7 +162,7 @@ void ui_coffee_machine_screen_init(void)
     lv_obj_align(coffee_5, LV_ALIGN_CENTER, 1600, 10);
     lv_img_set_src(coffee_5, COFFEE_5);
     lv_img_set_zoom(coffee_5, 192);
-    
+
     coffee_6 = lv_img_create(coffee_machine_png_box);
     lv_obj_set_width(coffee_6, 300);
     lv_obj_set_height(coffee_6, 300);

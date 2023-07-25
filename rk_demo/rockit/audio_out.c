@@ -33,9 +33,12 @@ static AUDIO_SOUND_MODE_E sound_mode(int ch)
 {
     switch (ch)
     {
-    case 1:     return AUDIO_SOUND_MODE_MONO;
-    case 2:     return AUDIO_SOUND_MODE_STEREO;
-    default:    return AUDIO_SOUND_MODE_BUTT;
+    case 1:
+        return AUDIO_SOUND_MODE_MONO;
+    case 2:
+        return AUDIO_SOUND_MODE_STEREO;
+    default:
+        return AUDIO_SOUND_MODE_BUTT;
     }
 }
 
@@ -61,13 +64,15 @@ int ao_init(void)
 
     RK_LOGI("rate %d bit %d ch %d", aoAttr.enSamplerate, aoAttr.enBitwidth, aoAttr.enSoundmode);
     result = RK_MPI_AO_SetPubAttr(aoDevId, &aoAttr);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai set attr fail, reason = %d", result);
         return -1;
     }
 
     result = RK_MPI_AO_Enable(aoDevId);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai enable fail, reason = %d", result);
         return -1;
     }
@@ -75,13 +80,15 @@ int ao_init(void)
     memset(&pstParams, 0, sizeof(AO_CHN_PARAM_S));
     pstParams.enLoopbackMode = AUDIO_LOOPBACK_NONE;
     result = RK_MPI_AO_SetChnParams(aoDevId, aoChn, &pstParams);
-    if (result != RK_SUCCESS) {
+    if (result != RK_SUCCESS)
+    {
         RK_LOGE("ai set channel params, aoChn = %d", aoChn);
         goto ai_chn_err;
     }
 
     result = RK_MPI_AO_EnableChn(aoDevId, aoChn);
-    if (result != 0) {
+    if (result != 0)
+    {
         RK_LOGE("ai enable channel fail, aoChn = %d, reason = %x", aoChn, result);
         goto ai_chn_err;
     }
@@ -102,7 +109,8 @@ int ao_init(void)
     adAttr.u32BufSize = 50 * 1024;
 
     result = RK_MPI_ADEC_CreateChn(adChn, &adAttr);
-    if (result) {
+    if (result)
+    {
         RK_LOGE("create adec chn %d err:0x%x\n", adChn, result);
         goto adec_err;
     }
@@ -115,7 +123,8 @@ int ao_init(void)
     aoBindAttr.s32ChnId = aoChn;
 
     result = RK_MPI_SYS_Bind(&adecBindAttr, &aoBindAttr);
-    if (result) {
+    if (result)
+    {
         RK_LOGE("bind ai adec failed:0x%x\n", result);
         goto bind_err;
     }
@@ -172,9 +181,10 @@ int ao_push(int (*hook)(void *, char *, int), void *arg)
     RK_MPI_SYS_CreateMB(&(frame.pMbBlk), &extConfig);
 
     result = RK_MPI_AO_SendFrame(aoDevId, aoChn, &frame, -1);
-    if (result < 0) {
+    if (result < 0)
+    {
         RK_LOGE("send frame fail, result = %X, TimeStamp = %lld, s32MilliSec = -1",
-            result, frame.u64TimeStamp);
+                result, frame.u64TimeStamp);
     }
     RK_MPI_MB_ReleaseMB(frame.pMbBlk);
     free(buf);
@@ -207,9 +217,10 @@ int ao_push(int (*hook)(void *, char *, int), void *arg)
     RK_MPI_SYS_CreateMB(&(stream.pMbBlk), &extConfig);
 
     result = RK_MPI_ADEC_SendStream(adChn, &stream, RK_TRUE);
-    if (result < 0) {
+    if (result < 0)
+    {
         RK_LOGE("send frame fail, result = %X, TimeStamp = %lld, s32MilliSec = -1",
-            result, stream.u64TimeStamp);
+                result, stream.u64TimeStamp);
     }
     RK_MPI_MB_ReleaseMB(stream.pMbBlk);
 #endif

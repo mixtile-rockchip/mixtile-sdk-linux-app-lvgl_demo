@@ -6,9 +6,9 @@
 #include <RkBtSink.h>
 #include <RkBle.h>
 
-#define BLE_UUID_SEND		"dfd4416e-1810-47f7-8248-eb8be3dc47f9"
-#define BLE_UUID_RECV		"9884d812-1810-4a24-94d3-b2c11a851fac"
-#define SERVICE_UUID		"00001910-0000-1000-8000-00805f9b34fb"
+#define BLE_UUID_SEND       "dfd4416e-1810-47f7-8248-eb8be3dc47f9"
+#define BLE_UUID_RECV       "9884d812-1810-4a24-94d3-b2c11a851fac"
+#define SERVICE_UUID        "00001910-0000-1000-8000-00805f9b34fb"
 
 static RkBtContent bt_content;
 static volatile bool gonff = false;
@@ -39,7 +39,8 @@ RK_BT_SINK_STATE bt_sink_state(void)
 static int bt_sink_callback(RK_BT_SINK_STATE state)
 {
     sink_state = state;
-    switch(state) {
+    switch (state)
+    {
     case RK_BT_SINK_STATE_IDLE:
         printf("++++++++++++ BT SINK EVENT: idle ++++++++++\n");
         break;
@@ -171,7 +172,8 @@ static void bt_sink_volume_callback(int volume)
 
 static void bt_bond_state_cb(const char *bd_addr, const char *name, RK_BT_BOND_STATE state)
 {
-    switch(state) {
+    switch (state)
+    {
     case RK_BT_BOND_STATE_NONE:
         printf("++++++++++ BT BOND NONE: %s, %s ++++++++++\n", name, bd_addr);
         break;
@@ -186,7 +188,8 @@ static void bt_bond_state_cb(const char *bd_addr, const char *name, RK_BT_BOND_S
 
 static void bt_state_cb(RK_BT_STATE state)
 {
-    switch(state) {
+    switch (state)
+    {
     case RK_BT_STATE_TURNING_ON:
         printf("++++++++++ RK_BT_STATE_TURNING_ON ++++++++++\n");
         break;
@@ -212,7 +215,8 @@ static void bt_ble_request_data_callback(const char *uuid)
 static void bt_ble_recv_data_callback(const char *uuid, char *data, int len)
 {
     printf("=== %s uuid: %s===\n", __func__, uuid);
-    for (int i = 0 ; i < len; i++) {
+    for (int i = 0 ; i < len; i++)
+    {
         printf("%02x ", data[i]);
     }
     printf("\n");
@@ -250,7 +254,7 @@ int bt_ble_init(void)
     printf("ble_name_len: %s(%d)\n", bt_content.ble_content.ble_name, strlen(bt_content.ble_content.ble_name));
     ble_name_len = strlen(bt_content.ble_content.ble_name);
     remain_len = 31 - (bt_content.ble_content.advData[1] + 1)
-                    - (bt_content.ble_content.advData[4] + 1);
+                 - (bt_content.ble_content.advData[4] + 1);
     len = ble_name_len > remain_len ? remain_len : ble_name_len;
     bt_content.ble_content.advData[8] = len + 1;
     bt_content.ble_content.advData[9] = 0x09;
@@ -282,7 +286,7 @@ int bt_ble_init(void)
     bt_content.ble_content.respData[11] = 0x00;
     bt_content.ble_content.respData[12] = 0x00;
 
-    bt_content.ble_content.respData[13] = 0x08;	// SN长度
+    bt_content.ble_content.respData[13] = 0x08; // SN长度
     /*SN号*/
     bt_content.ble_content.respData[14] = 0x54;
     bt_content.ble_content.respData[15] = 0x00;
@@ -293,8 +297,8 @@ int bt_ble_init(void)
     bt_content.ble_content.respData[20] = 0x00;
     bt_content.ble_content.respData[21] = 0x36;
 
-    bt_content.ble_content.respData[22] = 0x01;	//绑定信息长度
-    bt_content.ble_content.respData[23] = 0x00;	//绑定信息
+    bt_content.ble_content.respData[22] = 0x01; //绑定信息长度
+    bt_content.ble_content.respData[23] = 0x00; //绑定信息
 
     bt_content.ble_content.respData[0] = bt_content.ble_content.respData[1] + 1;  //长度
     bt_content.ble_content.respDataLen = bt_content.ble_content.respData[0] + 1;

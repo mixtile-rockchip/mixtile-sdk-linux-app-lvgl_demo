@@ -1,7 +1,8 @@
 #ifndef __AUDIO_SERVER_H__
 #define __AUDIO_SERVER_H__
 
-enum {
+enum
+{
     STATE_IDLE,
     STATE_RUNNING,
     STATE_EXIT,

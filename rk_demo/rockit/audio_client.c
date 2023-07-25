@@ -61,7 +61,8 @@ int run_audio_client(char *ip)
     state = STATE_RUNNING;
     fd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if(fd < 0) {
+    if (fd < 0)
+    {
         printf("socket error\n");
         return fd;
     }
@@ -72,7 +73,8 @@ int run_audio_client(char *ip)
     serveraddr.sin_port = htons(9999);
     ret = connect(fd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
 
-    if(ret < 0) {
+    if (ret < 0)
+    {
         printf("connect error\n");
         close(fd);
         fd = -1;
@@ -80,7 +82,8 @@ int run_audio_client(char *ip)
     }
 
     ret = pthread_create(&tid, NULL, do_cap, NULL);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         printf("pthread error\n");
         close(fd);
         fd = -1;

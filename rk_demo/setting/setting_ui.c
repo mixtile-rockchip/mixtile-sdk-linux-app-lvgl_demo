@@ -25,28 +25,29 @@ enum
     SUBMENU_DEFAULT = SUBMENU_WIFI,
 };
 
-struct submenu_s {
+struct submenu_s
+{
     char *name;
     void (*init)(void);
     void (*deinit)(void);
-    lv_obj_t * menu;
+    lv_obj_t *menu;
 };
 
-static lv_obj_t * ui_screen;
-static lv_obj_t * btn_return;
-static lv_obj_t * label_menu;
-static lv_obj_t * area_menu;
-static lv_obj_t * area_content = NULL;
+static lv_obj_t *ui_screen;
+static lv_obj_t *btn_return;
+static lv_obj_t *label_menu;
+static lv_obj_t *area_menu;
+static lv_obj_t *area_content = NULL;
 
-static lv_obj_t * wifi_saved_area;
-static lv_obj_t * wifi_scaned;
-static lv_obj_t * wifi_saved_area;
-static lv_obj_t * wifi_scaned;
-static lv_obj_t * wifi_switch;
+static lv_obj_t *wifi_saved_area;
+static lv_obj_t *wifi_scaned;
+static lv_obj_t *wifi_saved_area;
+static lv_obj_t *wifi_scaned;
+static lv_obj_t *wifi_switch;
 
-static lv_style_t * style_cont;
+static lv_style_t *style_cont;
 
-static lv_obj_t * sub_menu[SUBMENU_MAX];
+static lv_obj_t *sub_menu[SUBMENU_MAX];
 static int cur_menu = SUBMENU_DEFAULT;
 static struct submenu_s submenu_desc[SUBMENU_MAX];
 
@@ -70,7 +71,8 @@ SUBMENU_COMMON_DEFINE(SUBMENU_WALLPAPER, wallpaper)
 SUBMENU_COMMON_DEFINE(SUBMENU_LANGUAGE_DATE, language)
 SUBMENU_COMMON_DEFINE(SUBMENU_ABOUT, about)
 
-static struct submenu_s submenu_desc[SUBMENU_MAX] = {
+static struct submenu_s submenu_desc[SUBMENU_MAX] =
+{
     {"WIFI",        submenu_wifi,    submenu_wifi_destroy, NULL},
     {"蓝牙",        submenu_bt,      submenu_bt_destroy,   NULL},
     {"显示和亮度",  submenu_display, submenu_display_destroy, NULL},
@@ -96,7 +98,7 @@ static void style_init(void)
     lv_style_set_pad_bottom(style_cont, 10);
 }
 
-static void menu_switch_cb(lv_event_t * e)
+static void menu_switch_cb(lv_event_t *e)
 {
     intptr_t idx = (intptr_t)lv_event_get_user_data(e);
 
@@ -104,8 +106,8 @@ static void menu_switch_cb(lv_event_t * e)
         return;
 
     if ((cur_menu >= SUBMENU_MIN)
-        && (cur_menu < SUBMENU_MAX)
-        && submenu_desc[cur_menu].menu)
+            && (cur_menu < SUBMENU_MAX)
+            && submenu_desc[cur_menu].menu)
     {
         lv_obj_add_flag(submenu_desc[cur_menu].menu,
                         LV_OBJ_FLAG_HIDDEN);
@@ -122,9 +124,10 @@ static void menu_switch_cb(lv_event_t * e)
     }
 }
 
-static void btn_drawed_cb(lv_event_t * e)
+static void btn_drawed_cb(lv_event_t *e)
 {
-    switch (e->code) {
+    switch (e->code)
+    {
     case LV_EVENT_CLICKED:
         home_ui_init();
         for (int i = SUBMENU_MIN; i < SUBMENU_MAX; i++)

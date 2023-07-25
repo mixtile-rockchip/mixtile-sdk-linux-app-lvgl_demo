@@ -17,24 +17,25 @@ enum
     SUBMENU_DEFAULT = SUBMENU_INFO,
 };
 
-struct submenu_s {
+struct submenu_s
+{
     char *name;
-    void (*init)(lv_obj_t * parent);
+    void (*init)(lv_obj_t *parent);
     void (*deinit)(void);
-    lv_obj_t * menu;
+    lv_obj_t *menu;
 };
 
-static lv_obj_t * ui_screen;
-static lv_obj_t * bg_pic;
-static lv_obj_t * btn_return;
-static lv_obj_t * label_menu;
-static lv_obj_t * area_submenu;
+static lv_obj_t *ui_screen;
+static lv_obj_t *bg_pic;
+static lv_obj_t *btn_return;
+static lv_obj_t *label_menu;
+static lv_obj_t *area_submenu;
 
-static lv_img_dsc_t * bg_snapshot;
+static lv_img_dsc_t *bg_snapshot;
 
-static lv_style_t * style_cont;
+static lv_style_t *style_cont;
 
-static lv_obj_t * sub_menu[SUBMENU_MAX];
+static lv_obj_t *sub_menu[SUBMENU_MAX];
 static struct submenu_s submenu_desc[SUBMENU_MAX];
 
 #define SUBMENU_COMMON_DEFINE(enum_t, name) \
@@ -53,7 +54,8 @@ SUBMENU_COMMON_DEFINE(SUBMENU_INFO, info)
 SUBMENU_COMMON_DEFINE(SUBMENU_CONTROL, control)
 SUBMENU_COMMON_DEFINE(SUBMENU_MUSIC, music)
 
-static struct submenu_s submenu_desc[SUBMENU_MAX] = {
+static struct submenu_s submenu_desc[SUBMENU_MAX] =
+{
     {"首页",   submenu_info,    submenu_info_destroy,    NULL},
     {"控制",   submenu_control, submenu_control_destroy, NULL},
     {"播放器", submenu_music,   submenu_music_destroy,   NULL}
@@ -65,7 +67,7 @@ static void bg_pic_snapshot_blur(void)
 
     bg_snapshot = lv_snapshot_take(bg_pic, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t * canvas = lv_canvas_create(NULL);
+    lv_obj_t *canvas = lv_canvas_create(NULL);
     lv_area_t area;
     lv_canvas_set_buffer(canvas, (void *)bg_snapshot->data,
                          bg_snapshot->header.w,
@@ -102,9 +104,10 @@ static void style_init(void)
     lv_style_set_pad_bottom(style_cont, 10);
 }
 
-static void btn_drawed_cb(lv_event_t * e)
+static void btn_drawed_cb(lv_event_t *e)
 {
-    switch (e->code) {
+    switch (e->code)
+    {
     case LV_EVENT_CLICKED:
         home_ui_init();
         for (int i = SUBMENU_MIN; i < SUBMENU_MAX; i++)
@@ -130,14 +133,14 @@ static void btn_drawed_cb(lv_event_t * e)
     }
 }
 
-lv_img_dsc_t * smart_home_ui_bg_blur(void)
+lv_img_dsc_t *smart_home_ui_bg_blur(void)
 {
     return bg_snapshot;
 }
 
 void smart_home_ui_init(void)
 {
-    lv_obj_t * obj;
+    lv_obj_t *obj;
 
     style_init();
 

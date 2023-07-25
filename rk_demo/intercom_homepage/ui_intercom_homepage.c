@@ -2,20 +2,20 @@
 #include <time.h>
 #include "ui_intercom_homepage.h"
 
-static lv_obj_t * ui_back;
+static lv_obj_t *ui_back;
 
-lv_obj_t * ui_Screen_intercom_homepage;
-lv_obj_t * ui_intercom_call_Label_0;
-static lv_obj_t * bg_pic;
+lv_obj_t *ui_Screen_intercom_homepage;
+lv_obj_t *ui_intercom_call_Label_0;
+static lv_obj_t *bg_pic;
 
 extern lv_obj_t *ui_img_circular;
 extern lv_font_t Security_alarm;
 extern lv_font_t Video_monitor;
-extern lv_obj_t * ui_Screen_intercom_call;
+extern lv_obj_t *ui_Screen_intercom_call;
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
 
-static void icon_cb(lv_event_t * e);
+static void icon_cb(lv_event_t *e);
 
 static struct lv_button_parameter button[] =
 {
@@ -35,12 +35,14 @@ static struct lv_button_parameter button[] =
 void intercom_call_ui_init();
 void monitor_ui_init();
 
-static void icon_cb(lv_event_t * e){
+static void icon_cb(lv_event_t *e)
+{
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
     intptr_t type = (intptr_t)lv_event_get_user_data(e);
 
-    if (code == LV_EVENT_CLICKED) {
+    if (code == LV_EVENT_CLICKED)
+    {
         switch (type)
         {
         case 1:
@@ -53,7 +55,7 @@ static void icon_cb(lv_event_t * e){
             lv_obj_del(ui_Screen_intercom_homepage);
             ui_Screen_intercom_homepage = NULL;
             break;
-        
+
         default:
             break;
         }
@@ -61,10 +63,12 @@ static void icon_cb(lv_event_t * e){
 }
 
 
-static void back_icon_cb(lv_event_t * e){
+static void back_icon_cb(lv_event_t *e)
+{
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_CLICKED){
+    if (code == LV_EVENT_CLICKED)
+    {
         home_ui_init();
         lv_obj_del(ui_Screen_intercom_homepage);
         ui_Screen_intercom_homepage = NULL;
@@ -72,7 +76,7 @@ static void back_icon_cb(lv_event_t * e){
 }
 
 
-void function_keys(lv_obj_t * parent, lv_obj_t *referent)
+void function_keys(lv_obj_t *parent, lv_obj_t *referent)
 {
     for (intptr_t i = 0; i < 10; i ++)
     {
@@ -90,7 +94,7 @@ void function_keys(lv_obj_t * parent, lv_obj_t *referent)
         lv_obj_set_size(button[i].ui_circle_label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
         lv_obj_align_to(button[i].ui_circle_label, button[i].ui_circle, LV_ALIGN_CENTER, button[i].x_po_verify, button[i].y_po_verify);
         lv_label_set_text(button[i].ui_circle_label, button[i].txt);
-        lv_obj_add_event_cb(button[i].ui_circle, icon_cb, LV_EVENT_ALL, (void*)i);
+        lv_obj_add_event_cb(button[i].ui_circle, icon_cb, LV_EVENT_ALL, (void *)i);
     }
 
 }

@@ -19,7 +19,7 @@ static lv_obj_t *bt_switch;
 
 static void switch_toggled(lv_event_t *e)
 {
-    lv_obj_t * sw = lv_event_get_target(e);
+    lv_obj_t *sw = lv_event_get_target(e);
 
     if (lv_obj_has_state(sw, LV_STATE_CHECKED))
         bt_ble_init();
@@ -27,7 +27,7 @@ static void switch_toggled(lv_event_t *e)
         bt_ble_deinit();
 }
 
-lv_obj_t * menu_bt_init(lv_obj_t * parent)
+lv_obj_t *menu_bt_init(lv_obj_t *parent)
 {
     bg = lv_obj_create(parent);
     lv_obj_remove_style_all(bg);
