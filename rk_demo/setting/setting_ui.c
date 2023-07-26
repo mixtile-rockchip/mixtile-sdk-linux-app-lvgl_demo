@@ -197,6 +197,7 @@ void setting_ui_init(void)
     }
 
     submenu_desc[SUBMENU_DEFAULT].init();
+    cur_menu = SUBMENU_DEFAULT;
 load:
     lv_disp_load_scr(ui_screen);
 }
