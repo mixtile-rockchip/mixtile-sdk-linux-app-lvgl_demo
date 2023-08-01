@@ -2,43 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <RkBtBase.h>
-#include <RkBtSink.h>
-#include <RkBle.h>
+#include "wifibt.h"
 
 #define BLE_UUID_SEND       "dfd4416e-1810-47f7-8248-eb8be3dc47f9"
 #define BLE_UUID_RECV       "9884d812-1810-4a24-94d3-b2c11a851fac"
 #define SERVICE_UUID        "00001910-0000-1000-8000-00805f9b34fb"
 
 static RkBtContent bt_content;
-static volatile bool gonff = false;
-static volatile bool sink_started = false;
-static RK_BT_SINK_STATE sink_state = RK_BT_SINK_STATE_IDLE;
-static BtTrackInfo g_track_info;
-static bool track_changed = 0;
-static int g_pos, g_time;
-static bool time_changed = 0;
-static int g_volume;
-static bool vol_changed = 0;
+static struct bt_info g_bt_info;
 
-bool bt_sink_is_started(void)
+void bt_sink_info(struct bt_info *info)
 {
-    return sink_started;
+    memcpy(info, &g_bt_info, sizeof(*info));
 }
 
-bool bt_is_state_on(void)
+void bt_sink_track_clear(void)
 {
-    return gonff;
+    g_bt_info.track_changed = false;
 }
 
-RK_BT_SINK_STATE bt_sink_state(void)
+void bt_sink_pos_clear(void)
 {
-    return sink_state;
+    g_bt_info.pos_changed = false;
 }
 
 static int bt_sink_callback(RK_BT_SINK_STATE state)
 {
-    sink_state = state;
+    g_bt_info.sink_state = state;
     switch (state)
     {
     case RK_BT_SINK_STATE_IDLE:
@@ -61,11 +51,11 @@ static int bt_sink_callback(RK_BT_SINK_STATE state)
         break;
     case RK_BT_A2DP_SINK_STARTED:
         printf("++++++++++++ BT A2DP SINK STATE: started ++++++++++\n");
-        sink_started = true;
+        g_bt_info.sink_started = true;
         break;
     case RK_BT_A2DP_SINK_SUSPENDED:
         printf("++++++++++++ BT A2DP SINK STATE: suspended ++++++++++\n");
-        sink_started = false;
+        g_bt_info.sink_started = false;
         break;
     case RK_BT_A2DP_SINK_STOPPED:
         printf("++++++++++++ BT A2DP SINK STATE: stoped ++++++++++\n");
@@ -80,9 +70,9 @@ static void bt_sink_position_change_callback(const char *bd_addr, int song_len, 
     printf("++++++++ bt sink position change ++++++++\n");
     printf("    remote device address: %s\n", bd_addr);
     printf("    song_len: %d, song_pos: %d\n", song_len, song_pos);
-    g_pos = song_pos;
-    g_time = song_len;
-    time_changed = 1;
+    g_bt_info.pos = song_pos;
+    g_bt_info.time = song_len;
+    g_bt_info.pos_changed = true;
 }
 
 static void bt_sink_track_change_callback(const char *bd_addr, BtTrackInfo track_info)
@@ -103,75 +93,32 @@ static void bt_sink_track_change_callback(const char *bd_addr, BtTrackInfo track
     {
         if (strlen(track_info.title))
         {
-            memcpy(g_track_info.title, track_info.title, sizeof(g_track_info.title));
-            track_changed = 1;
+            memcpy(g_bt_info.title, track_info.title, sizeof(g_bt_info.title));
+            g_bt_info.track_changed = true;
         }
         if (strlen(track_info.artist))
         {
-            memcpy(g_track_info.artist, track_info.artist, sizeof(g_track_info.artist));
-            track_changed = 1;
+            memcpy(g_bt_info.artist, track_info.artist, sizeof(g_bt_info.artist));
+            g_bt_info.track_changed = true;
         }
     }
     else
     {
-        snprintf(g_track_info.title, sizeof(g_track_info.title), "媒体音频");
-        snprintf(g_track_info.artist, sizeof(g_track_info.artist), " ");
-        track_changed = 1;
+        snprintf(g_bt_info.title, sizeof(g_bt_info.title), "媒体音频");
+        snprintf(g_bt_info.artist, sizeof(g_bt_info.artist), " ");
+        g_bt_info.track_changed = true;
     }
-}
-
-int bt_sink_get_track_info(char **title, char **artist)
-{
-    if (!track_changed)
-    {
-        *title = NULL;
-        *artist = NULL;
-        return 0;
-    }
-    track_changed = 0;
-
-    *title = strdup(g_track_info.title);
-    *artist = strdup(g_track_info.artist);
-
-    return 1;
-}
-
-int bt_sink_get_track_time(int *pos, int *time)
-{
-    if (!time_changed)
-    {
-        return 0;
-    }
-    time_changed = 0;
-
-    *pos = g_pos;
-    *time = g_time;
-
-    return 1;
-}
-
-int bt_sink_get_vol(int *vol)
-{
-    if (!vol_changed)
-    {
-        return 0;
-    }
-    vol_changed = 0;
-
-    *vol = g_volume;
-
-    return 1;
 }
 
 static void bt_sink_volume_callback(int volume)
 {
     printf("++++++++ bt sink volume change, volume: %d ++++++++\n", volume);
-    g_volume = volume;
-    vol_changed = 1;
+    g_bt_info.vol = volume;
 }
 
 static void bt_bond_state_cb(const char *bd_addr, const char *name, RK_BT_BOND_STATE state)
 {
+    g_bt_info.bond_state = state;
     switch (state)
     {
     case RK_BT_BOND_STATE_NONE:
@@ -188,6 +135,7 @@ static void bt_bond_state_cb(const char *bd_addr, const char *name, RK_BT_BOND_S
 
 static void bt_state_cb(RK_BT_STATE state)
 {
+    g_bt_info.bt_state = state;
     switch (state)
     {
     case RK_BT_STATE_TURNING_ON:
@@ -195,37 +143,62 @@ static void bt_state_cb(RK_BT_STATE state)
         break;
     case RK_BT_STATE_ON:
         printf("++++++++++ RK_BT_STATE_ON ++++++++++\n");
-        gonff = true;
         break;
     case RK_BT_STATE_TURNING_OFF:
         printf("++++++++++ RK_BT_STATE_TURNING_OFF ++++++++++\n");
         break;
     case RK_BT_STATE_OFF:
         printf("++++++++++ RK_BT_STATE_OFF ++++++++++\n");
-        gonff = false;
         break;
     }
 }
 
-static void bt_ble_request_data_callback(const char *uuid)
+static void bt_ble_request_data_callback(const char *uuid, char *data, int *len)
 {
     printf("=== %s uuid: %s===\n", __func__, uuid);
+
+    //len <= mtu(g_mtu)
+    *len = strlen("hello rockchip");
+    memcpy(data, "hello rockchip", strlen("hello rockchip"));
+
+    printf("=== %s uuid: %s data: %s[%d]===\n", __func__, uuid, data, *len);
+
+    return;
 }
 
 static void bt_ble_recv_data_callback(const char *uuid, char *data, int len)
 {
+    char data_t[512];
+    char reply_buf[512] = {"My name is rockchip"};
+
     printf("=== %s uuid: %s===\n", __func__, uuid);
+    memcpy(data_t, data, len);
     for (int i = 0 ; i < len; i++)
     {
-        printf("%02x ", data[i]);
+        printf("%02x ", data_t[i]);
     }
     printf("\n");
+
+    if (strstr(data_t, "Hello RockChip") || strstr(data_t, "HelloRockChip") ||
+            strstr(data_t, "HELLO ROCKCHIP") || strstr(data_t, "HELLOROCKCHIP") ||
+            strstr(data_t, "hello rockchip") || strstr(data_t, "hellorockchip"))
+    {
+        printf("=== %s Reply:%s ===\n", __func__, reply_buf);
+        rk_ble_write(uuid, reply_buf, 17);
+    }
+//    printf("=== %s uuid: %s===\n", __func__, uuid);
+//    for (int i = 0 ; i < len; i++)
+//    {
+//        printf("%02x ", data[i]);
+//    }
+//    printf("\n");
 }
 
 int bt_ble_init(void)
 {
     int len, ble_name_len, remain_len;
 
+    memset(&g_bt_info, 0, sizeof(g_bt_info));
     memset(&bt_content, 0, sizeof(RkBtContent));
     bt_content.bt_name = "ROCKCHIP_AUDIO";
     bt_content.ble_content.ble_name = "ROCKCHIP_AUDIO_BLE";
@@ -328,35 +301,5 @@ int bt_sink_enable(void)
 int bt_sink_disable(void)
 {
     rk_bt_sink_close();
-}
-
-int bt_sink_disconnect(void)
-{
-    rk_bt_sink_disconnect();
-}
-
-int bt_sink_set_volume(int volume)
-{
-    return rk_bt_sink_set_volume(volume);
-}
-
-int bt_sink_next(void)
-{
-    return rk_bt_sink_next();
-}
-
-int bt_sink_prev(void)
-{
-    return rk_bt_sink_prev();
-}
-
-int bt_sink_play(void)
-{
-    return rk_bt_sink_play();
-}
-
-int bt_sink_pause(void)
-{
-    return rk_bt_sink_pause();
 }
 

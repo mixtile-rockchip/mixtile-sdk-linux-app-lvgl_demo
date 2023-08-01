@@ -30,7 +30,8 @@ typedef enum
 {
     NONE = 0,
     WPA,
-    WEP
+    WEP,
+    WPA3
 } RK_WIFI_CONNECTION_Encryp_e;
 
 typedef struct
@@ -71,6 +72,7 @@ char *RK_wifi_scan_r(void);
 char *RK_wifi_scan_r_sec(const unsigned int cols);
 int RK_wifi_connect(char *ssid, const char *psk);
 int RK_wifi_connect_wep(char *ssid, const char *psk);
+int RK_wifi_connect_wpa3(char *ssid, const char *psk);
 int RK_wifi_connect1(char *ssid, const char *psk, const RK_WIFI_CONNECTION_Encryp_e encryp, const int hide);
 int RK_wifi_disconnect_network(void);
 int RK_wifi_restart_network(void);

@@ -7,6 +7,7 @@
 #include <lvgl/lvgl.h>
 
 #include "bt.h"
+#include "wifibt.h"
 #include "main.h"
 #include "ui_resource.h"
 #include "smart_home_ui.h"
@@ -46,43 +47,64 @@ static int volume = 100;
 static int mute = 0;
 static int g_pos = 0;
 
+static int bt_sink_fd = -1;
+static struct wifibt_cmdarg cmdarg;
+static struct bt_info new_info;
+
 static void btn_cb(lv_event_t *e)
 {
     intptr_t idx = (intptr_t)lv_event_get_user_data(e);
 
-    if (bt_sink_state() == RK_BT_SINK_STATE_IDLE ||
-            bt_sink_state() == RK_BT_SINK_STATE_DISCONNECT)
+    cmdarg.cmd = BT_INFO;
+    cmdarg.val = &new_info;
+    wifibt_send_wait(&cmdarg, sizeof(cmdarg));
+
+    if (new_info.sink_state == RK_BT_SINK_STATE_IDLE ||
+            new_info.sink_state == RK_BT_SINK_STATE_DISCONNECT)
         return;
 
     switch (idx)
     {
     case 0:
-        bt_sink_prev();
+        cmdarg.cmd = BT_SINK_PREV;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         break;
     case 1:
-        if (bt_sink_is_started())
-            bt_sink_pause();
+        if (new_info.sink_started)
+            cmdarg.cmd = BT_SINK_PAUSE;
         else
-            bt_sink_play();
+            cmdarg.cmd = BT_SINK_PLAY;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         break;
     case 2:
-        bt_sink_next();
+        cmdarg.cmd = BT_SINK_NEXT;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         break;
     case 3:
         if (volume >= 10)
             volume -= 10;
-        bt_sink_set_volume(volume);
+        else
+            volume = 0;
+        cmdarg.cmd = BT_SINK_VOL;
+        cmdarg.val = (void *)volume;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         break;
     case 4:
         if (volume <= 90)
             volume += 10;
-        bt_sink_set_volume(volume);
+        else
+            volume = 100;
+        cmdarg.cmd = BT_SINK_VOL;
+        cmdarg.val = (void *)volume;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         break;
     case 5:
         if (mute)
-            bt_sink_set_volume(volume);
+            cmdarg.val = (void *)volume;
         else
-            bt_sink_set_volume(0);
+            cmdarg.val = (void *)0;
+        cmdarg.cmd = BT_SINK_VOL;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         mute = !mute;
         break;
     }
@@ -91,28 +113,35 @@ static void btn_cb(lv_event_t *e)
 static void pos_timer_cb(struct _lv_timer_t *tmr)
 {
     static int sink_started = -1;
-    int pos, time;
+    int pos;
 
-    if (sink_started != bt_sink_is_started())
+    cmdarg.cmd = BT_INFO;
+    cmdarg.val = &new_info;
+    wifibt_send_wait(&cmdarg, sizeof(cmdarg));
+
+    if (new_info.sink_started != sink_started)
     {
-        sink_started = bt_sink_is_started();
-        if (sink_started)
+        if (new_info.sink_started)
             lv_label_set_text(btn_play, LV_SYMBOL_PAUSE);
         else
             lv_label_set_text(btn_play, LV_SYMBOL_PLAY);
+        sink_started = new_info.sink_started;
     }
 
-    if (bt_sink_get_track_time(&pos, &time))
+    if (new_info.pos_changed)
     {
-        g_pos = pos;
-        lv_slider_set_range(slider, 0, time);
-        lv_slider_set_value(slider, pos, LV_ANIM_ON);
-        time /= 1000;
-        lv_label_set_text_fmt(label_time, "%02d:%02d", time / 60, time % 60);
+        g_pos = new_info.pos;
+        lv_slider_set_range(slider, 0, new_info.time);
+        lv_slider_set_value(slider, new_info.pos, LV_ANIM_ON);
+        new_info.time /= 1000;
+        lv_label_set_text_fmt(label_time, "%02d:%02d",
+                              new_info.time / 60, new_info.time % 60);
+        cmdarg.cmd = BT_SINK_POS_CLEAR;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
     }
     else
     {
-        if (!sink_started)
+        if (!new_info.sink_started)
             return;
         g_pos += 100;
         lv_slider_set_value(slider, g_pos, LV_ANIM_ON);
@@ -126,38 +155,41 @@ static void bt_timer_cb(struct _lv_timer_t *tmr)
     char *title, *artist;
     int vol;
 
+    cmdarg.cmd = BT_INFO;
+    cmdarg.val = &new_info;
+    wifibt_send_wait(&cmdarg, sizeof(cmdarg));
+
     if ((bt_sink_enabled == 0)
-            && bt_is_state_on())
+            && (new_info.bt_state == RK_BT_STATE_ON))
     {
         bt_sink_enabled = 1;
-        bt_sink_enable();
+        cmdarg.cmd = BT_SINK_ENABLE;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         lv_label_set_text(label_bt_state,
                           "蓝牙：已开启 A2DP：等待连接");
+        return;
     }
 
     if (bt_sink_enabled)
     {
-        if (bt_sink_state() != RK_BT_SINK_STATE_IDLE &&
-                bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
+        if (new_info.sink_state != RK_BT_SINK_STATE_IDLE &&
+                new_info.sink_state != RK_BT_SINK_STATE_DISCONNECT)
             lv_label_set_text(label_bt_state,
                               "蓝牙：已开启 A2DP：已连接");
     }
 
-    if (bt_sink_get_track_info(&title, &artist))
+    if (new_info.track_changed)
     {
-        lv_label_set_text(label_singer,
-                          artist ? artist : "未知歌手");
-        lv_label_set_text(label_song,
-                          title ? title : "未知歌曲");
-        if (artist)
-            free(artist);
+        title = strdup(new_info.title);
+        artist = strdup(new_info.artist);
+        lv_label_set_text(label_singer, artist);
+        lv_label_set_text(label_song, title);
         if (title)
             free(title);
-    }
-
-    if (bt_sink_get_vol(&vol))
-    {
-        volume = vol;
+        if (artist)
+            free(artist);
+        cmdarg.cmd = BT_SINK_TRACK_CLEAR;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
     }
 }
 
@@ -167,9 +199,13 @@ lv_obj_t *menu_music_init(lv_obj_t *parent)
     int x, y;
     int ofs;
 
-    if (bt_is_state_on())
+    cmdarg.cmd = BT_INFO;
+    cmdarg.val = &new_info;
+    wifibt_send_wait(&cmdarg, sizeof(cmdarg));
+    if (new_info.bt_state == RK_BT_STATE_ON)
     {
-        bt_sink_enable();
+        cmdarg.cmd = BT_SINK_ENABLE;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         bt_sink_enabled = 1;
     }
     else
@@ -290,13 +326,8 @@ void menu_music_deinit(void)
 
     if (bt_sink_enabled)
     {
-        if (bt_sink_state() != RK_BT_SINK_STATE_IDLE &&
-                bt_sink_state() != RK_BT_SINK_STATE_DISCONNECT)
-        {
-            bt_sink_pause();
-            bt_sink_disconnect();
-        }
-        bt_sink_disable();
+        cmdarg.cmd = BT_SINK_DISABLE;
+        wifibt_send(&cmdarg, sizeof(cmdarg));
         bt_sink_enabled = 0;
     }
 }

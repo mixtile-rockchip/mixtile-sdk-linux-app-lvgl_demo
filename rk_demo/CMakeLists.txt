@@ -13,7 +13,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/intercom_call
 	${PROJECT_SOURCE_DIR}/intercom_homepage
 	${PROJECT_SOURCE_DIR}/rockit
-	${PROJECT_SOURCE_DIR}/bt
+	${PROJECT_SOURCE_DIR}/wifibt
 	)
 
 if (LV_DRV_USE_SDL_GPU)
@@ -32,7 +32,7 @@ aux_source_directory(./video_monitor SRCS)
 aux_source_directory(./intercom_call SRCS)
 aux_source_directory(./intercom_homepage SRCS)
 aux_source_directory(./rockit SRCS)
-aux_source_directory(./bt SRCS)
+aux_source_directory(./wifibt SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 

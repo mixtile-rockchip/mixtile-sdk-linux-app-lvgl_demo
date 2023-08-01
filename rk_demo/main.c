@@ -25,8 +25,7 @@
 
 #include "rk_defines.h"
 #include "rk_mpi_sys.h"
-#include "Rk_wifi.h"
-#include "bt.h"
+#include "wifibt.h"
 
 lv_ft_info_t ttf_main_s;
 lv_ft_info_t ttf_main_m;
@@ -121,10 +120,7 @@ int main(int argc, char **argv)
     signal(SIGINT, sigterm_handler);
     RK_MPI_SYS_Init();
 
-    if (RK_wifi_enable(1) < 0)
-        printf("RK_wifi_enable 1 fail!\n");
-
-    bt_ble_init();
+    run_wifibt_server();
 
     lvgl_init();
 

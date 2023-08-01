@@ -6,10 +6,10 @@
 
 #include <lvgl/lvgl.h>
 
-#include "bt.h"
 #include "main.h"
 #include "cJSON.h"
 #include "ui_resource.h"
+#include "wifibt.h"
 
 static lv_obj_t *bg;
 
@@ -17,14 +17,17 @@ static lv_obj_t *part_switch;
 static lv_obj_t *bt_label;
 static lv_obj_t *bt_switch;
 
+static struct wifibt_cmdarg cmdarg;
+
 static void switch_toggled(lv_event_t *e)
 {
     lv_obj_t *sw = lv_event_get_target(e);
 
     if (lv_obj_has_state(sw, LV_STATE_CHECKED))
-        bt_ble_init();
+        cmdarg.cmd = BT_ENABLE;
     else
-        bt_ble_deinit();
+        cmdarg.cmd = BT_DISABLE;
+    wifibt_send(&cmdarg, sizeof(cmdarg));
 }
 
 lv_obj_t *menu_bt_init(lv_obj_t *parent)

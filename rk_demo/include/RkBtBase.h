@@ -99,10 +99,16 @@ typedef struct
     uint8_t respData[MXA_ADV_DATA_LEN];
     uint8_t respDataLen;
     uint8_t advDataType;
+
+    uint8_t tx_power;
+    uint16_t Appearance;
+    uint16_t manufacturer_id;
+    uint8_t manufacturer_data[25];
+
     /* recevice data */
     void (*cb_ble_recv_fun)(const char *uuid, char *data, int len);
     /* full data */
-    void (*cb_ble_request_data)(const char *uuid);
+    void (*cb_ble_request_data)(const char *uuid, char *data, int *len);
 } RkBleContent;
 
 typedef struct
