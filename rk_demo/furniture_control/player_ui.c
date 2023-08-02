@@ -7,11 +7,18 @@
 #include "player_ui.h"
 #include "furniture_control_ui.h"
 
+// #include "rkadk_common.h"
+// #include "rkadk_media_comm.h"
+// #include "rkadk_log.h"
+// #include "rkadk_param.h"
+// #include "rkadk_player.h"
+
 ///////////////////// VARIABLES ////////////////////
 static lv_obj_t *ui_player_screen = NULL;
 static lv_obj_t *player_label;
 static lv_obj_t *ui_return;
 static lv_obj_t *player_box = NULL;
+static lv_obj_t *icon_box = NULL;
 static lv_obj_t *player_box_canvas = NULL;
 static lv_obj_t *player_box_button = NULL;
 static lv_obj_t *player_start_button = NULL;
@@ -56,6 +63,42 @@ static lv_style_t style_list;
 //                         bg_snapshot->header.w,
 //                         bg_snapshot->header.h, &dsc);
 //     lv_obj_del(canvas);
+// }
+
+// static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo) {
+//   RKADK_CHECK_POINTER_N(pstFrmInfo);
+
+//   memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
+//   pstFrmInfo->u32DispWidth = 720;
+//   pstFrmInfo->u32DispHeight = 1280;
+//   pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
+//   pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
+//   pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
+//   pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
+//   pstFrmInfo->u32VoLay = 1;
+//   pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
+//   pstFrmInfo->u32BorderColor = 0x0000FA;
+//   pstFrmInfo->bMirror = RKADK_FALSE;
+//   pstFrmInfo->bFlip = RKADK_FALSE;
+//   pstFrmInfo->u32Rotation = 1;
+//   pstFrmInfo->stSyncInfo.bIdv = RKADK_TRUE;
+//   pstFrmInfo->stSyncInfo.bIhs = RKADK_TRUE;
+//   pstFrmInfo->stSyncInfo.bIvs = RKADK_TRUE;
+//   pstFrmInfo->stSyncInfo.bSynm = RKADK_TRUE;
+//   pstFrmInfo->stSyncInfo.bIop = RKADK_TRUE;
+//   pstFrmInfo->stSyncInfo.u16FrameRate = 30;
+//   pstFrmInfo->stSyncInfo.u16PixClock = 65000;
+//   pstFrmInfo->stSyncInfo.u16Hact = 1200;
+//   pstFrmInfo->stSyncInfo.u16Hbb = 24;
+//   pstFrmInfo->stSyncInfo.u16Hfb = 240;
+//   pstFrmInfo->stSyncInfo.u16Hpw = 136;
+//   pstFrmInfo->stSyncInfo.u16Hmid = 0;
+//   pstFrmInfo->stSyncInfo.u16Vact = 1200;
+//   pstFrmInfo->stSyncInfo.u16Vbb = 200;
+//   pstFrmInfo->stSyncInfo.u16Vfb = 194;
+//   pstFrmInfo->stSyncInfo.u16Vpw = 6;
+
+//   return;
 // }
 
 static void style_init(void)
@@ -136,6 +179,15 @@ void player_list_button_callback(lv_event_t *event)
         video_list_box = NULL;
     }
 }
+
+void player_start_button_callback(lv_event_t *event) {
+
+}
+
+void player_stop_button_callback(lv_event_t *event) {
+    
+}
+
 ///////////////////// SCREENS ////////////////////
 void ui_player_screen_init(void)
 {
@@ -143,13 +195,15 @@ void ui_player_screen_init(void)
 
     ui_player_screen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_player_screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_opa(ui_player_screen, LV_OPA_TRANSP, 0); 
 
-    bg_pic = lv_img_create(ui_player_screen);
-    lv_obj_set_pos(bg_pic, 0, 0);
-    lv_img_set_src(bg_pic, BG_PIC_1);
-    //bg_pic_snapshot_blur();
+    icon_box = lv_obj_create(ui_player_screen);
+    //lv_obj_remove_style_all(player_box);
+    lv_obj_set_width(icon_box, lv_pct(100));
+    lv_obj_set_height(icon_box, lv_pct(8));
+    lv_obj_align(icon_box, LV_ALIGN_TOP_LEFT, 0, 0);
 
-    ui_return = lv_img_create(ui_player_screen);
+    ui_return = lv_img_create(icon_box);
     lv_img_set_src(ui_return, IMG_RETURN_BTN);
     lv_obj_set_width(ui_return, LV_SIZE_CONTENT);   /// 32
     lv_obj_set_height(ui_return, LV_SIZE_CONTENT);    /// 32
@@ -161,7 +215,7 @@ void ui_player_screen_init(void)
         lv_obj_add_event_cb(ui_return, player_page_jump_furniture_control_callback, LV_EVENT_CLICKED, NULL);
     }
 
-    player_label = lv_label_create(ui_player_screen);
+    player_label = lv_label_create(icon_box);
     lv_obj_set_width(player_label, 249);
     lv_obj_set_height(player_label, 26);
     lv_obj_align(player_label, LV_ALIGN_TOP_LEFT, 100, 20);
@@ -169,21 +223,16 @@ void ui_player_screen_init(void)
     lv_label_set_text(player_label, "宣传视频");
 
     player_box = lv_obj_create(ui_player_screen);
-    lv_obj_remove_style_all(player_box);
+    //lv_obj_remove_style_all(player_box);
     lv_obj_set_width(player_box, lv_pct(100));
-    lv_obj_set_height(player_box, lv_pct(80));
-    lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(10));
-
-    player_box_canvas = lv_obj_create(player_box);
-    lv_obj_remove_style_all(player_box_canvas);
-    lv_obj_set_width(player_box_canvas, lv_pct(100));
-    lv_obj_set_height(player_box_canvas, lv_pct(70));
+    lv_obj_set_height(player_box, lv_pct(35));
+    lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(65));
 
     player_box_button = lv_obj_create(player_box);
     lv_obj_remove_style_all(player_box_button);
     lv_obj_set_width(player_box_button, lv_pct(100));
     lv_obj_set_height(player_box_button, lv_pct(30));
-    lv_obj_align(player_box_button, LV_ALIGN_TOP_LEFT, 0, lv_pct(70));
+    lv_obj_align(player_box_button, LV_ALIGN_TOP_LEFT, 0, lv_pct(10));
 
     player_start_button = lv_img_create(player_box_button);
     lv_img_set_src(player_start_button, IMG_PLAYER_START);
@@ -191,6 +240,10 @@ void ui_player_screen_init(void)
     lv_obj_set_height(player_start_button, 128);    /// 64
     lv_obj_set_align(player_start_button, LV_ALIGN_CENTER);
     lv_obj_add_flag(player_start_button, LV_OBJ_FLAG_CLICKABLE);
+    if (player_start_button != NULL)
+    {
+        lv_obj_add_event_cb(player_start_button, player_start_button_callback, LV_EVENT_CLICKED, NULL);
+    }
 
     player_stop_button = lv_img_create(player_box_button);
     lv_img_set_src(player_stop_button, IMG_PLAYER_STOP);
@@ -198,6 +251,11 @@ void ui_player_screen_init(void)
     lv_obj_set_height(player_stop_button, 128);    /// 64
     lv_obj_align(player_stop_button, LV_ALIGN_CENTER, 250, 0);
     lv_obj_add_flag(player_stop_button, LV_OBJ_FLAG_CLICKABLE);
+    if (player_stop_button != NULL)
+    {
+        lv_obj_add_event_cb(player_stop_button, player_stop_button_callback, LV_EVENT_CLICKED, NULL);
+    }
+
 
     player_list_button = lv_img_create(player_box_button);
     lv_img_set_src(player_list_button, IMG_PLAYER_LIST);
@@ -212,10 +270,10 @@ void ui_player_screen_init(void)
         lv_obj_add_event_cb(player_list_button, player_list_button_callback, LV_EVENT_CLICKED, NULL);
     }
 
-    video_label = lv_label_create(player_box_button);
+    video_label = lv_label_create(player_box);
     lv_obj_set_width(video_label, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(video_label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_align(video_label, LV_ALIGN_CENTER, 0, 100);
+    lv_obj_align(video_label, LV_ALIGN_CENTER, 0, lv_pct(10));
     lv_obj_add_style(video_label, &style_txt_m, LV_PART_MAIN);
     lv_label_set_text(video_label, "");
 
