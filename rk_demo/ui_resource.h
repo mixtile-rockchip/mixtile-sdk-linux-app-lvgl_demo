@@ -55,5 +55,13 @@
 #define IMG_PLAYER_START    "A:"PATH_PREFIX"/player-start.png"
 #define IMG_PLAYER_LIST     "A:"PATH_PREFIX"/list.png"
 
+//intercom
+#define IMG_INTERCOM_PAUSE          "A:"PATH_PREFIX"/pause-fill.png"
+#define IMG_INTERCOM_ROUND          "A:"PATH_PREFIX"/round.png"
+#define IMG_INTERCOM_WEBCAM         "A:"PATH_PREFIX"/webcam-fill.png"
+#define IMG_INTERCOM_ARROWUP        "A:"PATH_PREFIX"/arrow-up-fill.png"
+#define IMG_INTERCOM_BACKWARD       "A:"PATH_PREFIX"/backward.png"
+#define IMG_INTERCOM_RECTANGLE1     "A:"PATH_PREFIX"/rectangle_1.png"
+
 #endif
 

@@ -81,7 +81,7 @@ void function_keys(lv_obj_t *parent, lv_obj_t *referent)
     for (intptr_t i = 0; i < 10; i ++)
     {
         button[i].ui_circle = lv_img_create(parent);
-        lv_img_set_src(button[i].ui_circle, (const void *)&ui_img_circular);
+        lv_img_set_src(button[i].ui_circle, IMG_INTERCOM_ROUND);
         lv_obj_set_width(button[i].ui_circle, LV_SIZE_CONTENT);
         lv_obj_set_height(button[i].ui_circle, LV_SIZE_CONTENT);
         lv_obj_add_flag(button[i].ui_circle, LV_OBJ_FLAG_ADV_HITTEST);

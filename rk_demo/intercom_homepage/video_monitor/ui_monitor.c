@@ -26,14 +26,6 @@ static lv_obj_t *bg_pic;
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
 
-extern lv_img_dsc_t ui_img_pause;
-extern lv_img_dsc_t ui_img_webcam;
-extern lv_img_dsc_t ui_img_forward;
-extern lv_img_dsc_t ui_img_backward;
-extern lv_img_dsc_t ui_img_circular;
-extern lv_img_dsc_t ui_img_video_background;
-
-
 static void back_icon_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -58,16 +50,11 @@ void ui_monitor_screen_init()
     lv_img_set_src(bg_pic, BG_PIC_0);
 
     //video_background
-    ui_video_background = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_video_background, &ui_img_video_background);
-    lv_obj_set_width(ui_video_background, LV_SIZE_CONTENT);
-    lv_obj_set_height(ui_video_background, LV_SIZE_CONTENT);
-    lv_img_set_zoom(ui_video_background, 160);
-    lv_obj_set_x(ui_video_background, -140);
+    ui_video_background = lv_obj_create(ui_Screen_monitor);
+    lv_obj_set_size(ui_video_background, 400, 300);  // 设置矩形框的大小
+    lv_obj_set_x(ui_video_background, 10);
     lv_obj_set_y(ui_video_background, 400);
-    //lv_obj_align_to(ui_video_background, ui_back, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
-    lv_obj_add_flag(ui_video_background, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_video_background, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_video_background, lv_color_black(), LV_PART_MAIN);
 
     //back img
     ui_back = lv_img_create(ui_Screen_monitor);
@@ -90,54 +77,54 @@ void ui_monitor_screen_init()
 
     //circular_left
     ui_circular_0 = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_circular_0, &ui_img_circular);
+    lv_img_set_src(ui_circular_0, IMG_INTERCOM_ROUND);
     lv_obj_set_size(ui_circular_0, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    lv_obj_align_to(ui_circular_0, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, -160, 60);
+    lv_obj_align_to(ui_circular_0, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, 0, 60);
     ui_backward = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_backward, &ui_img_backward);
+    lv_img_set_src(ui_backward, IMG_INTERCOM_BACKWARD);
     lv_obj_set_size(ui_backward, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_backward, ui_circular_0, LV_ALIGN_CENTER, 0, -3);
 
 
     //circular_right
     ui_circular_1 = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_circular_1, &ui_img_circular);
+    lv_img_set_src(ui_circular_1, IMG_INTERCOM_ROUND);
     lv_obj_set_size(ui_circular_1, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    lv_obj_align_to(ui_circular_1, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, 5, 60);
+    lv_obj_align_to(ui_circular_1, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, 170, 60);
     ui_forward = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_forward, &ui_img_forward);
+    lv_img_set_src(ui_forward, IMG_INTERCOM_ARROWUP);
     lv_obj_set_size(ui_forward, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_forward, ui_circular_1, LV_ALIGN_CENTER, 0, -3);
 
 
     ui_circular_mid = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_circular_mid, &ui_img_circular);
+    lv_img_set_src(ui_circular_mid, IMG_INTERCOM_ROUND);
     lv_img_set_zoom(ui_circular_mid, 400);
     lv_obj_set_size(ui_circular_mid, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    lv_obj_align_to(ui_circular_mid, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, -75, 60);
+    lv_obj_align_to(ui_circular_mid, ui_video_background, LV_ALIGN_OUT_RIGHT_MID, 85, 60);
     ui_monitor_Label_1 = lv_label_create(ui_Screen_monitor);
     lv_obj_set_size(ui_monitor_Label_1, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_monitor_Label_1, ui_circular_mid, LV_ALIGN_CENTER, -3, -5);
     lv_label_set_text(ui_monitor_Label_1, "主机1");
 
-    ////webcam
+    //webcam
     ui_circular_2 = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_circular_2, &ui_img_circular);
+    lv_img_set_src(ui_circular_2, IMG_INTERCOM_ROUND);
     lv_obj_set_size(ui_circular_2, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_circular_2, ui_circular_mid, LV_ALIGN_OUT_TOP_MID, 0, 0);
     ui_webcam = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_webcam, &ui_img_webcam);
+    lv_img_set_src(ui_webcam, IMG_INTERCOM_WEBCAM);
     lv_obj_set_size(ui_webcam, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_webcam, ui_circular_2, LV_ALIGN_CENTER, 0, -3);
 
 
     //pause
     ui_circular_3 = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_circular_3, &ui_img_circular);
+    lv_img_set_src(ui_circular_3, IMG_INTERCOM_ROUND);
     lv_obj_set_size(ui_circular_3, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_circular_3, ui_circular_mid, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
     ui_pause = lv_img_create(ui_Screen_monitor);
-    lv_img_set_src(ui_pause, &ui_img_pause);
+    lv_img_set_src(ui_pause, IMG_INTERCOM_PAUSE);
     lv_obj_set_size(ui_pause, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align_to(ui_pause, ui_circular_3, LV_ALIGN_CENTER, 0, -3);
 

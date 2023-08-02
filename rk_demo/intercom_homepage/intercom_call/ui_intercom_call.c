@@ -21,8 +21,6 @@ static lv_obj_t *ui_ip_label;
 
 static lv_timer_t *timer;
 
-extern lv_img_dsc_t ui_img_circular;
-extern lv_img_dsc_t ui_img_rectangle;
 extern lv_obj_t *ui_Screen_intercom_homepage;
 extern lv_style_t style_txt_s;
 extern lv_style_t style_txt_m;
@@ -130,7 +128,7 @@ void intercom_call_button(lv_obj_t *parent, lv_obj_t *referent)
     for (intptr_t i = 0; i < 16; i ++)
     {
         button[i].ui_circle = lv_img_create(parent);
-        lv_img_set_src(button[i].ui_circle, (const void *)&ui_img_circular);
+        lv_img_set_src(button[i].ui_circle, IMG_INTERCOM_ROUND);
         lv_obj_set_width(button[i].ui_circle, LV_SIZE_CONTENT);
         lv_obj_set_height(button[i].ui_circle, LV_SIZE_CONTENT);
         lv_obj_add_flag(button[i].ui_circle, LV_OBJ_FLAG_ADV_HITTEST);
@@ -205,7 +203,7 @@ void ui_intercom_call_screen_init()
                     5, 0);
 
     ui_rectangle = lv_img_create(ui_Screen_intercom_call);
-    lv_img_set_src(ui_rectangle, &ui_img_rectangle);
+    lv_img_set_src(ui_rectangle, IMG_INTERCOM_RECTANGLE1);
     lv_obj_set_width(ui_rectangle, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_rectangle, LV_SIZE_CONTENT);
     lv_obj_align(ui_rectangle, LV_ALIGN_CENTER, 0, -250);

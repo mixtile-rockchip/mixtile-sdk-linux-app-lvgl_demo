@@ -11,9 +11,9 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/setting
 	${PROJECT_SOURCE_DIR}/smart_home
 	${PROJECT_SOURCE_DIR}/include
-	${PROJECT_SOURCE_DIR}/video_monitor
-	${PROJECT_SOURCE_DIR}/intercom_call
 	${PROJECT_SOURCE_DIR}/intercom_homepage
+	${PROJECT_SOURCE_DIR}/intercom_homepage/video_monitor
+	${PROJECT_SOURCE_DIR}/intercom_homepage/intercom_call
 	${PROJECT_SOURCE_DIR}/rockit
 	${PROJECT_SOURCE_DIR}/wifibt
 	${CMAKE_SYSROOT}/usr/include/rkadk/
@@ -31,9 +31,9 @@ aux_source_directory(./home SRCS)
 aux_source_directory(./furniture_control SRCS)
 aux_source_directory(./setting SRCS)
 aux_source_directory(./smart_home SRCS)
-aux_source_directory(./video_monitor SRCS)
-aux_source_directory(./intercom_call SRCS)
 aux_source_directory(./intercom_homepage SRCS)
+aux_source_directory(./intercom_homepage/video_monitor SRCS)
+aux_source_directory(./intercom_homepage/intercom_call SRCS)
 aux_source_directory(./rockit SRCS)
 aux_source_directory(./wifibt SRCS)
 
