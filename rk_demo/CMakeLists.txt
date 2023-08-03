@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.8)
 
 project(rk_demo)
 
+add_definitions(-g)
+
 include_directories(
 	${PROJECT_SOURCE_DIR}/
 	${PROJECT_SOURCE_DIR}/home
@@ -14,6 +16,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/intercom_homepage
 	${PROJECT_SOURCE_DIR}/rockit
 	${PROJECT_SOURCE_DIR}/wifibt
+	${CMAKE_SYSROOT}/usr/include/rkadk/
 	)
 
 if (LV_DRV_USE_SDL_GPU)
@@ -37,7 +40,7 @@ aux_source_directory(./wifibt SRCS)
 add_executable(${PROJECT_NAME} ${SRCS})
 
 target_link_libraries(${PROJECT_NAME}
-	lvgl pthread m lv_drivers freetype rkwifibt rockit
+	lvgl pthread m lv_drivers freetype rkwifibt rockit rkadk
 )
 
 if (LV_DRV_USE_SDL_GPU)

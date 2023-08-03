@@ -7,11 +7,11 @@
 #include "player_ui.h"
 #include "furniture_control_ui.h"
 
-// #include "rkadk_common.h"
-// #include "rkadk_media_comm.h"
-// #include "rkadk_log.h"
-// #include "rkadk_param.h"
-// #include "rkadk_player.h"
+#include "rkadk_common.h"
+#include "rkadk_media_comm.h"
+#include "rkadk_log.h"
+#include "rkadk_param.h"
+#include "rkadk_player.h"
 
 ///////////////////// VARIABLES ////////////////////
 static lv_obj_t *ui_player_screen = NULL;
@@ -33,73 +33,73 @@ static lv_obj_t *bg_pic = NULL;
 static lv_style_t style_txt;
 static lv_style_t style_list;
 //static lv_img_dsc_t * bg_snapshot;
+
+static RKADK_PLAYER_CFG_S stPlayCfg;
+static RKADK_MW_PTR pPlayer = NULL;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-// static void bg_pic_snapshot_blur(void)
-// {
-//     lv_draw_rect_dsc_t dsc;
 
-//     bg_snapshot = lv_snapshot_take(bg_pic, LV_IMG_CF_TRUE_COLOR);
+static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo) {
+  RKADK_CHECK_POINTER_N(pstFrmInfo);
 
-//     lv_obj_t * canvas = lv_canvas_create(NULL);
-//     lv_area_t area;
-//     lv_canvas_set_buffer(canvas, bg_snapshot->data,
-//                          bg_snapshot->header.w,
-//                          bg_snapshot->header.h,
-//                          bg_snapshot->header.cf);
-//     area.x1 = 0;
-//     area.y1 = 0;
-//     area.x2 = bg_snapshot->header.w - 1;
-//     area.y2 = bg_snapshot->header.h - 1;
-//     lv_canvas_blur_ver(canvas, &area, 100);
-//     lv_canvas_blur_hor(canvas, &area, 100);
-//     lv_draw_rect_dsc_init(&dsc);
-//     dsc.bg_opa = 70;
-//     dsc.bg_color = lv_color_black();
-//     lv_canvas_draw_rect(canvas, 0, 0,
-//                         bg_snapshot->header.w,
-//                         bg_snapshot->header.h, &dsc);
-//     lv_obj_del(canvas);
-// }
+  memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
+  pstFrmInfo->u32DispWidth = 720;
+  pstFrmInfo->u32DispHeight = 1280;
+  pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
+  pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
+  pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
+  pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
+  pstFrmInfo->u32VoLay = 1;
+  pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
+  pstFrmInfo->u32BorderColor = 0x0000FA;
+  pstFrmInfo->bMirror = RKADK_FALSE;
+  pstFrmInfo->bFlip = RKADK_FALSE;
+  pstFrmInfo->u32Rotation = 1;
+  pstFrmInfo->stSyncInfo.bIdv = RKADK_TRUE;
+  pstFrmInfo->stSyncInfo.bIhs = RKADK_TRUE;
+  pstFrmInfo->stSyncInfo.bIvs = RKADK_TRUE;
+  pstFrmInfo->stSyncInfo.bSynm = RKADK_TRUE;
+  pstFrmInfo->stSyncInfo.bIop = RKADK_TRUE;
+  pstFrmInfo->stSyncInfo.u16FrameRate = 30;
+  pstFrmInfo->stSyncInfo.u16PixClock = 65000;
+  pstFrmInfo->stSyncInfo.u16Hact = 1200;
+  pstFrmInfo->stSyncInfo.u16Hbb = 24;
+  pstFrmInfo->stSyncInfo.u16Hfb = 240;
+  pstFrmInfo->stSyncInfo.u16Hpw = 136;
+  pstFrmInfo->stSyncInfo.u16Hmid = 0;
+  pstFrmInfo->stSyncInfo.u16Vact = 1200;
+  pstFrmInfo->stSyncInfo.u16Vbb = 200;
+  pstFrmInfo->stSyncInfo.u16Vfb = 194;
+  pstFrmInfo->stSyncInfo.u16Vpw = 6;
 
-// static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo) {
-//   RKADK_CHECK_POINTER_N(pstFrmInfo);
+  return;
+}
 
-//   memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
-//   pstFrmInfo->u32DispWidth = 720;
-//   pstFrmInfo->u32DispHeight = 1280;
-//   pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
-//   pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
-//   pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
-//   pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
-//   pstFrmInfo->u32VoLay = 1;
-//   pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
-//   pstFrmInfo->u32BorderColor = 0x0000FA;
-//   pstFrmInfo->bMirror = RKADK_FALSE;
-//   pstFrmInfo->bFlip = RKADK_FALSE;
-//   pstFrmInfo->u32Rotation = 1;
-//   pstFrmInfo->stSyncInfo.bIdv = RKADK_TRUE;
-//   pstFrmInfo->stSyncInfo.bIhs = RKADK_TRUE;
-//   pstFrmInfo->stSyncInfo.bIvs = RKADK_TRUE;
-//   pstFrmInfo->stSyncInfo.bSynm = RKADK_TRUE;
-//   pstFrmInfo->stSyncInfo.bIop = RKADK_TRUE;
-//   pstFrmInfo->stSyncInfo.u16FrameRate = 30;
-//   pstFrmInfo->stSyncInfo.u16PixClock = 65000;
-//   pstFrmInfo->stSyncInfo.u16Hact = 1200;
-//   pstFrmInfo->stSyncInfo.u16Hbb = 24;
-//   pstFrmInfo->stSyncInfo.u16Hfb = 240;
-//   pstFrmInfo->stSyncInfo.u16Hpw = 136;
-//   pstFrmInfo->stSyncInfo.u16Hmid = 0;
-//   pstFrmInfo->stSyncInfo.u16Vact = 1200;
-//   pstFrmInfo->stSyncInfo.u16Vbb = 200;
-//   pstFrmInfo->stSyncInfo.u16Vfb = 194;
-//   pstFrmInfo->stSyncInfo.u16Vpw = 6;
+static void rkadk_init(void) {
+    setenv("rt_vo_disable_vop", "0", 1);
+    RKADK_MPI_SYS_Init();
+    RKADK_PARAM_Init(NULL, NULL);
+    memset(&stPlayCfg, 0, sizeof(RKADK_PLAYER_CFG_S));
+    param_init(&stPlayCfg.stFrmInfo);
+    stPlayCfg.bEnableVideo = 1;
+    stPlayCfg.bEnableAudio = 0;
+    stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
+    stPlayCfg.stFrmInfo.u32FrmInfoY = 128;
+    if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg)) {
+        printf("rkadk: RKADK_PLAYER_Create failed\n");
+        return;
+    }
+}
 
-//   return;
-// }
+static void rkadk_deinit(void) {
+  RKADK_PLAYER_Stop(pPlayer);
+  RKADK_PLAYER_Destroy(pPlayer);
+  pPlayer = NULL;
+  RKADK_MPI_SYS_Exit();
+}
 
 static void style_init(void)
 {
@@ -117,7 +117,7 @@ void player_page_jump_furniture_control_callback(lv_event_t *event)
     printf("player_page_jump_furniture_control_callback is into \n");
     furniture_control_ui_init();
     lv_obj_del(ui_player_screen);
-    //free(bg_snapshot);
+    rkadk_deinit();
     ui_player_screen = NULL;
     video_list_box = NULL;
 }
@@ -125,10 +125,22 @@ void player_page_jump_furniture_control_callback(lv_event_t *event)
 void video_name_callback(lv_event_t *event)
 {
     char *file_name = lv_event_get_user_data(event);
-    printf("video_name select file %s\n", file_name);
-    lv_label_set_text(video_label, file_name);
+    char path[50] = "/oem/";
+    strcat(path, file_name);
+    printf("video_name select file %s\n", path); 
+    lv_label_set_text(video_label, path);
     lv_obj_del(video_list_box);
     video_list_box = NULL;
+    printf("video_name_callback set player file name is %s\n", path);
+    RKADK_PLAYER_Stop(pPlayer);
+    int ret = RKADK_PLAYER_SetDataSource(pPlayer, path);
+    if (ret) {
+        printf("rkadk: SetDataSource failed, ret = %d\n", ret);
+    }
+    ret = RKADK_PLAYER_Prepare(pPlayer);
+    if (ret) {
+        printf("rkadk: Prepare failed, ret = %d\n", ret);
+    }
 }
 
 void player_list_button_callback(lv_event_t *event)
@@ -181,18 +193,32 @@ void player_list_button_callback(lv_event_t *event)
 }
 
 void player_start_button_callback(lv_event_t *event) {
-
+    printf("player_start_button_callback into\n");
+    char *file = lv_label_get_text(video_label);;
+    if(strncmp(file, "/oem/", 5)) {
+        printf("rkadk: !!! You have not selected the file to play !!!\n");
+        return;
+    }
+    printf("rkadk: the file to play %s\n", file);
+    int ret = RKADK_PLAYER_Play(pPlayer);
+    if (ret) {
+        printf("rkadk: Play failed, ret = %d\n", ret);
+    }
 }
 
 void player_stop_button_callback(lv_event_t *event) {
-    
+    printf("player_stop_button_callback into\n");
+    int ret = RKADK_PLAYER_Pause(pPlayer);
+    if (ret) {
+        printf("rkadk: Pause failed, ret = %d\n", ret);
+    }
 }
 
 ///////////////////// SCREENS ////////////////////
 void ui_player_screen_init(void)
 {
+    rkadk_init();
     style_init();
-
     ui_player_screen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_player_screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_opa(ui_player_screen, LV_OPA_TRANSP, 0); 
@@ -200,7 +226,7 @@ void ui_player_screen_init(void)
     icon_box = lv_obj_create(ui_player_screen);
     //lv_obj_remove_style_all(player_box);
     lv_obj_set_width(icon_box, lv_pct(100));
-    lv_obj_set_height(icon_box, lv_pct(8));
+    lv_obj_set_height(icon_box, lv_pct(10));
     lv_obj_align(icon_box, LV_ALIGN_TOP_LEFT, 0, 0);
 
     ui_return = lv_img_create(icon_box);
@@ -225,8 +251,8 @@ void ui_player_screen_init(void)
     player_box = lv_obj_create(ui_player_screen);
     //lv_obj_remove_style_all(player_box);
     lv_obj_set_width(player_box, lv_pct(100));
-    lv_obj_set_height(player_box, lv_pct(35));
-    lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(65));
+    lv_obj_set_height(player_box, lv_pct(50));
+    lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(50));
 
     player_box_button = lv_obj_create(player_box);
     lv_obj_remove_style_all(player_box_button);
