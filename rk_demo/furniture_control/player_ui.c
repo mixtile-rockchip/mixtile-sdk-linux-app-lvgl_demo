@@ -132,7 +132,12 @@ void video_name_callback(lv_event_t *event)
     lv_obj_del(video_list_box);
     video_list_box = NULL;
     printf("video_name_callback set player file name is %s\n", path);
-    RKADK_PLAYER_Stop(pPlayer);
+    if(pPlayer != NULL) {
+        rkadk_deinit();
+    }
+    if(pPlayer == NULL) {
+        rkadk_init();
+    }
     int ret = RKADK_PLAYER_SetDataSource(pPlayer, path);
     if (ret) {
         printf("rkadk: SetDataSource failed, ret = %d\n", ret);
@@ -217,7 +222,6 @@ void player_stop_button_callback(lv_event_t *event) {
 ///////////////////// SCREENS ////////////////////
 void ui_player_screen_init(void)
 {
-    rkadk_init();
     style_init();
     ui_player_screen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_player_screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
