@@ -42,43 +42,45 @@ static RKADK_MW_PTR pPlayer = NULL;
 
 ///////////////////// FUNCTIONS ////////////////////
 
-static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo) {
-  RKADK_CHECK_POINTER_N(pstFrmInfo);
+static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo)
+{
+    RKADK_CHECK_POINTER_N(pstFrmInfo);
 
-  memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
-  pstFrmInfo->u32DispWidth = 720;
-  pstFrmInfo->u32DispHeight = 1280;
-  pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
-  pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
-  pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
-  pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
-  pstFrmInfo->u32VoLay = 1;
-  pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
-  pstFrmInfo->u32BorderColor = 0x0000FA;
-  pstFrmInfo->bMirror = RKADK_FALSE;
-  pstFrmInfo->bFlip = RKADK_FALSE;
-  pstFrmInfo->u32Rotation = 1;
-  pstFrmInfo->stSyncInfo.bIdv = RKADK_TRUE;
-  pstFrmInfo->stSyncInfo.bIhs = RKADK_TRUE;
-  pstFrmInfo->stSyncInfo.bIvs = RKADK_TRUE;
-  pstFrmInfo->stSyncInfo.bSynm = RKADK_TRUE;
-  pstFrmInfo->stSyncInfo.bIop = RKADK_TRUE;
-  pstFrmInfo->stSyncInfo.u16FrameRate = 30;
-  pstFrmInfo->stSyncInfo.u16PixClock = 65000;
-  pstFrmInfo->stSyncInfo.u16Hact = 1200;
-  pstFrmInfo->stSyncInfo.u16Hbb = 24;
-  pstFrmInfo->stSyncInfo.u16Hfb = 240;
-  pstFrmInfo->stSyncInfo.u16Hpw = 136;
-  pstFrmInfo->stSyncInfo.u16Hmid = 0;
-  pstFrmInfo->stSyncInfo.u16Vact = 1200;
-  pstFrmInfo->stSyncInfo.u16Vbb = 200;
-  pstFrmInfo->stSyncInfo.u16Vfb = 194;
-  pstFrmInfo->stSyncInfo.u16Vpw = 6;
+    memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
+    pstFrmInfo->u32DispWidth = 720;
+    pstFrmInfo->u32DispHeight = 1280;
+    pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
+    pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
+    pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
+    pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
+    pstFrmInfo->u32VoLay = 1;
+    pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
+    pstFrmInfo->u32BorderColor = 0x0000FA;
+    pstFrmInfo->bMirror = RKADK_FALSE;
+    pstFrmInfo->bFlip = RKADK_FALSE;
+    pstFrmInfo->u32Rotation = 1;
+    pstFrmInfo->stSyncInfo.bIdv = RKADK_TRUE;
+    pstFrmInfo->stSyncInfo.bIhs = RKADK_TRUE;
+    pstFrmInfo->stSyncInfo.bIvs = RKADK_TRUE;
+    pstFrmInfo->stSyncInfo.bSynm = RKADK_TRUE;
+    pstFrmInfo->stSyncInfo.bIop = RKADK_TRUE;
+    pstFrmInfo->stSyncInfo.u16FrameRate = 30;
+    pstFrmInfo->stSyncInfo.u16PixClock = 65000;
+    pstFrmInfo->stSyncInfo.u16Hact = 1200;
+    pstFrmInfo->stSyncInfo.u16Hbb = 24;
+    pstFrmInfo->stSyncInfo.u16Hfb = 240;
+    pstFrmInfo->stSyncInfo.u16Hpw = 136;
+    pstFrmInfo->stSyncInfo.u16Hmid = 0;
+    pstFrmInfo->stSyncInfo.u16Vact = 1200;
+    pstFrmInfo->stSyncInfo.u16Vbb = 200;
+    pstFrmInfo->stSyncInfo.u16Vfb = 194;
+    pstFrmInfo->stSyncInfo.u16Vpw = 6;
 
-  return;
+    return;
 }
 
-static void rkadk_init(void) {
+static void rkadk_init(void)
+{
     setenv("rt_vo_disable_vop", "0", 1);
     RKADK_MPI_SYS_Init();
     RKADK_PARAM_Init(NULL, NULL);
@@ -88,17 +90,19 @@ static void rkadk_init(void) {
     stPlayCfg.bEnableAudio = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoY = 128;
-    if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg)) {
+    if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg))
+    {
         printf("rkadk: RKADK_PLAYER_Create failed\n");
         return;
     }
 }
 
-static void rkadk_deinit(void) {
-  RKADK_PLAYER_Stop(pPlayer);
-  RKADK_PLAYER_Destroy(pPlayer);
-  pPlayer = NULL;
-  RKADK_MPI_SYS_Exit();
+static void rkadk_deinit(void)
+{
+    RKADK_PLAYER_Stop(pPlayer);
+    RKADK_PLAYER_Destroy(pPlayer);
+    pPlayer = NULL;
+    RKADK_MPI_SYS_Exit();
 }
 
 static void style_init(void)
@@ -127,23 +131,27 @@ void video_name_callback(lv_event_t *event)
     char *file_name = lv_event_get_user_data(event);
     char path[50] = "/oem/";
     strcat(path, file_name);
-    printf("video_name select file %s\n", path); 
+    printf("video_name select file %s\n", path);
     lv_label_set_text(video_label, path);
     lv_obj_del(video_list_box);
     video_list_box = NULL;
     printf("video_name_callback set player file name is %s\n", path);
-    if(pPlayer != NULL) {
+    if (pPlayer != NULL)
+    {
         rkadk_deinit();
     }
-    if(pPlayer == NULL) {
+    if (pPlayer == NULL)
+    {
         rkadk_init();
     }
     int ret = RKADK_PLAYER_SetDataSource(pPlayer, path);
-    if (ret) {
+    if (ret)
+    {
         printf("rkadk: SetDataSource failed, ret = %d\n", ret);
     }
     ret = RKADK_PLAYER_Prepare(pPlayer);
-    if (ret) {
+    if (ret)
+    {
         printf("rkadk: Prepare failed, ret = %d\n", ret);
     }
 }
@@ -197,24 +205,29 @@ void player_list_button_callback(lv_event_t *event)
     }
 }
 
-void player_start_button_callback(lv_event_t *event) {
+void player_start_button_callback(lv_event_t *event)
+{
     printf("player_start_button_callback into\n");
     char *file = lv_label_get_text(video_label);;
-    if(strncmp(file, "/oem/", 5)) {
+    if (strncmp(file, "/oem/", 5))
+    {
         printf("rkadk: !!! You have not selected the file to play !!!\n");
         return;
     }
     printf("rkadk: the file to play %s\n", file);
     int ret = RKADK_PLAYER_Play(pPlayer);
-    if (ret) {
+    if (ret)
+    {
         printf("rkadk: Play failed, ret = %d\n", ret);
     }
 }
 
-void player_stop_button_callback(lv_event_t *event) {
+void player_stop_button_callback(lv_event_t *event)
+{
     printf("player_stop_button_callback into\n");
     int ret = RKADK_PLAYER_Pause(pPlayer);
-    if (ret) {
+    if (ret)
+    {
         printf("rkadk: Pause failed, ret = %d\n", ret);
     }
 }
@@ -225,7 +238,7 @@ void ui_player_screen_init(void)
     style_init();
     ui_player_screen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_player_screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_opa(ui_player_screen, LV_OPA_TRANSP, 0); 
+    lv_obj_set_style_bg_opa(ui_player_screen, LV_OPA_TRANSP, 0);
 
     icon_box = lv_obj_create(ui_player_screen);
     //lv_obj_remove_style_all(player_box);
