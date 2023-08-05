@@ -139,10 +139,13 @@ void video_name_callback(lv_event_t *event)
     printf("video_name_callback set player file name is %s\n", path);
     if (pPlayer != NULL)
     {
+        printf("video_name_callback: stop and deinit pPlayer\n");
+        RKADK_PLAYER_Stop(pPlayer);
         rkadk_deinit();
     }
     if (pPlayer == NULL)
     {
+        printf("video_name_callback: rkadk_init pPlayer\n");
         rkadk_init();
     }
     int ret = RKADK_PLAYER_SetDataSource(pPlayer, path);
