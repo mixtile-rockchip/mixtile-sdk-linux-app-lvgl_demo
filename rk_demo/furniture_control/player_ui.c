@@ -48,13 +48,14 @@ static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo)
 
     memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
     pstFrmInfo->u32DispWidth = 720;
-    pstFrmInfo->u32DispHeight = 1280;
+    pstFrmInfo->u32DispHeight = 512; //1280*0.4=512
     pstFrmInfo->u32ImgWidth = pstFrmInfo->u32DispWidth;
     pstFrmInfo->u32ImgHeight = pstFrmInfo->u32DispHeight;
-    pstFrmInfo->u32VoFormat = VO_FORMAT_RGB888;
+    pstFrmInfo->u32VoFormat = VO_FORMAT_NV12;
     pstFrmInfo->u32EnIntfType = DISPLAY_TYPE_LCD;
     pstFrmInfo->u32VoLay = 1;
     pstFrmInfo->enIntfSync = RKADK_VO_OUTPUT_DEFAULT;
+    pstFrmInfo->enVoSpliceMode = SPLICE_MODE_BYPASS;
     pstFrmInfo->u32BorderColor = 0x0000FA;
     pstFrmInfo->bMirror = RKADK_FALSE;
     pstFrmInfo->bFlip = RKADK_FALSE;
