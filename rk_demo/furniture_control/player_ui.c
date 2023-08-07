@@ -88,7 +88,7 @@ static void rkadk_init(void)
     memset(&stPlayCfg, 0, sizeof(RKADK_PLAYER_CFG_S));
     param_init(&stPlayCfg.stFrmInfo);
     stPlayCfg.bEnableVideo = 1;
-    stPlayCfg.bEnableAudio = 0;
+    stPlayCfg.bEnableAudio = 1;
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoY = 128;
     if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg))
