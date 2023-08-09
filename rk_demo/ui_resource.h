@@ -62,6 +62,7 @@
 #define IMG_INTERCOM_ARROWUP        "A:"PATH_PREFIX"/arrow-up-fill.png"
 #define IMG_INTERCOM_BACKWARD       "A:"PATH_PREFIX"/backward.png"
 #define IMG_INTERCOM_RECTANGLE1     "A:"PATH_PREFIX"/rectangle_1.png"
+#define IMG_INTERCOM_CONTUINE       "A:"PATH_PREFIX"/continue.png"
 
 #endif
 
