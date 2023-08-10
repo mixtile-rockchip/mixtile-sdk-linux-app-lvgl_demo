@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+//#include <errno.h>
 #include "main.h"
 #include "player_ui.h"
 #include "furniture_control_ui.h"
@@ -36,6 +37,7 @@ static lv_style_t style_list;
 
 static RKADK_PLAYER_CFG_S stPlayCfg;
 static RKADK_MW_PTR pPlayer = NULL;
+int play_flag = 0;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
 ///////////////////// ANIMATIONS ////////////////////
@@ -125,6 +127,7 @@ void player_page_jump_furniture_control_callback(lv_event_t *event)
     rkadk_deinit();
     ui_player_screen = NULL;
     video_list_box = NULL;
+    play_flag = 0;
 }
 
 void video_name_callback(lv_event_t *event)
@@ -140,13 +143,17 @@ void video_name_callback(lv_event_t *event)
     if (pPlayer != NULL)
     {
         printf("video_name_callback: stop and deinit pPlayer\n");
-        RKADK_PLAYER_Stop(pPlayer);
+        //RKADK_PLAYER_Stop(pPlayer);
         rkadk_deinit();
     }
     if (pPlayer == NULL)
     {
         printf("video_name_callback: rkadk_init pPlayer\n");
         rkadk_init();
+    }
+    if (play_flag == 1)
+    {
+        play_flag = 0;
     }
     int ret = RKADK_PLAYER_SetDataSource(pPlayer, path);
     if (ret)
@@ -166,8 +173,17 @@ void player_list_button_callback(lv_event_t *event)
     DIR *dir;
     struct dirent *entry;
     int file_count = 0;
+
     if (video_list_box == NULL)
     {
+        dir = opendir(PATH_VIDEO);
+        if (dir == NULL)
+        {
+            //fprintf(stderr, "err: %s\n", strerror(errno));
+            printf("Error opening directory /oem\n");
+            return;
+        }
+        printf("create video_list_box\n");
         video_list_box = lv_obj_create(player_box);
         //lv_obj_remove_style_all(video_list_box);
         lv_obj_set_width(video_list_box, lv_pct(50));
@@ -180,12 +196,6 @@ void player_list_button_callback(lv_event_t *event)
         lv_obj_add_style(video_list, &style_list, LV_PART_MAIN);
         lv_obj_set_style_pad_column(video_list, 10, LV_PART_MAIN);
 
-        dir = opendir(PATH_VIDEO);
-        if (dir == NULL)
-        {
-            printf("Error opening directory /oem\n");
-            return;
-        }
         while ((entry = readdir(dir)) != NULL)
         {
             if (entry->d_type == DT_REG)
@@ -201,9 +211,11 @@ void player_list_button_callback(lv_event_t *event)
                 }
             }
         }
+        closedir(dir);
     }
     else
     {
+        printf("del video_list_box\n");
         lv_obj_del(video_list_box);
         video_list_box = NULL;
     }
@@ -212,6 +224,11 @@ void player_list_button_callback(lv_event_t *event)
 void player_start_button_callback(lv_event_t *event)
 {
     printf("player_start_button_callback into\n");
+    if (play_flag == 1)
+    {
+        printf("Video is playing!\n");
+        return;
+    }
     char *file = lv_label_get_text(video_label);;
     if (strncmp(file, "/oem/", 5))
     {
@@ -224,16 +241,23 @@ void player_start_button_callback(lv_event_t *event)
     {
         printf("rkadk: Play failed, ret = %d\n", ret);
     }
+    play_flag = 1;
 }
 
 void player_stop_button_callback(lv_event_t *event)
 {
     printf("player_stop_button_callback into\n");
+    if (play_flag == 0)
+    {
+        printf("Video is stop!\n");
+        return;
+    }
     int ret = RKADK_PLAYER_Pause(pPlayer);
     if (ret)
     {
         printf("rkadk: Pause failed, ret = %d\n", ret);
     }
+    play_flag = 0;
 }
 
 ///////////////////// SCREENS ////////////////////
