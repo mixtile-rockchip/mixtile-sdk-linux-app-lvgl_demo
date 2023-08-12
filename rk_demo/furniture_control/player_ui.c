@@ -93,6 +93,7 @@ static void rkadk_init(void)
     stPlayCfg.bEnableAudio = 1;
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoY = 128;
+    stPlayCfg.bEnableBlackBackground = true;
     if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg))
     {
         printf("rkadk: RKADK_PLAYER_Create failed\n");
