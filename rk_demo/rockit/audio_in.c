@@ -94,8 +94,8 @@ int ai_init(void)
 #if AVQE_EN
     memset(&stAiVqeConfig, 0, sizeof(AI_VQE_CONFIG_S));
     stAiVqeConfig.enCfgMode = AIO_VQE_CONFIG_LOAD_FILE;
-    memcpy(stAiVqeConfig.aCfgFile, "/data/config_aivqe.json",
-           strlen("/data/config_aivqe.json"));
+    memcpy(stAiVqeConfig.aCfgFile, "/usr/vqefiles/config_aivqe.json",
+           strlen("/usr/vqefiles/config_aivqe.json"));
 
     stAiVqeConfig.s32WorkSampleRate = AUDIO_RATE;
     stAiVqeConfig.s32FrameSample = AUDIO_PERIOD_SZ;
