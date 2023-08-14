@@ -20,7 +20,7 @@
 #define AUDIO_CH_CAP        1
 #define AUDIO_CH_REF        1
 #define AUDIO_CH            (AUDIO_CH_CAP + AUDIO_CH_REF)
-#define AUDIO_CH_OUT        2
+#define AUDIO_CH_OUT        1
 
 #define AUDIO_PERIOD_SZ     256
 #define AUDIO_PERIOD_CNT    4

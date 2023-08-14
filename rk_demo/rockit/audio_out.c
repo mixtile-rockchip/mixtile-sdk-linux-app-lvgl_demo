@@ -17,7 +17,7 @@
 #define AUDIO_RATE          AUDIO_SAMPLE_RATE_16000
 #define AUDIO_BITS          AUDIO_BIT_WIDTH_16
 #define AUDIO_CH            2
-#define AUDIO_CH_IN         2
+#define AUDIO_CH_IN         1
 
 #define AUDIO_PERIOD_SZ     256
 #define AUDIO_PERIOD_CNT    4
