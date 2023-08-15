@@ -103,10 +103,13 @@ static void rkadk_init(void)
 
 static void rkadk_deinit(void)
 {
-    RKADK_PLAYER_Stop(pPlayer);
+    if (play_flag == 1) {
+        RKADK_PLAYER_Stop(pPlayer);
+    }
     RKADK_PLAYER_Destroy(pPlayer);
     pPlayer = NULL;
     RKADK_MPI_SYS_Exit();
+    play_flag = 0;
 }
 
 static void style_init(void)
