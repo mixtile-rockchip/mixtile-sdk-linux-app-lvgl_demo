@@ -103,9 +103,7 @@ static void rkadk_init(void)
 
 static void rkadk_deinit(void)
 {
-    if (play_flag == 1) {
-        RKADK_PLAYER_Stop(pPlayer);
-    }
+    RKADK_PLAYER_Stop(pPlayer);
     RKADK_PLAYER_Destroy(pPlayer);
     pPlayer = NULL;
     RKADK_MPI_SYS_Exit();
@@ -147,7 +145,6 @@ void video_name_callback(lv_event_t *event)
     if (pPlayer != NULL)
     {
         printf("video_name_callback: stop and deinit pPlayer\n");
-        //RKADK_PLAYER_Stop(pPlayer);
         rkadk_deinit();
     }
     if (pPlayer == NULL)
