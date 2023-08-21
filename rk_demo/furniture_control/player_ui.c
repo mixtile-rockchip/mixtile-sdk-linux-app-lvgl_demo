@@ -38,11 +38,53 @@ static lv_style_t style_list;
 static RKADK_PLAYER_CFG_S stPlayCfg;
 static RKADK_MW_PTR pPlayer = NULL;
 int play_flag = 0;
+int play_end = 0;
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+
+static RKADK_VOID PlayerEventFnTest(RKADK_MW_PTR pPlayer,
+                                    RKADK_PLAYER_EVENT_E enEvent,
+                                    RKADK_VOID *pData)
+{
+    switch (enEvent)
+    {
+    case RKADK_PLAYER_EVENT_STATE_CHANGED:
+        printf("+++++ RKADK_PLAYER_EVENT_STATE_CHANGED +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_EOF:
+        printf("+++++ RKADK_PLAYER_EVENT_EOF +++++\n");
+        play_flag = 0;
+        play_end = 1;
+        break;
+    case RKADK_PLAYER_EVENT_SOF:
+        printf("+++++ RKADK_PLAYER_EVENT_SOF +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_SEEK_END:
+        printf("+++++ RKADK_PLAYER_EVENT_SEEK_END +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_ERROR:
+        printf("+++++ RKADK_PLAYER_EVENT_ERROR +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_PREPARED:
+        printf("+++++ RKADK_PLAYER_EVENT_PREPARED +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_PLAY:
+        printf("+++++ RKADK_PLAYER_EVENT_PLAY +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_PAUSED:
+        printf("+++++ RKADK_PLAYER_EVENT_PAUSED +++++\n");
+        break;
+    case RKADK_PLAYER_EVENT_STOPPED:
+        printf("+++++ RKADK_PLAYER_EVENT_STOPPED +++++\n");
+        break;
+    default:
+        printf("+++++ Unknown event(%d) +++++\n", enEvent);
+        break;
+    }
+}
 
 static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo)
 {
@@ -94,6 +136,7 @@ static void rkadk_init(void)
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoY = 128;
     stPlayCfg.bEnableBlackBackground = true;
+    stPlayCfg.pfnPlayerCallback = PlayerEventFnTest;
     if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg))
     {
         printf("rkadk: RKADK_PLAYER_Create failed\n");
@@ -166,6 +209,7 @@ void video_name_callback(lv_event_t *event)
     {
         printf("rkadk: Prepare failed, ret = %d\n", ret);
     }
+    play_end = 0;
 }
 
 void player_list_button_callback(lv_event_t *event)
@@ -225,24 +269,49 @@ void player_list_button_callback(lv_event_t *event)
 void player_start_button_callback(lv_event_t *event)
 {
     printf("player_start_button_callback into\n");
-    if (play_flag == 1)
-    {
-        printf("Video is playing!\n");
-        return;
-    }
-    char *file = lv_label_get_text(video_label);;
+    char *file = lv_label_get_text(video_label);
     if (strncmp(file, "/oem/", 5))
     {
         printf("rkadk: !!! You have not selected the file to play !!!\n");
         return;
     }
     printf("rkadk: the file to play %s\n", file);
-    int ret = RKADK_PLAYER_Play(pPlayer);
-    if (ret)
+    int ret = 0;
+    if ((play_flag == 1) || (play_end == 1))
     {
-        printf("rkadk: Play failed, ret = %d\n", ret);
+        printf("Video is playing! replay! \n");
+        RKADK_PLAYER_Stop(pPlayer);
+        printf("Video is play file: %s \n", file);
+        ret = RKADK_PLAYER_SetDataSource(pPlayer, file);
+        if (ret)
+        {
+            printf("rkadk: SetDataSource failed, ret = %d\n", ret);
+        }
+        ret = RKADK_PLAYER_Prepare(pPlayer);
+        if (ret)
+        {
+            printf("rkadk: Prepare failed, ret = %d\n", ret);
+        }
+        ret = RKADK_PLAYER_Play(pPlayer);
+        if (ret)
+        {
+            printf("rkadk: Play failed, ret = %d\n", ret);
+        }
+        play_end = 0;
+        return;
+
     }
-    play_flag = 1;
+    else
+    {
+        ret = RKADK_PLAYER_Play(pPlayer);
+        if (ret)
+        {
+            printf("rkadk: Play failed, ret = %d\n", ret);
+        }
+        play_flag = 1;
+        play_end = 0;
+        return;
+    }
 }
 
 void player_stop_button_callback(lv_event_t *event)
