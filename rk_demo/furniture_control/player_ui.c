@@ -70,12 +70,17 @@ static RKADK_VOID PlayerEventFnTest(RKADK_MW_PTR pPlayer,
         break;
     case RKADK_PLAYER_EVENT_PREPARED:
         printf("+++++ RKADK_PLAYER_EVENT_PREPARED +++++\n");
+        play_end = 0;
+        play_flag = 0;
         break;
     case RKADK_PLAYER_EVENT_PLAY:
         printf("+++++ RKADK_PLAYER_EVENT_PLAY +++++\n");
+        play_flag = 1;
+        play_end = 0;
         break;
     case RKADK_PLAYER_EVENT_PAUSED:
         printf("+++++ RKADK_PLAYER_EVENT_PAUSED +++++\n");
+        play_flag = 0;
         break;
     case RKADK_PLAYER_EVENT_STOPPED:
         printf("+++++ RKADK_PLAYER_EVENT_STOPPED +++++\n");
@@ -209,7 +214,6 @@ void video_name_callback(lv_event_t *event)
     {
         printf("rkadk: Prepare failed, ret = %d\n", ret);
     }
-    play_end = 0;
 }
 
 void player_list_button_callback(lv_event_t *event)
@@ -308,8 +312,6 @@ void player_start_button_callback(lv_event_t *event)
         {
             printf("rkadk: Play failed, ret = %d\n", ret);
         }
-        play_flag = 1;
-        play_end = 0;
         return;
     }
 }
@@ -327,7 +329,6 @@ void player_stop_button_callback(lv_event_t *event)
     {
         printf("rkadk: Pause failed, ret = %d\n", ret);
     }
-    play_flag = 0;
 }
 
 ///////////////////// SCREENS ////////////////////
