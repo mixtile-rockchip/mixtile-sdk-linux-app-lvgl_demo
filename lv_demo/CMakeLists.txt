@@ -44,4 +44,5 @@ if (LV_DRV_USE_DRM)
 endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(PROGRAMS S00-lv_demo DESTINATION /etc/init.d)
 
