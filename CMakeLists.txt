@@ -8,6 +8,7 @@ include(FindPkgConfig)
 find_package(PkgConfig)
 
 include_directories(
+	${PROJECT_SOURCE_DIR}/
 	${PROJECT_SOURCE_DIR}/lvgl/
 	${PROJECT_SOURCE_DIR}/sys/
 	${PROJECT_SOURCE_DIR}/cJSON/
@@ -82,6 +83,44 @@ if (LV_USE_RK_DEMO)
 else()
 	add_subdirectory(lv_demo)
 endif()
+
+set(VERSION_INFO "\"Unknown\"")
+
+if (EXISTS "${PROJECT_SOURCE_DIR}/.git")
+	find_package(Git)
+	if (GIT_FOUND)
+		execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+			OUTPUT_VARIABLE EXEC_OUT
+			ERROR_VARIABLE EXEC_ERROR
+			RESULT_VARIABLE EXEC_RET
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+			ERROR_STRIP_TRAILING_WHITESPACE)
+
+		if (NOT EXEC_RET)
+			set(VERSION_INFO ${EXEC_OUT})
+			string(REPLACE "\"" "\\\"" VERSION_INFO ${VERSION_INFO})
+			execute_process(COMMAND ${GIT_EXECUTABLE} ls-files -m
+				WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+				OUTPUT_VARIABLE EXEC_OUT
+				ERROR_VARIABLE EXEC_ERROR
+				RESULT_VARIABLE EXEC_RET
+				OUTPUT_STRIP_TRAILING_WHITESPACE
+				ERROR_STRIP_TRAILING_WHITESPACE)
+			if (EXEC_OUT)
+				set(VERSION_INFO "${VERSION_INFO}-dirty")
+			endif()
+			set(VERSION_INFO "\"${VERSION_INFO}\"")
+			message(STATUS "current version:")
+			message(STATUS "${VERSION_INFO}")
+		endif()
+	endif()
+endif()
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/version.in
+    ${PROJECT_SOURCE_DIR}/version.h
+)
 
 if (EXISTS "${PROJECT_SOURCE_DIR}/tools/pre-commit")
 	set(GIT_HOOK_SRC "${PROJECT_SOURCE_DIR}/tools/pre-commit")
