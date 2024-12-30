@@ -43,6 +43,10 @@ if (LV_USE_RGA)
 	link_libraries(rga)
 endif()
 
+if (LV_USE_DRAW_RK_TRANSFORM)
+	link_libraries(rkyuvscaler)
+endif()
+
 if (LVGL_DEMO_RK3506)
 	add_definitions(-DUSE_RK3506=1)
 endif()
