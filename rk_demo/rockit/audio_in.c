@@ -89,7 +89,11 @@ int ai_init(void)
 
     memset(&pstParams, 0, sizeof(AI_CHN_PARAM_S));
     pstParams.enLoopbackMode = AUDIO_LOOPBACK_NONE;
+#if AENC_EN
     pstParams.s32UsrFrmDepth = -1;
+#else
+    pstParams.s32UsrFrmDepth = 1;
+#endif
     result = RK_MPI_AI_SetChnParam(aiDevId, aiChn, &pstParams);
     if (result != RK_SUCCESS)
     {

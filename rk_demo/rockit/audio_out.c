@@ -303,7 +303,10 @@ void main(int argc, char *argv[])
 
     ao_init();
     while (1)
-        ao_push(ao_read, fd);
+    {
+        if (ao_push(ao_read, fd) != RK_SUCCESS)
+            break;
+    }
     ao_deinit();
 
     RK_MPI_SYS_Exit();
