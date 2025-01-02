@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <linux/input.h>
 #include <libevdev-1.0/libevdev/libevdev.h>
@@ -62,6 +63,11 @@ static evdev_record_t evdev_val[2];
 static int touch_up = 0;
 static pthread_t evdev_tid;
 static pthread_mutex_t evdev_lock;
+static int touch_crop = 0;
+static int crop_x1;
+static int crop_y1;
+static int crop_x2;
+static int crop_y2;
 
 static int evdev_key_val;
 static int evdev_button;
@@ -95,6 +101,31 @@ static int lsensor_fd = -1;
 #define TP_NAME_LEN (32)
 static char tp_event[TP_NAME_LEN] = EVDEV_NAME;
 static void *evdev_thread(void *arg);
+
+static int32_t env_get_u32(const char *name, uint32_t *value, uint32_t default_value)
+{
+    char *ptr = getenv(name);
+
+    if (NULL == ptr)
+    {
+        *value = default_value;
+    }
+    else
+    {
+        char *endptr;
+        int base = (ptr[0] == '0' && ptr[1] == 'x') ? (16) : (10);
+        errno = 0;
+        *value = strtoul(ptr, &endptr, base);
+        if (errno || (ptr == endptr))
+        {
+            errno = 0;
+            *value = default_value;
+        }
+    }
+
+    return 0;
+}
+
 /**
  * Get touchscreen device event no
  */
@@ -455,11 +486,29 @@ int evdev_set_file(lv_display_t *disp, char *dev_name)
             (evdev_min_y != 0) ||
             (evdev_max_y != disp_ver))
     {
-        evdev_calibrate = 1;
-        printf("calibrate [%d,%d]x[%d,%d] to %dx%d\n",
-               evdev_min_x, evdev_max_x,
-               evdev_min_y, evdev_max_y,
-               disp_hor, disp_ver);
+        const char *buf;
+        buf = getenv("lv_disp_crop");
+        if (buf)
+            touch_crop = buf[0] - '0';
+        if (!touch_crop)
+        {
+            evdev_calibrate = 1;
+            printf("calibrate [%d,%d]x[%d,%d] to %dx%d\n",
+                   evdev_min_x, evdev_max_x,
+                   evdev_min_y, evdev_max_y,
+                   disp_hor, disp_ver);
+        }
+        else
+        {
+            crop_x1 = (evdev_max_x - disp_hor) / 2;
+            crop_y1 = (evdev_max_y - disp_ver) / 2;
+            crop_x2 = crop_x1 + disp_hor;
+            crop_y2 = crop_y1 + disp_ver;
+            printf("crop [%d,%d]x[%d,%d] to [%d,%d]x[%d,%d]\n",
+                   evdev_min_x, evdev_max_x,
+                   evdev_min_y, evdev_max_y,
+                   crop_x1, crop_y1, crop_x2, crop_y2);
+        }
     }
     printf("evdev_calibrate = %d\n", evdev_calibrate);
 
@@ -688,6 +737,21 @@ void evdev_read(lv_indev_t *drv, lv_indev_data_t *data)
 
     x = (int)kfx.v;
     y = (int)kfy.v;
+
+    if (touch_crop)
+    {
+        if (x < crop_x1)
+            x = crop_x1;
+        else if (x > crop_x2)
+            x = crop_x2;
+        x -= crop_x1;
+
+        if (y < crop_y1)
+            y = crop_y1;
+        else if (y > crop_y2)
+            y = crop_y2;
+        y -= crop_y1;
+    }
 
     data->point.x = x;
     data->point.y = y;
