@@ -13,6 +13,13 @@
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
 
+#if LV_USE_PROFILER
+#include <sys/syscall.h>
+#define gettid() syscall(SYS_gettid)
+
+static FILE *profiler_fd = NULL;
+#endif
+
 /* 0, 90, 180, 270 */
 static int g_indev_rotation = 0;
 /* 0, 90, 180, 270 */
@@ -49,8 +56,31 @@ static void lv_sysdelay(uint32_t ms)
     usleep(ms * 1000);
 }
 
+#if LV_USE_PROFILER
+static void profiler_flush_cb(const char *buf)
+{
+    if (profiler_fd)
+        fwrite(buf, 1, strlen(buf), profiler_fd);
+}
+
+static int profiler_tid_get_cb(void)
+{
+    return gettid();
+}
+
+static uint32_t profiler_tick_get_cb(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * 1000000 + tv.tv_usec);
+}
+#endif
+
 void lv_port_init(void)
 {
+#if LV_USE_PROFILER
+    lv_profiler_builtin_config_t profiler_config;
+#endif
     const char *buf;
 
     lv_init();
@@ -61,6 +91,16 @@ void lv_port_init(void)
     lv_log_register_print_cb(print_cb);
     lv_tick_set_cb(lv_systick);
     lv_delay_set_cb(lv_sysdelay);
+
+#if LV_USE_PROFILER
+    profiler_fd = fopen("/userdata/lvgl_profiler.txt", "wb+");
+    lv_profiler_builtin_config_init(&profiler_config);
+    profiler_config.tick_per_sec = 1000000;
+    profiler_config.tick_get_cb = profiler_tick_get_cb;
+    profiler_config.flush_cb = profiler_flush_cb;
+    profiler_config.tid_get_cb = profiler_tid_get_cb;
+    lv_profiler_builtin_init(&profiler_config);
+#endif
 
     lv_port_disp_init(0, 0, g_disp_rotation);
     lv_port_indev_init(g_indev_rotation);
