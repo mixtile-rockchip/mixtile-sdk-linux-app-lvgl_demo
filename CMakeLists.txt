@@ -43,6 +43,10 @@ if (LV_USE_RGA)
 	link_libraries(rga)
 endif()
 
+if (LV_USE_MIMALLOC_MALLOC)
+	link_libraries(mimalloc)
+endif()
+
 if (LV_USE_DRAW_RK_TRANSFORM)
 	link_libraries(rkyuvscaler)
 endif()
