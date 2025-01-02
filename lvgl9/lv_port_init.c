@@ -22,8 +22,6 @@ static FILE *profiler_fd = NULL;
 
 /* 0, 90, 180, 270 */
 static int g_indev_rotation = 0;
-/* 0, 90, 180, 270 */
-static int g_disp_rotation = 0;
 
 static int log_level = LV_LOG_LEVEL_WARN;
 static void print_cb(lv_log_level_t level, const char *buf)
@@ -76,7 +74,7 @@ static uint32_t profiler_tick_get_cb(void)
 }
 #endif
 
-void lv_port_init(void)
+void lv_port_init(int width, int height, int rotation)
 {
 #if LV_USE_PROFILER
     lv_profiler_builtin_config_t profiler_config;
@@ -102,7 +100,7 @@ void lv_port_init(void)
     lv_profiler_builtin_init(&profiler_config);
 #endif
 
-    lv_port_disp_init(0, 0, g_disp_rotation);
-    lv_port_indev_init(g_indev_rotation);
+    lv_port_disp_init(width, height, rotation);
+    lv_port_indev_init(g_indev_rotation + rotation);
 }
 

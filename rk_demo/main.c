@@ -252,7 +252,7 @@ static void psensor_cb(lv_timer_t *timer)
 
 static void lvgl_init(void)
 {
-    lv_port_init();
+    lv_port_init(0, 0, 0);
 
 #if USE_SENSOR
     lv_indev_drv_t *lsensor, *psensor;

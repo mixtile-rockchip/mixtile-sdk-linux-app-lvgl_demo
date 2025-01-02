@@ -6,7 +6,7 @@
 #ifndef LV_PORT_INIT_H
 #define LV_PORT_INIT_H
 
-void lv_port_init(void);
+void lv_port_init(int width, int height, int rotation);
 
 #endif
 

@@ -105,7 +105,7 @@ static void font_init(void)
 
 static void lvgl_init(void)
 {
-    lv_port_init();
+    lv_port_init(0, 0, 0);
 
     font_init();
 }

@@ -152,7 +152,7 @@ static void font_init(void)
 
 static void lvgl_init(void)
 {
-    lv_port_init();
+    lv_port_init(0, 0, 0);
 
     ui_scaler = ui_scaler_new(1920, 1080);
     ui_scaler_set_refer_size(ui_scaler, LV_HOR_RES, LV_VER_RES);

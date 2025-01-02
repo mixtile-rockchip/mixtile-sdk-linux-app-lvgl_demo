@@ -32,7 +32,7 @@ static void sigterm_handler(int sig)
 int main(int argc, char **argv)
 {
     signal(SIGINT, sigterm_handler);
-    lv_port_init();
+    lv_port_init(0, 0, 0);
 
     monitor();
 
