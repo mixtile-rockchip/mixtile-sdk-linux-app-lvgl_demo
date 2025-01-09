@@ -18,7 +18,11 @@
 #include <dirent.h>
 
 #include "main.h"
+
+#define KALMAN_FILTER_EN    0
+#if KALMAN_FILTER_EN
 #include "kalman_filter.h"
+#endif
 /*********************
  *      DEFINES
  *********************/
@@ -81,8 +85,10 @@ static FILE *lv_raw_point;
 static FILE *lv_fix_point;
 #endif
 
+#if KALMAN_FILTER_EN
 static KalmanFilter kfx;
 static KalmanFilter kfy;
+#endif
 
 #if USE_SENSOR
 static int psensor_event_id = -1;
@@ -732,11 +738,16 @@ void evdev_read(lv_indev_t *drv, lv_indev_data_t *data)
                     0, ver_res);
     }
 
-    KalmanUpdate(&kfx, raw_x * 1.0, first_point);
-    KalmanUpdate(&kfy, raw_y * 1.0, first_point);
+#if KALMAN_FILTER_EN
+    KalmanUpdate(&kfx, (float)raw_x / evdev_max_x, first_point);
+    KalmanUpdate(&kfy, (float)raw_y / evdev_max_y, first_point);
 
-    x = (int)kfx.v;
-    y = (int)kfy.v;
+    x = (int)(kfx.v * evdev_max_x);
+    y = (int)(kfy.v * evdev_max_y);
+#else
+    x = raw_x;
+    y = raw_y;
+#endif
 
     if (touch_crop)
     {

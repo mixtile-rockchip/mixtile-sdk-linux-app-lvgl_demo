@@ -16,7 +16,7 @@ void KalmanInit(KalmanFilter *kf, double initial_state, double initial_error,
 void KalmanUpdate(KalmanFilter *kf, double measurement, int first)
 {
     if (first)
-        KalmanInit(kf, measurement, 1, 0.1, 0.1);
+        KalmanInit(kf, measurement, 1, 0.4, 0.03);
 
     kf->v += kf->P * kf->Q;
     kf->P += kf->P * kf->Q + kf->Q * kf->P;
