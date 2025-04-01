@@ -9,19 +9,15 @@
 #include "evdev.h"
 #if USE_EVDEV != 0 || USE_BSD_EVDEV
 
+#include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
-#if USE_BSD_EVDEV
-#include <dev/dev/input.h>
-#else
 #include <linux/input.h>
-#endif
 #include <libevdev-1.0/libevdev/libevdev.h>
 #include <dirent.h>
-
-#include "main.h"
 
 #define KALMAN_FILTER_EN    0
 #if KALMAN_FILTER_EN
