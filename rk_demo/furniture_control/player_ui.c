@@ -184,7 +184,11 @@ static void rkadk_init(void)
     memset(&stPlayCfg, 0, sizeof(RKADK_PLAYER_CFG_S));
     param_init(&stPlayCfg.stFrmInfo);
 
+#if USE_RK3506
+    stPlayCfg.stAudioCfg.pSoundCard = "hw:0,0";
+#else
     stPlayCfg.stAudioCfg.pSoundCard = "default";
+#endif
     stPlayCfg.stAudioCfg.u32SpeakerVolume = 70;
     stPlayCfg.bEnableVideo = 1;
     stPlayCfg.bEnableAudio = 1;
