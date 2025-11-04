@@ -19,6 +19,16 @@
 #include "rkadk_player.h"
 #include "rk_mpi_vo.h"
 ///////////////////// VARIABLES ////////////////////
+static lv_obj_t *progress_bar = NULL;
+static lv_obj_t *time_label = NULL;
+static lv_obj_t *progress_container = NULL;
+static lv_timer_t *progress_timer = NULL;
+static lv_style_t style_progress_bg;
+static lv_style_t style_progress_indic;
+
+// Add a progress bar refresh timer callback function
+static void progress_timer_cb(lv_timer_t *timer);
+
 static lv_obj_t *main = NULL;
 static lv_obj_t *btn_return;
 static lv_obj_t *player_box = NULL;
@@ -46,6 +56,78 @@ pthread_t ntid;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+
+// 进度条计时器回调功能
+static void progress_timer_cb(lv_timer_t *timer)
+{
+    if (pPlayer == NULL || play_flag != 1)
+    {
+        return;
+    }
+    int current_time = 0;
+    int duration = 0;
+    current_time = RKADK_PLAYER_GetCurrentPosition(pPlayer);
+    RKADK_PLAYER_GetDuration(pPlayer, &duration);
+    if (duration > 0)
+    {
+        // 计算进度百分比
+        int progress = (int)((current_time * 100) / duration);
+        lv_bar_set_value(progress_bar, progress, LV_ANIM_ON);
+        // 更新时间显示
+        char time_text[20];
+        int current_min = current_time / 60;
+        int current_sec = current_time % 60;
+        int duration_min = duration / 60;
+        int duration_sec = duration % 60;
+        snprintf(time_text, sizeof(time_text), "%02d:%02d / %02d:%02d",
+                 current_min, current_sec, duration_min, duration_sec);
+        lv_label_set_text(time_label, time_text);
+    }
+}
+
+// 开始进度条定时器
+static void start_progress_timer(void)
+{
+    if (progress_timer == NULL)
+    {
+        progress_timer = lv_timer_create(progress_timer_cb, 500, NULL);
+    }
+}
+
+// 停止进度条定时器
+static void stop_progress_timer(void)
+{
+    if (progress_timer)
+    {
+        lv_timer_del(progress_timer);
+        progress_timer = NULL;
+    }
+}
+
+// 进度条拖动事件回调
+static void progress_bar_event_cb(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *slider = lv_event_get_target(e);
+    if (code == LV_EVENT_VALUE_CHANGED)
+    {
+        int value = lv_slider_get_value(slider);
+        printf("Slider value changed to: %d\n", value);
+        // 根据进度计算跳转时间
+        if (pPlayer != NULL)
+        {
+            int duration = 0; // 需要从播放器获取总时长
+            RKADK_PLAYER_GetDuration(pPlayer, &duration);
+            if (duration > 0)
+            {
+                int seek_time = (value * duration) / 100;
+                RKADK_PLAYER_Seek(pPlayer, seek_time);
+                printf("Seeking to: %d seconds\n", seek_time);
+            }
+        }
+    }
+}
+
 
 #if FRAME_DETECT
 static void *GetFramerate(void *arg)
@@ -222,11 +304,23 @@ static void style_init(void)
     lv_style_init(&style_list);
     lv_style_set_text_font(&style_list, ttf_main_m.font);
     lv_style_set_text_color(&style_list, lv_color_black());
+
+    lv_style_init(&style_progress_bg);
+    lv_style_set_bg_color(&style_progress_bg, lv_color_hex(0x4A4A4A));
+    lv_style_set_bg_opa(&style_progress_bg, LV_OPA_COVER);
+    lv_style_set_radius(&style_progress_bg, 10);
+    lv_style_set_border_width(&style_progress_bg, 0);
+
+    lv_style_init(&style_progress_indic);
+    lv_style_set_bg_color(&style_progress_indic, lv_color_hex(0x2195f6));
+    lv_style_set_bg_opa(&style_progress_indic, LV_OPA_COVER);
+    lv_style_set_radius(&style_progress_indic, 10);
 }
 
 static void btn_return_cb(lv_event_t *event)
 {
     printf("player_page_jump_furniture_control_callback is into \n");
+    stop_progress_timer();
     furniture_control_ui_init();
     lv_obj_del(main);
     rkadk_deinit();
@@ -273,6 +367,7 @@ void video_name_callback(lv_event_t *event)
         printf("rkadk: Prepare failed, ret = %d\n", ret);
     }
     ret = RKADK_PLAYER_Play(pPlayer);
+    start_progress_timer();
     if (ret)
     {
         printf("rkadk: Play failed, ret = %d\n", ret);
@@ -429,6 +524,9 @@ void player_start_button_callback(lv_event_t *event)
         {
             printf("rkadk: Play failed, ret = %d\n", ret);
         }
+
+        start_progress_timer();
+
         play_end = 0;
 #if FRAME_DETECT
         pthread_create(&ntid, NULL, GetFramerate, NULL);
@@ -443,6 +541,7 @@ void player_start_button_callback(lv_event_t *event)
         {
             printf("rkadk: Play failed, ret = %d\n", ret);
         }
+        start_progress_timer();
 #if FRAME_DETECT
         pthread_create(&ntid, NULL, GetFramerate, NULL);
 #endif
@@ -463,6 +562,9 @@ void player_stop_button_callback(lv_event_t *event)
     {
         printf("rkadk: Pause failed, ret = %d\n", ret);
     }
+
+    stop_progress_timer();
+
 #if FRAME_DETECT
     close_framerate_detection();
 #endif
@@ -568,6 +670,32 @@ void player_ui_init(void)
     lv_obj_align(icon_box, LV_ALIGN_TOP_LEFT, 0, 0);
 
     btn_return = ui_return_btn_create(icon_box, btn_return_cb, "宣传视频");
+
+    // 创建一个进度条容器——把它放在播放按钮区域的上方
+    progress_container = lv_obj_create(main);
+    lv_obj_remove_style_all(progress_container);
+    lv_obj_set_size(progress_container, lv_pct(90), 40); // 宽度90%，高度40像素
+    lv_obj_align(progress_container, LV_ALIGN_TOP_MID, 0, lv_pct(60)); // 调整位置
+    // 创建进度条
+    progress_bar = lv_slider_create(progress_container);
+    //lv_obj_set_size(progress_bar, lv_pct(100), 8);
+    //lv_obj_align(progress_bar, LV_ALIGN_TOP_MID, 0, 5);
+    //lv_bar_set_range(progress_bar, 0, 100); // 设置范围0-100%
+    //lv_bar_set_value(progress_bar, 0, LV_ANIM_OFF);
+    lv_obj_set_size(progress_bar, lv_pct(100), 8);
+    lv_obj_align(progress_bar, LV_ALIGN_TOP_MID, 0, 5);
+    lv_slider_set_range(progress_bar, 0, 100);
+    lv_obj_add_event_cb(progress_bar, progress_bar_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+    // 应用进度条样式
+    lv_obj_add_style(progress_bar, &style_progress_bg, LV_PART_MAIN);
+    lv_obj_add_style(progress_bar, &style_progress_indic, LV_PART_INDICATOR);
+    // 创建时间显示标签
+    time_label = lv_label_create(progress_container);
+    lv_obj_set_size(time_label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_align(time_label, LV_ALIGN_BOTTOM_MID, 0, -5);
+    lv_label_set_text(time_label, "00:00 / 00:00");
+    lv_obj_set_style_text_font(time_label, ttf_main_s.font, LV_PART_MAIN);
+    lv_obj_set_style_text_color(time_label, lv_color_white(), LV_PART_MAIN);
 
 #if USE_RK3506 //Because the rk3506 has hardware rga, video can be scaled
     player_box = lv_obj_create(main);
