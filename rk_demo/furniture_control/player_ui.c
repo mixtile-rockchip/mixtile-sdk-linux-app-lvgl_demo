@@ -109,7 +109,7 @@ static void progress_bar_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *slider = lv_event_get_target(e);
-    if (code == LV_EVENT_VALUE_CHANGED)
+    if (code == LV_EVENT_RELEASED)
     {
         int value = lv_slider_get_value(slider);
         printf("Slider value changed to: %d\n", value);
@@ -685,7 +685,6 @@ void player_ui_init(void)
     lv_obj_set_size(progress_bar, lv_pct(100), 8);
     lv_obj_align(progress_bar, LV_ALIGN_TOP_MID, 0, 5);
     lv_slider_set_range(progress_bar, 0, 100);
-    lv_obj_add_event_cb(progress_bar, progress_bar_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     // 应用进度条样式
     lv_obj_add_style(progress_bar, &style_progress_bg, LV_PART_MAIN);
     lv_obj_add_style(progress_bar, &style_progress_indic, LV_PART_INDICATOR);
@@ -697,6 +696,7 @@ void player_ui_init(void)
     lv_obj_set_style_text_font(time_label, ttf_main_s.font, LV_PART_MAIN);
     lv_obj_set_style_text_color(time_label, lv_color_white(), LV_PART_MAIN);
 
+    lv_obj_add_event_cb(progress_bar, progress_bar_event_cb, LV_EVENT_ALL, NULL);
 #if USE_RK3506 //Because the rk3506 has hardware rga, video can be scaled
     player_box = lv_obj_create(main);
     lv_obj_set_width(player_box, lv_pct(100));
