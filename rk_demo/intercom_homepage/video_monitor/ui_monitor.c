@@ -253,7 +253,7 @@ static void rkadk_init(void)
     stPlayCfg.stNetStreamCfg.transport = "udp";
     stPlayCfg.stVdecCfg.u32FrameBufCnt = 4;
 
-    RK_MPI_VO_SetLayerFlush(-1);
+    RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_CONTINUOUS);
     if (RKADK_PLAYER_Create(&pPlayer, &stPlayCfg))
     {
         printf("rkadk: RKADK_PLAYER_Create failed\n");
@@ -380,7 +380,7 @@ static void kb_cb(lv_event_t *e)
     }
     lv_obj_del(kb);
     kb = NULL;
-    RK_MPI_VO_SetLayerFlush(-1);
+    RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_ONCE);
 }
 
 static void rtsp_addr_set(lv_event_t *e)
@@ -438,7 +438,7 @@ static void rtsp_setting_callback(lv_event_t *e)
     else
     {
         lv_obj_add_flag(ui_setting_box, LV_OBJ_FLAG_HIDDEN);
-        RK_MPI_VO_SetLayerFlush(-1);
+        RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_ONCE);
     }
 }
 
@@ -565,7 +565,7 @@ void monitor_ui_init()
     if (main)
         return;
 
-    RK_MPI_VO_SetLayerFlush(-1);
+    RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_ONCE);
     style_init();
 
     main = lv_obj_create(lv_scr_act());

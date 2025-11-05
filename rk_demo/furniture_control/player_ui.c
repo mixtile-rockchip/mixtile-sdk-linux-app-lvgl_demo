@@ -495,7 +495,7 @@ void player_list_button_callback(lv_event_t *event)
         lv_obj_del(video_list_box);
         video_list_box = NULL;
         if (play_flag == 0)
-            RK_MPI_VO_SetLayerFlush(-1);
+            RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_ONCE);
     }
 }
 
@@ -659,7 +659,7 @@ void player_ui_init(void)
 {
     rk_demo_bg_hide();
 
-    RK_MPI_VO_SetLayerFlush(-1);
+    RK_MPI_VO_SetLayerCleanMode(-1, VO_LAYER_CLEAN_MODE_CONTINUOUS);
     if (main)
         return;
 
@@ -742,5 +742,6 @@ void player_ui_init(void)
     lv_obj_align(video_label, LV_ALIGN_CENTER, 0, lv_pct(10));
     lv_obj_add_style(video_label, &style_txt_m, LV_PART_MAIN);
     lv_label_set_text(video_label, "");
+
 }
 #endif
