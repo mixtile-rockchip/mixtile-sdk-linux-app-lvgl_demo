@@ -204,9 +204,9 @@ static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo)
     RKADK_CHECK_POINTER_N(pstFrmInfo);
 
     memset(pstFrmInfo, 0, sizeof(RKADK_PLAYER_FRAME_INFO_S));
-    pstFrmInfo->u32DispWidth = 720;
+    pstFrmInfo->u32DispWidth = scr_w;
 #if USE_RK3506
-    pstFrmInfo->u32DispHeight = RK_PCT_H(57);
+    pstFrmInfo->u32DispHeight = scr_h;
 #else
     pstFrmInfo->u32DispHeight = 512; //1280*0.4=512
 #endif
@@ -275,7 +275,7 @@ static void rkadk_init(void)
     stPlayCfg.bEnableVideo = 1;
     stPlayCfg.bEnableAudio = 1;
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
-    stPlayCfg.stFrmInfo.u32FrmInfoY = RK_PCT_H(10);
+    stPlayCfg.stFrmInfo.u32FrmInfoY = 0;
     stPlayCfg.stFrmInfo.u32DispBufLen = 2;
     stPlayCfg.bEnableBlackBackground = true;
     stPlayCfg.pfnPlayerCallback = PlayerEventFnTest;
@@ -663,6 +663,7 @@ void player_ui_init(void)
     lv_obj_refr_size(main);
 
     icon_box = lv_obj_create(main);
+    lv_obj_remove_style_all(icon_box);
     lv_obj_clear_flag(icon_box, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_pad_all(icon_box, 0, LV_PART_MAIN);
     lv_obj_set_width(icon_box, lv_pct(100));
@@ -699,11 +700,13 @@ void player_ui_init(void)
     lv_obj_add_event_cb(progress_bar, progress_bar_event_cb, LV_EVENT_ALL, NULL);
 #if USE_RK3506 //Because the rk3506 has hardware rga, video can be scaled
     player_box = lv_obj_create(main);
+    lv_obj_remove_style_all(player_box);
     lv_obj_set_width(player_box, lv_pct(100));
     lv_obj_set_height(player_box, lv_pct(33));
     lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(67));
 #else
     player_box = lv_obj_create(main);
+    lv_obj_remove_style_all(player_box);
     lv_obj_set_width(player_box, lv_pct(100));
     lv_obj_set_height(player_box, lv_pct(50));
     lv_obj_align(player_box, LV_ALIGN_TOP_LEFT, 0, lv_pct(50));
