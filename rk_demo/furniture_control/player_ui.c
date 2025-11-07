@@ -46,6 +46,7 @@ static lv_style_t style_list;
 
 static RKADK_PLAYER_CFG_S stPlayCfg;
 static RKADK_MW_PTR pPlayer = NULL;
+static int seeking = 0;
 int play_flag = 0;
 int play_end = 0;
 int start_clock = 0;
@@ -60,7 +61,7 @@ pthread_t ntid;
 // 进度条计时器回调功能
 static void progress_timer_cb(lv_timer_t *timer)
 {
-    if (pPlayer == NULL || play_flag != 1)
+    if (pPlayer == NULL || play_flag != 1 || seeking == 1)
     {
         return;
     }
@@ -114,6 +115,8 @@ static void progress_bar_event_cb(lv_event_t *e)
         int value = lv_slider_get_value(slider);
         printf("Slider value changed to: %d\n", value);
         // 根据进度计算跳转时间
+        seeking = 1;
+        stop_progress_timer();
         if (pPlayer != NULL)
         {
             int duration = 0; // 需要从播放器获取总时长
@@ -163,6 +166,7 @@ static RKADK_VOID PlayerEventFnTest(RKADK_MW_PTR pPlayer,
         printf("+++++ RKADK_PLAYER_EVENT_EOF +++++\n");
         play_flag = 0;
         play_end = 1;
+        seeking = 0; // 重置跳转状态
 #if FRAME_DETECT
         close_framerate_detection();
 #endif
@@ -172,9 +176,14 @@ static RKADK_VOID PlayerEventFnTest(RKADK_MW_PTR pPlayer,
         break;
     case RKADK_PLAYER_EVENT_SEEK_END:
         printf("+++++ RKADK_PLAYER_EVENT_SEEK_END +++++\n");
+        seeking = 0;
+        if (play_flag == 1) {
+            start_progress_timer();
+        }
         break;
     case RKADK_PLAYER_EVENT_ERROR:
         printf("+++++ RKADK_PLAYER_EVENT_ERROR +++++\n");
+        seeking = 0; // 错误时也重置状态
         break;
     case RKADK_PLAYER_EVENT_PREPARED:
         printf("+++++ RKADK_PLAYER_EVENT_PREPARED +++++\n");
