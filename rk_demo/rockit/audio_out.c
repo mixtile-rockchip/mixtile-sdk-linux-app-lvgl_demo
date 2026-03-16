@@ -199,7 +199,7 @@ int ao_push(int (*hook)(void *, char *, int), void *arg)
     MB_EXT_CONFIG_S extConfig;
     RK_S32 result;
     RK_U8 *buf;
-    int size = 1024;
+    int size = 128;
 
     buf = malloc(size * sizeof(RK_U8));
     if ((size = hook(arg, buf, size)) <= 0)
