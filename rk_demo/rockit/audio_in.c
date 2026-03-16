@@ -69,7 +69,7 @@ int ai_init(void)
     aiAttr.enSamplerate = AUDIO_RATE;
     aiAttr.enSoundmode = sound_mode(AUDIO_CH_OUT);
     aiAttr.u32FrmNum = AUDIO_PERIOD_CNT;
-    aiAttr.u32PtNumPerFrm = 1024;//AUDIO_PERIOD_SZ;
+    aiAttr.u32PtNumPerFrm = AUDIO_PERIOD_SZ;
     aiAttr.u32EXFlag = 0;
     aiAttr.u32ChnCnt = 4;
 
