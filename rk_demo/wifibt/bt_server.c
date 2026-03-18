@@ -855,8 +855,6 @@ static int bt_ble_init(void)
     //"indicate"
     static char *chr_props[] = { "read", "write", "notify", "write-without-response", NULL };
 
-    log("%s \n", __func__);
-
     //Must determine whether Bluetooth is turned on
     if (rk_bt_is_open())
     {
@@ -877,7 +875,7 @@ static int bt_ble_init(void)
     strcpy(bt_content.ble_content.ble_name, "rkble");
 
     char bt_id[6] = {0};
-    FILE *fp = fopen("/data/bt_id.txt", "r+");
+    FILE *fp = fopen("/userdata/bt_id.txt", "r+");
     if (fp)
     {
         fread(bt_id, 1, 6, fp);
@@ -889,19 +887,17 @@ static int bt_ble_init(void)
         {
             bt_id[i] = '0' + (rand() % 10);
         }
-        fp = fopen("/data/bt_id.txt", "w");
+        fp = fopen("/userdata/bt_id.txt", "w");
         fwrite(bt_id, 1, 6, fp);
         fclose(fp);
     }
 
     char buf[38];
-    memset(buf, 38, sizeof(buf));
+    memset(buf, 0, sizeof(buf));
     snprintf(buf, sizeof(buf), "%s_%s", bt_content.bt_name, bt_id);
     memcpy(bt_content.bt_name, buf, sizeof(bt_content.bt_name));
-
     memcpy(bt_info.bt_name, bt_content.bt_name, sizeof(bt_info.bt_name));
-
-    memset(buf, 38, sizeof(buf));
+    memset(buf, 0, sizeof(buf));
     snprintf(buf, sizeof(buf), "%s_%s", bt_content.ble_content.ble_name, bt_id);
     memcpy(bt_content.ble_content.ble_name, buf,
            sizeof(bt_content.ble_content.ble_name));
@@ -938,9 +934,7 @@ static int bt_ble_init(void)
     //"audio-headset"
     conf.Class = "0x240414";
     create_bt_conf(&conf);
-
     rk_debug_init(true);
-
     rk_bt_init(&bt_content);
 }
 
