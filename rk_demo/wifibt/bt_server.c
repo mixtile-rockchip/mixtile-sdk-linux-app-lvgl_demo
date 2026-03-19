@@ -656,6 +656,7 @@ static void bt_test_state_cb(RkBtRemoteDev *rdev, RK_BT_STATE state)
     case RK_BT_STATE_ADAPTER_POWER_ON:
         bt_content.power = true;
         log("RK_BT_STATE_ADAPTER_POWER_ON successful\n");
+        rk_bt_set_discoverable(1);
         break;
     case RK_BT_STATE_ADAPTER_POWER_OFF:
         bt_content.power = false;
@@ -701,15 +702,8 @@ static bool bt_test_vendor_cb(bool enable)
             return false;
         }
 
-        //TODO
-        //bt_set_local_name();
-        //bt_content.bt_name = bt_name;
-
-        //start bluetoothd
-        //exec_command_system("/usr/libexec/bluetooth/bluetoothd -d -n -P battery,hostname,gap,wiimote -f /data/main.conf &");
-
         exec_command_system("killall bluetoothd && sleep 0.5");
-        exec_command_system("/usr/libexec/bluetooth/bluetoothd -n -P battery,hostname,gap,wiimote -f /data/main.conf &");
+        exec_command_system("/usr/libexec/bluetooth/bluetoothd -n -P battery,hostname,gap,wiimote -f /userdata/main.conf &");
 
         //check bluetoothd
         times = 100;
@@ -729,12 +723,6 @@ static bool bt_test_vendor_cb(bool enable)
         //CLEAN
         exec_command_system("hciconfig hci0 down");
         exec_command_system("killall bluetoothd");
-
-        //vendor deinit
-        //if (get_ps_pid("brcm_patchram_plus1"))
-        //    kill_task("killall brcm_patchram_plus1");
-        //if (get_ps_pid("rtk_hciattach"))
-        //    kill_task("killall rtk_hciattach");
 
         //audio server deinit
         if (get_ps_pid("bluealsa"))
@@ -783,7 +771,7 @@ static bool bt_test_audio_server_cb(bool enable)
     return true;
 }
 
-#define BT_CONF_DIR "/data/main.conf"
+#define BT_CONF_DIR "/userdata/main.conf"
 static int create_bt_conf(struct bt_conf *conf)
 {
     FILE *fp;
@@ -823,6 +811,13 @@ static int create_bt_conf(struct bt_conf *conf)
         fputs(cmdline, fp);
     }
 
+    //"SecureConnections"
+    if (conf->SecureConnections)
+    {
+        sprintf(cmdline, "SecureConnections = %s\n", conf->SecureConnections);
+        fputs(cmdline, fp);
+    }
+
     //mode
     if (conf->mode)
     {
@@ -841,8 +836,8 @@ static int create_bt_conf(struct bt_conf *conf)
 
     fclose(fp);
 
-    if (system("cat /data/main.conf"))
-        log("cat /data/main.conf failed");
+    if (system("cat /userdata/main.conf"))
+        log("cat /userdata/main.conf failed");
 
     return 0;
 }
@@ -903,7 +898,8 @@ static int bt_ble_init(void)
            sizeof(bt_content.ble_content.ble_name));
 
     //IO CAPABILITY
-    bt_content.io_capability = IO_CAPABILITY_DISPLAYYESNO;
+    //bt_content.io_capability = IO_CAPABILITY_DISPLAYYESNO;
+    bt_content.io_capability = IO_CAPABILITY_NOINPUTNOOUTPUT;
 
     /*
      * Only one can be enabled
@@ -933,6 +929,14 @@ static int bt_ble_init(void)
     conf.discoverableTimeout = "0";
     //"audio-headset"
     conf.Class = "0x240414";
+
+    //custom pincode
+    conf.ssp = conf.SecureConnections = "on";
+    bt_content.pincode = "1234";
+    //conf.gatt_client = "false";
+
+    conf.gatt_client_cache = "no";
+
     create_bt_conf(&conf);
     rk_debug_init(true);
     rk_bt_init(&bt_content);
