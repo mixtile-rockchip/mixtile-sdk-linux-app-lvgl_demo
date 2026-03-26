@@ -105,3 +105,9 @@ void lv_port_init(int width, int height, int rotation)
     lv_port_indev_init(g_indev_rotation + rotation);
 }
 
+void lv_port_deinit(void)
+{
+    lv_port_disp_deinit();
+    lv_deinit();
+}
+

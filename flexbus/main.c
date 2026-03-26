@@ -44,6 +44,8 @@ int main(int argc, char **argv)
         usleep(100);
     }
 
+    lv_port_deinit();
+
     return 0;
 }
 

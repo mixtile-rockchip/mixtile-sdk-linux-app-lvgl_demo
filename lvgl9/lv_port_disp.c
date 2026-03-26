@@ -48,10 +48,21 @@ void lv_port_disp_init(lv_coord_t hor_res, lv_coord_t ver_res, int rot)
     LV_LOG_USER("LV_USE_SDL");
     disp = lv_sdl_window_create(hor_res, ver_res);
 #endif
+}
 
-#if defined(LV_USE_RKADK) && LV_USE_RKADK
-    LV_LOG_USER("LV_USE_RKADK");
-    disp = lv_rkadk_disp_create(lvgl_rot);
+void lv_port_disp_deinit(void)
+{
+#if defined(LV_USE_LINUX_DRM) && LV_USE_LINUX_DRM
+#if defined(LV_DRM_USE_EGL) && LV_DRM_USE_EGL
+    LV_LOG_WARN("lv_linux_drm_destroy has no implement");
+#else
+    lv_display_t *disp = lv_display_get_default();
+    lv_drm_disp_delete(disp);
+#endif
+#endif
+
+#if defined(LV_USE_SDL) && LV_USE_SDL
+    lv_sdl_quit();
 #endif
 }
 

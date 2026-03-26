@@ -413,5 +413,7 @@ int main(int argc, char **argv)
         usleep(1000);
     }
 
+    lv_port_deinit();
+
     return 0;
 }

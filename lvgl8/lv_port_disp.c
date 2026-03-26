@@ -52,3 +52,18 @@ void lv_port_disp_init(lv_coord_t hor_res, lv_coord_t ver_res, int rot)
 #endif
 }
 
+void lv_port_disp_deinit(void)
+{
+#if USE_DRM
+    drm_disp_drv_deinit();
+#endif
+
+#if USE_SDL_GPU
+    LV_LOG_WARN("sdl_disp_drv_deinit has no implement");
+#endif
+
+#if USE_RKADK
+    rkadk_disp_drv_deinit();
+#endif
+}
+

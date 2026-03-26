@@ -376,5 +376,7 @@ int main(int argc, char **argv)
     RK_MPI_SYS_Exit();
 #endif
 
+    lv_port_deinit();
+
     return 0;
 }
